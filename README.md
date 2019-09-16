@@ -108,9 +108,9 @@ Using the Anaconda prompt, follow these instructions:
 
 # Download the windows app! #
 
-Open this link in to your browser.
+Open this link in your browser.
 
-https://github.com/manulea/MITGUI/releases/download/v3.0/fr.exe
+https://github.com/accessibilitysoftwarehub/FaceSwitch2/releases/download/2.0/fr.exe
 
 Click Save File
 
