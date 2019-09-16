@@ -112,6 +112,8 @@ Open this link in your browser.
 
 https://github.com/accessibilitysoftwarehub/FaceSwitch2/releases/download/2.0/fr.exe
 
+![Image0](https://i.imgur.com/blbhQhH.png)
+
 Click Save File
 
 ![Image1](https://i.imgur.com/rpf0os7.png)
