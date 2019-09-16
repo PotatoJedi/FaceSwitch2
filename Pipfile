@@ -1,0 +1,20 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+dlib = "*"
+opencv-python = "*"
+imutils = "*"
+numpy = "*"
+pywin32 = "==224"
+pygame = "*"
+PyQt5 = "==5.13.0"
+pyqt5-tools = "*"
+cmake = "*"
+
+[requires]
+python_version = "3.6"
