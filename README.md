@@ -9,10 +9,10 @@ For example they could map a keystroke to the "open mouth" gesture. This would m
 # [Installation Guide](https://github.com/accessibilitysoftwarehub/FaceSwitch2/wiki/Installation-Guide) #
 
 #### A special thanks to the following creators of these Libraries:
-* [PyQt5 5.13.0](https://pypi.org/project/PyQt5/)
-* [dlib 19.17.0](https://pypi.org/project/dlib/)
-* [opencv-python 4.1.0.25](https://pypi.org/project/opencv-python/)
-* [imutils 0.5.2](https://pypi.org/project/imutils/)
-* [numpy 1.17.0 ](https://pypi.org/project/numpy/)
-* [pywin32 224](https://pypi.org/project/pywin32/)
-* [pygame 1.9.6](https://pypi.org/project/pygame/)
+- [PyQt5 5.13.0](https://pypi.org/project/PyQt5/)
+- [dlib 19.17.0](https://pypi.org/project/dlib/)
+- [opencv-python 4.1.0.25](https://pypi.org/project/opencv-python/)
+- [imutils 0.5.2](https://pypi.org/project/imutils/)
+- [numpy 1.17.0 ](https://pypi.org/project/numpy/)
+- [pywin32 224](https://pypi.org/project/pywin32/)
+- [pygame 1.9.6](https://pypi.org/project/pygame/)
