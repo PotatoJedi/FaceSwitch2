@@ -57,13 +57,16 @@ class App(QDialog):
         self.oldPos = self.pos()
         self.landmarks()
         
+        self.facial_landmarks = numpy.zeroes((68, 2))
+        
         self.open_mouth_var = 0
         self.raise_eyebrows_var = 0
         self.smile_var = 0
         self.snarl_var = 0
         self.blink_var = 0
         
-        self.open_mouth_calibrate = 0
+        self.open_mouth_cal = 0
+        self.raise_eyebrows_cal = 0
 
 
     def center(self):
@@ -101,19 +104,21 @@ class App(QDialog):
                 print("Error connecting to webcam! Exiting...")
                 sys.exit()
             
+            print(self.facial_landmarks.shape)
+            
             # Activated
             if self.faceShapePredictorActivated:
                 for (i, rect) in enumerate(rects):
                     # Make the prediction and transform it to numpy array
                     shape = predictor(gray, rect)
                     shape = face_utils.shape_to_np(shape)
+                    #facial_landmarks = shape
 
                     for (x, y) in shape:
                         cv2.circle(frame, (x, y), 2, (0, 255, 0), -1)  # (0, 255, 0) = Green
                     
                     # Create a base line variable so that the gesture detection will still work when the user moves towards/away from the camera
                     self.base_line = ((shape[16][0]) - (shape[0][0]))
-                    print("Calibrated base_line to", self.base_line)
                     
                     # Recognise gestures
                     
@@ -279,7 +284,7 @@ class App(QDialog):
                                                                     self.blink_var))
         self.btnLoad.setToolTip('Load Settings')
         self.btnLoad.clicked.connect(lambda: self.btn_load_settings())
-        self.btnCalibrate.clicked.connect(lambda: self.btn_calibrate())
+        self.btnCalibrate.clicked.connect(lambda: self.btn_calibrate(self.shape))
 
         # sliders
         self.sliderOpenMouth.valueChanged.connect(lambda: self.value_changed())
@@ -292,11 +297,11 @@ class App(QDialog):
         self.webcam.setText("Webcam")
         self.show()
 
-    def btn_calibrate(self):
-        if self.faceShapePredictorActivated:
-            
-        else:
-            print("Must be activated")
+    # def btn_calibrate(self):
+        # if self.faceShapePredictorActivated:
+            # print(facial_landmarks.shape)
+        # else:
+            # print("Must be activated")
 
     def value_changed(self):
         self.open_mouth_var = round(float(self.sliderOpenMouth.value()) / 277, 2)
