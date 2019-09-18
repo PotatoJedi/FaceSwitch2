@@ -8,6 +8,8 @@ For example they could map a keystroke to the "open mouth" gesture. This would m
 
 # [Installation Guide](https://github.com/accessibilitysoftwarehub/FaceSwitch2/wiki/Installation-Guide) #
 
+# [gifDemonstration](https://i.imgur.com/PDeQAyX.gif)
+
 #### A special thanks to the following creators of these Libraries:
 - [PyQt5 5.13.0](https://pypi.org/project/PyQt5/)
 - [dlib 19.17.0](https://pypi.org/project/dlib/)
