@@ -37,7 +37,6 @@ class App(QDialog):
         self.capturedPositions = False
         self.faceShapePredictorActivated = False
         
-        self.count = 0
         self.webcamActive = True
         
         self.cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # gives an error without CAP_DSHOW
@@ -51,8 +50,6 @@ class App(QDialog):
         self.raiseEyebrowsActivated = False
         self.snarlActivated = False
         self.blinkActivated = False
-        self.calibrate = False
-        self.changesMade = False
         
         self.wsh = comclt.Dispatch("WScript.Shell")  # Open keytyper
         
@@ -113,11 +110,8 @@ class App(QDialog):
                         cv2.circle(frame, (x, y), 2, (0, 255, 0), -1)  # (0, 255, 0) = Green
                     # Recognise gestures
 
-                    if self.calibrate:
-                        self.base_line = ((shape[16][0]) - (shape[0][0]))
-                        print("Calibrated base_line to", self.base_line)
-                        # turn off calibration
-                        self.calibrate = not self.calibrate
+                    self.base_line = ((shape[16][0]) - (shape[0][0]))
+                    print("Calibrated base_line to", self.base_line)
 
                     # Open mouth
                     if self.openMouthActivated:
@@ -241,7 +235,6 @@ class App(QDialog):
         print("Checking for state settings...")
         state_settings_path = app_dir + '/state_settings.json'
         self.load_settings(state_settings_path)  # Load the last settings that were used
-        self.changesMade = False  # this is so after the load settings is called, changes aren't considered to be made yet
         QApplication.setStyle("Fusion")
         palette = QPalette()
         palette.setColor(QPalette.Window, QColor(53, 53, 53))
@@ -313,7 +306,6 @@ class App(QDialog):
         self.lblSmileT.setText(str(self.smileVar))
         self.lblSnarlT.setText(str(self.snarlVar))
         self.lblBlinkT.setText(str(self.blinkVar))
-        self.changesMade = True
     
     def save_state(self, openMouthTxt, raiseEyebrowsTxt, smileTxt, snarlTxt, blinkTxt, openMouthVar, raiseEyebrowsVar, smileVar, snarlVar, blinkVar):
         openMouthKey = openMouthTxt
