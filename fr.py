@@ -11,8 +11,8 @@ import cv2
 import dlib
 import win32com.client as comclt  # Used to insert keys
 import os
-import json  # for saving/loading settings
 
+import json  # for saving/loading settings
 
 class App(QDialog):
     def __init__(self):

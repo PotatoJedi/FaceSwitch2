@@ -12,7 +12,6 @@ imutils = "*"
 numpy = "*"
 pywin32 = "==224"
 PyQt5 = "==5.13.0"
-pyqt5-tools = "*"
 cmake = "*"
 
 [requires]
