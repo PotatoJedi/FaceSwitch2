@@ -8,7 +8,7 @@ For example they could map a keystroke to the "open mouth" gesture. This would m
 
 # Download the windows app! #
 
-[Click here to download](https://github.com/manulea/MITGUI/releases/download/v3.0/fr.exe)
+[Click here to download](https://github.com/accessibilitysoftwarehub/FaceSwitch2/releases/download/2.0/fr.exe)
 
 # Installation Guide
 
