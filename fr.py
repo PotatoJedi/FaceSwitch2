@@ -57,11 +57,13 @@ class App(QDialog):
         self.oldPos = self.pos()
         self.landmarks()
         
-        self.openMouthVar = 0
-        self.raiseEyebrowsVar = 0
-        self.smileVar = 0
-        self.snarlVar = 0
-        self.blinkVar = 0
+        self.open_mouth_var = 0
+        self.raise_eyebrows_var = 0
+        self.smile_var = 0
+        self.snarl_var = 0
+        self.blink_var = 0
+        
+        self.open_mouth_calibrate = 0
 
 
     def center(self):
@@ -108,18 +110,20 @@ class App(QDialog):
 
                     for (x, y) in shape:
                         cv2.circle(frame, (x, y), 2, (0, 255, 0), -1)  # (0, 255, 0) = Green
-                    # Recognise gestures
-
+                    
+                    # Create a base line variable so that the gesture detection will still work when the user moves towards/away from the camera
                     self.base_line = ((shape[16][0]) - (shape[0][0]))
                     print("Calibrated base_line to", self.base_line)
-
+                    
+                    # Recognise gestures
+                    
                     # Open mouth
                     if self.openMouthActivated:
                         mouth_top = ((shape[61][1]) + (shape[62][1]) + (shape[63][1]))/3
                         mouth_bottom = ((shape[65][1]) + (shape[66][1]) + (shape[67][1]))/3
                         mouth_height = mouth_bottom - mouth_top
                         try:
-                            if mouth_height/self.base_line > float(self.openMouthVar):
+                            if mouth_height/self.base_line > float(self.open_mouth_var):
                                 gesture_arr.append(0)
                         except:
                             pass
@@ -130,7 +134,7 @@ class App(QDialog):
                         eye_bottom = ((shape[27][1]) + (shape[28][1]))/2
                         eye_height = eye_bottom - eye_top
                         try:
-                            if eye_height/self.base_line > float(self.raiseEyebrowsVar):
+                            if eye_height/self.base_line > float(self.raise_eyebrows_var):
                                 gesture_arr.append(1)
                         except:
                             pass
@@ -140,7 +144,7 @@ class App(QDialog):
                         eyelid_bottom = ((shape[40][1]) + (shape[41][1]) + (shape[46][1]) + (shape[47][1]))/4
                         eyelid_height = eyelid_bottom - eyelid_top
                         try:
-                            if eyelid_height/self.base_line < float(self.blinkVar):
+                            if eyelid_height/self.base_line < float(self.blink_var):
                                 gesture_arr.append(2)
                         except:
                             pass
@@ -150,7 +154,7 @@ class App(QDialog):
                         mouth_right = ((shape[53][0]) + (shape[54][0]) + (shape[55][0]) + (shape[64][0]))/4
                         mouth_width = mouth_right - mouth_left
                         try:
-                            if mouth_width/self.base_line > float(self.smileVar):
+                            if mouth_width/self.base_line > float(self.smile_var):
                                 gesture_arr.append(3)
                         except:
                             pass
@@ -160,7 +164,7 @@ class App(QDialog):
                         nose_bottom = ((shape[31][1]) + (shape[35][1]))/2
                         nose_height = nose_bottom - nose_top
                         try:
-                            if nose_height/self.base_line < float(self.snarlVar):
+                            if nose_height/self.base_line < float(self.snarl_var):
                                 gesture_arr.append(4)
                         except:
                             pass
@@ -268,11 +272,11 @@ class App(QDialog):
                                                                     self.txtSmile.toPlainText(),
                                                                     self.txtSnarl.toPlainText(),
                                                                     self.txtBlink.toPlainText(),
-                                                                    self.openMouthVar,
-                                                                    self.raiseEyebrowsVar,
-                                                                    self.smileVar,
-                                                                    self.snarlVar,
-                                                                    self.blinkVar))
+                                                                    self.open_mouth_var,
+                                                                    self.raise_eyebrows_var,
+                                                                    self.smile_var,
+                                                                    self.snarl_var,
+                                                                    self.blink_var))
         self.btnLoad.setToolTip('Load Settings')
         self.btnLoad.clicked.connect(lambda: self.btn_load_settings())
         self.btnCalibrate.clicked.connect(lambda: self.btn_calibrate())
@@ -290,37 +294,37 @@ class App(QDialog):
 
     def btn_calibrate(self):
         if self.faceShapePredictorActivated:
-            self.calibrate = not self.calibrate
+            
         else:
             print("Must be activated")
 
     def value_changed(self):
-        self.openMouthVar = round(float(self.sliderOpenMouth.value()) / 277, 2)
-        self.raiseEyebrowsVar = round(float(self.sliderRaiseEyebrows.value()) / 250, 2)
-        self.smileVar = round(float(self.sliderSmile.value()) / 166, 2)
-        self.snarlVar = round(float(self.sliderSnarl.value()) / 141, 3)
-        self.blinkVar = round(float(self.sliderBlink.value()) / 1000, 3)
+        self.open_mouth_var = round(float(self.sliderOpenMouth.value()) / 277, 2)
+        self.raise_eyebrows_var = round(float(self.sliderRaiseEyebrows.value()) / 250, 2)
+        self.smile_var = round(float(self.sliderSmile.value()) / 166, 2)
+        self.snarl_var = round(float(self.sliderSnarl.value()) / 141, 3)
+        self.blink_var = round(float(self.sliderBlink.value()) / 1000, 3)
     
-        self.lblOpenMouthT.setText(str(self.openMouthVar))
-        self.lblRaiseEyebrowsT.setText(str(self.raiseEyebrowsVar))
-        self.lblSmileT.setText(str(self.smileVar))
-        self.lblSnarlT.setText(str(self.snarlVar))
-        self.lblBlinkT.setText(str(self.blinkVar))
+        self.lblOpenMouthT.setText(str(self.open_mouth_var))
+        self.lblRaiseEyebrowsT.setText(str(self.raise_eyebrows_var))
+        self.lblSmileT.setText(str(self.smile_var))
+        self.lblSnarlT.setText(str(self.snarl_var))
+        self.lblBlinkT.setText(str(self.blink_var))
     
-    def save_state(self, openMouthTxt, raiseEyebrowsTxt, smileTxt, snarlTxt, blinkTxt, openMouthVar, raiseEyebrowsVar, smileVar, snarlVar, blinkVar):
+    def save_state(self, openMouthTxt, raiseEyebrowsTxt, smileTxt, snarlTxt, blinkTxt, open_mouth_var, raise_eyebrows_var, smile_var, snarl_var, blink_var):
         openMouthKey = openMouthTxt
         raiseEyebrowsKey = raiseEyebrowsTxt
         smileKey = smileTxt
         snarlKey = snarlTxt
         blinkKey = blinkTxt
-        openMouth = openMouthVar
-        raiseEyebrows = raiseEyebrowsVar
-        smile = smileVar
-        snarl = snarlVar
-        blink = blinkVar
+        openMouth = open_mouth_var
+        raiseEyebrows = raise_eyebrows_var
+        smile = smile_var
+        snarl = snarl_var
+        blink = blink_var
         data = {'openMouthKey': openMouthKey, 'raiseEyebrowsKey': raiseEyebrowsKey,
-                'smileKey': smileKey, 'snarlKey': snarlKey, 'blinkKey': blinkKey, 'openMouthVar': openMouth,
-                'raiseEyebrowsVar': raiseEyebrows, 'smileVar': smile, 'snarlVar': snarl, 'blinkVar': blink
+                'smileKey': smileKey, 'snarlKey': snarlKey, 'blinkKey': blinkKey, 'open_mouth_var': openMouth,
+                'raise_eyebrows_var': raiseEyebrows, 'smile_var': smile, 'snarl_var': snarl, 'blink_var': blink
                 }
         
         filepathwithextension = app_dir + '/state_settings.json'
@@ -333,20 +337,20 @@ class App(QDialog):
             json.dump(data, f)
         print("Settings file: '" + filepathwithextension + "' saved successfully!")
         
-    def btn_save_settings(self, openMouthTxt, raiseEyebrowsTxt, smileTxt, snarlTxt, blinkTxt, openMouthVar, raiseEyebrowsVar, smileVar, snarlVar, blinkVar):
+    def btn_save_settings(self, openMouthTxt, raiseEyebrowsTxt, smileTxt, snarlTxt, blinkTxt, open_mouth_var, raise_eyebrows_var, smile_var, snarl_var, blink_var):
         openMouthKey = openMouthTxt
         raiseEyebrowsKey = raiseEyebrowsTxt
         smileKey = smileTxt
         snarlKey = snarlTxt
         blinkKey = blinkTxt
-        openMouth = openMouthVar
-        raiseEyebrows = raiseEyebrowsVar
-        smile = smileVar
-        snarl = snarlVar
-        blink = blinkVar
+        openMouth = open_mouth_var
+        raiseEyebrows = raise_eyebrows_var
+        smile = smile_var
+        snarl = snarl_var
+        blink = blink_var
         data_to_save = {'openMouthKey': openMouthKey, 'raiseEyebrowsKey': raiseEyebrowsKey, 'smileKey': smileKey,
-                        'snarlKey': snarlKey, 'blinkKey': blinkKey, 'openMouthVar': openMouth,
-                        'raiseEyebrowsVar': raiseEyebrows, 'smileVar': smile, 'snarlVar': snarl, 'blinkVar': blink
+                        'snarlKey': snarlKey, 'blinkKey': blinkKey, 'open_mouth_var': openMouth,
+                        'raise_eyebrows_var': raiseEyebrows, 'smile_var': smile, 'snarl_var': snarl, 'blink_var': blink
                         }
         name, ok = QInputDialog.getText(self, 'Save Settings', 'Enter your name:')
         
@@ -364,11 +368,11 @@ class App(QDialog):
                 self.txtSmile.setPlainText(str(data['smileKey']))
                 self.txtSnarl.setPlainText(str(data['snarlKey']))
                 self.txtBlink.setPlainText(str(data['blinkKey']))
-                self.sliderOpenMouth.setValue(int(data['openMouthVar']*277))
-                self.sliderRaiseEyebrows.setValue(int(data['raiseEyebrowsVar']*250))
-                self.sliderSmile.setValue(int(data['smileVar']*166))
-                self.sliderSnarl.setValue(int(data['snarlVar']*141))
-                self.sliderBlink.setValue(int(data['blinkVar']*1000))
+                self.sliderOpenMouth.setValue(int(data['open_mouth_var']*277))
+                self.sliderRaiseEyebrows.setValue(int(data['raise_eyebrows_var']*250))
+                self.sliderSmile.setValue(int(data['smile_var']*166))
+                self.sliderSnarl.setValue(int(data['snarl_var']*141))
+                self.sliderBlink.setValue(int(data['blink_var']*1000))
                 self.value_changed()
                 print("Settings file: '" + name + "' loaded successfully!")
         except:
@@ -451,8 +455,8 @@ class App(QDialog):
             print("Saving state settings...")
             self.save_state(self.txtOpenMouth.toPlainText(), self.txtRaiseEyebrows.toPlainText(),
                             self.txtSmile.toPlainText(), self.txtSnarl.toPlainText(),
-                            self.txtBlink.toPlainText(), self.openMouthVar, self.raiseEyebrowsVar,
-                            self.smileVar, self.snarlVar, self.blinkVar)
+                            self.txtBlink.toPlainText(), self.open_mouth_var, self.raise_eyebrows_var,
+                            self.smile_var, self.snarl_var, self.blink_var)
             print("State settings saved successfully!")
             self.webcamActive = False
             event.accept()
