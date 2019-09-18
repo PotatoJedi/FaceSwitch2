@@ -2,7 +2,7 @@ import sys
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtWidgets import QApplication, QDialog, QInputDialog, QMainWindow, QCheckBox, QWidget, QPushButton, QLabel, \
-    QMessageBox, QDesktopWidget, QFileDialog
+    QMessageBox, QDesktopWidget, QFileDialog, QErrorMessage
 from PyQt5.QtGui import QIcon, QPalette, QColor, QPixmap, QImage
 from PyQt5.QtCore import pyqtSlot, Qt, QPoint
 from imutils import face_utils
@@ -13,6 +13,7 @@ import win32com.client as comclt  # Used to insert keys
 import os
 
 import json  # for saving/loading settings
+
 
 class App(QDialog):
     def __init__(self):
@@ -40,7 +41,9 @@ class App(QDialog):
         self.webcamActive = True
         
         self.cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # gives an error without CAP_DSHOW
-        
+
+        self.base_line = 0
+
         self.initUI()
         
         self.smileActivated = False
@@ -48,6 +51,8 @@ class App(QDialog):
         self.raiseEyebrowsActivated = False
         self.snarlActivated = False
         self.blinkActivated = False
+        self.calibrate = False
+        self.changesMade = False
         
         self.wsh = comclt.Dispatch("WScript.Shell")  # Open keytyper
         
@@ -60,6 +65,7 @@ class App(QDialog):
         self.smileVar = 0
         self.snarlVar = 0
         self.blinkVar = 0
+
 
     def center(self):
         qr = self.frameGeometry()
@@ -106,17 +112,20 @@ class App(QDialog):
                     for (x, y) in shape:
                         cv2.circle(frame, (x, y), 2, (0, 255, 0), -1)  # (0, 255, 0) = Green
                     # Recognise gestures
-                    
-                    # Baseline
-                    base_line = ((shape[16][0]) - (shape[0][0]))
-                    
+
+                    if self.calibrate:
+                        self.base_line = ((shape[16][0]) - (shape[0][0]))
+                        print("Calibrated base_line to", self.base_line)
+                        # turn off calibration
+                        self.calibrate = not self.calibrate
+
                     # Open mouth
                     if self.openMouthActivated:
                         mouth_top = ((shape[61][1]) + (shape[62][1]) + (shape[63][1]))/3
                         mouth_bottom = ((shape[65][1]) + (shape[66][1]) + (shape[67][1]))/3
                         mouth_height = mouth_bottom - mouth_top
                         try:
-                            if mouth_height/base_line > float(self.openMouthVar):
+                            if mouth_height/self.base_line > float(self.openMouthVar):
                                 gesture_arr.append(0)
                         except:
                             pass
@@ -127,7 +136,7 @@ class App(QDialog):
                         eye_bottom = ((shape[27][1]) + (shape[28][1]))/2
                         eye_height = eye_bottom - eye_top
                         try:
-                            if eye_height/base_line > float(self.raiseEyebrowsVar):
+                            if eye_height/self.base_line > float(self.raiseEyebrowsVar):
                                 gesture_arr.append(1)
                         except:
                             pass
@@ -137,7 +146,7 @@ class App(QDialog):
                         eyelid_bottom = ((shape[40][1]) + (shape[41][1]) + (shape[46][1]) + (shape[47][1]))/4
                         eyelid_height = eyelid_bottom - eyelid_top
                         try:
-                            if eyelid_height/base_line < float(self.blinkVar):
+                            if eyelid_height/self.base_line < float(self.blinkVar):
                                 gesture_arr.append(2)
                         except:
                             pass
@@ -147,7 +156,7 @@ class App(QDialog):
                         mouth_right = ((shape[53][0]) + (shape[54][0]) + (shape[55][0]) + (shape[64][0]))/4
                         mouth_width = mouth_right - mouth_left
                         try:
-                            if mouth_width/base_line > float(self.smileVar):
+                            if mouth_width/self.base_line > float(self.smileVar):
                                 gesture_arr.append(3)
                         except:
                             pass
@@ -157,7 +166,7 @@ class App(QDialog):
                         nose_bottom = ((shape[31][1]) + (shape[35][1]))/2
                         nose_height = nose_bottom - nose_top
                         try:
-                            if nose_height/base_line < float(self.snarlVar):
+                            if nose_height/self.base_line < float(self.snarlVar):
                                 gesture_arr.append(4)
                         except:
                             pass
@@ -169,37 +178,37 @@ class App(QDialog):
                         gesture_output = max(set(gesture_arr), key=gesture_arr.count)
                     
                     if gesture_output == 0:
-                        print("Mouth opened! - ", (mouth_height/base_line))
+                        print("Mouth opened! - ", (mouth_height/self.base_line))
                         self.wsh.SendKeys(self.txtOpenMouth.toPlainText())
                         for t in range(60, 68, 1):
                             cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
                         
                     elif gesture_output == 1:
-                        print("Eyebrows raised! - ", (eye_height/base_line))
+                        print("Eyebrows raised! - ", (eye_height/self.base_line))
                         self.wsh.SendKeys(self.txtRaiseEyebrows.toPlainText())
                         for t in range(17, 27, 1):
                             cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
                         
                     elif gesture_output == 2:
-                        print("Eye close detected! - ", (eyelid_height/base_line))
+                        print("Eye close detected! - ", (eyelid_height/self.base_line))
                         self.wsh.SendKeys(self.txtBlink.toPlainText())
                         for t in range(36, 48, 1):
                             cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
                         
                     elif gesture_output == 3:
-                        print("Smile detected! - ", (mouth_width/base_line))
+                        print("Smile detected! - ", (mouth_width/self.base_line))
                         self.wsh.SendKeys(self.txtSmile.toPlainText())
                         for t in range(54, 60, 1):
                             cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
                         cv2.circle(frame, (shape[48][0], shape[48][1]), 2, (255, 0, 0), -1)
                         
                     elif gesture_output == 4:
-                        print("Anger detected! - ", (nose_height/base_line))
+                        print("Anger detected! - ", (nose_height/self.base_line))
                         self.wsh.SendKeys(self.txtSnarl.toPlainText())
                         for t in range(27, 36, 1):
                             cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
                 
-                    if gesture_output == 0 or gesture_output == 1 or gesture_output == 2 or gesture_output == 3 or gesture_output == 4:
+                    if 0 <= gesture_output <= 4:
                         gesture_arr = deque(maxlen=15)
                         gesture_arr.extend([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
                         print(gesture_output)
@@ -232,7 +241,7 @@ class App(QDialog):
         print("Checking for state settings...")
         state_settings_path = app_dir + '/state_settings.json'
         self.load_settings(state_settings_path)  # Load the last settings that were used
-        
+        self.changesMade = False  # this is so after the load settings is called, changes aren't considered to be made yet
         QApplication.setStyle("Fusion")
         palette = QPalette()
         palette.setColor(QPalette.Window, QColor(53, 53, 53))
@@ -249,7 +258,8 @@ class App(QDialog):
         palette.setColor(QPalette.Highlight, QColor(42, 130, 218))
         palette.setColor(QPalette.HighlightedText, Qt.black)
         QApplication.setPalette(palette)
-    
+
+        # Checkboxes
         self.cboxOpenMouth.stateChanged.connect(lambda: self.btn_state(self.cboxOpenMouth))
         self.cboxRaiseEyebrows.stateChanged.connect(lambda: self.btn_state(self.cboxRaiseEyebrows))
         self.cboxSmile.stateChanged.connect(lambda: self.btn_state(self.cboxSmile))
@@ -270,11 +280,11 @@ class App(QDialog):
                                                                     self.smileVar,
                                                                     self.snarlVar,
                                                                     self.blinkVar))
-
         self.btnLoad.setToolTip('Load Settings')
         self.btnLoad.clicked.connect(lambda: self.btn_load_settings())
-        
-        # Sliders
+        self.btnCalibrate.clicked.connect(lambda: self.btn_calibrate())
+
+        # sliders
         self.sliderOpenMouth.valueChanged.connect(lambda: self.value_changed())
         self.sliderRaiseEyebrows.valueChanged.connect(lambda: self.value_changed())
         self.sliderSmile.valueChanged.connect(lambda: self.value_changed())
@@ -284,6 +294,12 @@ class App(QDialog):
         # webcam
         self.webcam.setText("Webcam")
         self.show()
+
+    def btn_calibrate(self):
+        if self.faceShapePredictorActivated:
+            self.calibrate = not self.calibrate
+        else:
+            print("Must be activated")
 
     def value_changed(self):
         self.openMouthVar = round(float(self.sliderOpenMouth.value()) / 277, 2)
@@ -297,6 +313,7 @@ class App(QDialog):
         self.lblSmileT.setText(str(self.smileVar))
         self.lblSnarlT.setText(str(self.snarlVar))
         self.lblBlinkT.setText(str(self.blinkVar))
+        self.changesMade = True
     
     def save_state(self, openMouthTxt, raiseEyebrowsTxt, smileTxt, snarlTxt, blinkTxt, openMouthVar, raiseEyebrowsVar, smileVar, snarlVar, blinkVar):
         openMouthKey = openMouthTxt
@@ -418,18 +435,21 @@ class App(QDialog):
             else:
                 self.blinkActivated = False
                 print("Blink detection deactivated")
-                
+
     @pyqtSlot()
     def on_click_initialize(self):  # Used to turn the gesture detection ON or OFF
         if self.faceShapePredictorActivated:
             self.faceShapePredictorActivated = False
             print("Gesture detection Deactivated!")
             self.btnInitialize.setText("Activate")
-            
+
         elif not self.faceShapePredictorActivated:
             self.faceShapePredictorActivated = True
             print("Gesture detection Activated!")
             self.btnInitialize.setText("Deactivate")
+
+    def warningbox(self):
+        pass
 
     def closeEvent(self, event):
         reply = QMessageBox.question(self, 'Message', "Are you sure you want to quit?", QMessageBox.Yes, QMessageBox.No)
