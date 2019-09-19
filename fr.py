@@ -116,7 +116,7 @@ class App(QDialog):
                     shape = face_utils.shape_to_np(shape)
                     self.facial_landmarks = shape # Set facial_landmarks to contain the data points from shape
                     
-                    detection = False
+                    detection = False # Boolean for determining if a gesture has been detected
 
                     for (x, y) in shape:
                         cv2.circle(frame, (x, y), 2, (0, 255, 0), -1)  # (0, 255, 0) = Green
@@ -201,16 +201,16 @@ class App(QDialog):
                     
                     # Smile
                     if self.smileActivated:
-                        mouth_left = ((shape[48][0]) + (shape[49][0]) + (shape[59][0]) + (shape[60][0]))/4
-                        mouth_right = ((shape[53][0]) + (shape[54][0]) + (shape[55][0]) + (shape[64][0]))/4
-                        mouth_width = mouth_right - mouth_left
+                        mouth_width = (((shape[54][0]) + (shape[64][0]))/2) - (((shape[48][0]) + (shape[60][0]))/2)
                         try:
-                            if mouth_width/self.base_line > float(self.smile_var):
+                            if (mouth_width/self.base_line) - self.neutral_gesture_vars['2'] > float(self.smile_var):
                                 gesture_arr.append(2)
                                 detection = True
                         except:
                             pass
                     
+                    # If there was no gesture detected, add a default value to the array
+                    # This prevents gesture detections from the previous gesture carrying over to the next
                     if not detection:
                         gesture_arr.append(-1)
                     
@@ -245,19 +245,19 @@ class App(QDialog):
                         gesture_output = max(set(gesture_arr), key=gesture_arr.count)
                     
                     if gesture_output == 0:
-                        print("Mouth opened! - ", (self.neutral_gesture_vars['0'] + (mouth_height/self.base_line)))
+                        print("Mouth opened! - ", self.neutral_gesture_vars['0'] + (mouth_height/self.base_line))
                         self.wsh.SendKeys(self.txtOpenMouth.toPlainText())
                         for t in range(60, 68, 1):
                             cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
                         
                     elif gesture_output == 1:
-                        print("Eyebrows raised! - ", ((eye_height/self.base_line) - self.neutral_gesture_vars['1']))
+                        print("Eyebrows raised! - ", (eye_height/self.base_line) - self.neutral_gesture_vars['1'])
                         self.wsh.SendKeys(self.txtRaiseEyebrows.toPlainText())
                         for t in range(17, 27, 1):
                             cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
                             
                     elif gesture_output == 2:
-                        print("Smile detected! - ", (mouth_width/self.base_line))
+                        print("Smile detected! - ", (mouth_width/self.base_line) - self.neutral_gesture_vars['2'])
                         self.wsh.SendKeys(self.txtSmile.toPlainText())
                         for t in range(54, 60, 1):
                             cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
