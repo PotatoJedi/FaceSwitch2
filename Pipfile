@@ -15,4 +15,4 @@ PyQt5 = "==5.13.0"
 cmake = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.6.7"
