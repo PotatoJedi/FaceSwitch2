@@ -115,6 +115,8 @@ class App(QDialog):
                     shape = predictor(gray, rect)
                     shape = face_utils.shape_to_np(shape)
                     self.facial_landmarks = shape # Set facial_landmarks to contain the data points from shape
+                    
+                    detection = False
 
                     for (x, y) in shape:
                         cv2.circle(frame, (x, y), 2, (0, 255, 0), -1)  # (0, 255, 0) = Green
@@ -181,22 +183,22 @@ class App(QDialog):
                     if self.openMouthActivated:
                         mouth_height = (shape[66][1]) - (shape[62][1])
                         try:
-                            if self.neutral_gesture_vars['0'] + (mouth_height/self.base_line) > self.open_mouth_var:
+                            if self.neutral_gesture_vars['0'] + (mouth_height/self.base_line) > float(self.open_mouth_var):
                                 gesture_arr.append(0)
+                                detection = True
                         except:
                             pass
-                    """
+                    
                     # Raise Eyebrow
                     if self.raiseEyebrowsActivated:
-                        eye_top = ((shape[18][1]) + (shape[19][1]) + (shape[20][1]) + (shape[23][1])
-                                   + (shape[24][1]) + (shape[25][1]))/6
-                        eye_bottom = ((shape[27][1]) + (shape[28][1]))/2
-                        eye_height = eye_bottom - eye_top
+                        eye_height = (shape[27][1]) - (((shape[19][1]) + (shape[24][1]))/2)
                         try:
-                            if eye_height/self.base_line > float(self.raise_eyebrows_var):
+                            if (eye_height/self.base_line) - self.neutral_gesture_vars['1'] > float(self.raise_eyebrows_var):
                                 gesture_arr.append(1)
+                                detection = True
                         except:
                             pass
+                    
                     # Smile
                     if self.smileActivated:
                         mouth_left = ((shape[48][0]) + (shape[49][0]) + (shape[59][0]) + (shape[60][0]))/4
@@ -205,8 +207,15 @@ class App(QDialog):
                         try:
                             if mouth_width/self.base_line > float(self.smile_var):
                                 gesture_arr.append(2)
+                                detection = True
                         except:
                             pass
+                    
+                    if not detection:
+                        gesture_arr.append(-1)
+                    
+                    """
+                    
                     # Scrunch nose / Snarl
                     if self.snarlActivated:
                         nose_top = ((shape[21][1]) + (shape[22][1]))/2
@@ -242,7 +251,7 @@ class App(QDialog):
                             cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
                         
                     elif gesture_output == 1:
-                        print("Eyebrows raised! - ", (eye_height/self.base_line))
+                        print("Eyebrows raised! - ", ((eye_height/self.base_line) - self.neutral_gesture_vars['1']))
                         self.wsh.SendKeys(self.txtRaiseEyebrows.toPlainText())
                         for t in range(17, 27, 1):
                             cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
@@ -265,12 +274,11 @@ class App(QDialog):
                         self.wsh.SendKeys(self.txtBlink.toPlainText())
                         for t in range(36, 48, 1):
                             cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
-                
-                    if 0 <= gesture_output <= 4:
+                    
+                    if 0 <= gesture_output <= 4: # If a gesture was output, reset the gesture array to give a small pause
                         gesture_arr = deque(maxlen=15)
                         gesture_arr.extend([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
-                        print(gesture_output)
-                        
+                    
                     
                     
                     """
@@ -403,10 +411,11 @@ class App(QDialog):
             # Closed mouth ratio
             self.neutral_open_mouth = self.neutral_landmarks[66][1] - self.neutral_landmarks[62][1]
             self.neutral_open_mouth /= base_line
-            print(self.neutral_open_mouth)
+            print("closed mouth:", self.neutral_open_mouth)
             # Normal eyebrow height ratio
             self.neutral_raise_eyebrows = (self.neutral_landmarks[27][1]) - (((self.neutral_landmarks[19][1]) + (self.neutral_landmarks[24][1]))/2)
-            self.neutral_raise_eyebrows /= base_line 
+            self.neutral_raise_eyebrows /= base_line
+            print("eyebrows:", self.neutral_raise_eyebrows)
             # Normal mouth width ratio
             self.neutral_smile = (((self.neutral_landmarks[54][0]) + (self.neutral_landmarks[64][0]))/2) - (((self.neutral_landmarks[48][0]) + (self.neutral_landmarks[60][0]))/2)
             self.neutral_smile /= base_line
