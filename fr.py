@@ -45,7 +45,7 @@ class App(QDialog):
         self.base_line = 0
 
 
-        self.heySexy = "Press a key to keybind"
+        self.sparetxtvar = "Press a key to keybind"
         self.changesMade = False
 
         self.initUI()
@@ -316,11 +316,11 @@ class App(QDialog):
         self.txtOpenMouth.setReadOnly(True)
 
         if self.changesMade:
-            self.heySexy = ""
+            self.sparetxtvar = ""
             self.txtOpenMouth.setPlainText("Press to set new KeyBind")
 
         elif not self.changesMade:
-            self.txtOpenMouth.setPlainText(self.heySexy)
+            self.txtOpenMouth.setPlainText(self.sparetxtvar)
             self.txtOpenMouth.setReadOnly(False)
 
     def get_userinput1(self, state):
@@ -328,44 +328,44 @@ class App(QDialog):
         self.txtRaiseEyebrows.setReadOnly(True)
 
         if self.changesMade:
-            self.heySexy = ""
+            self.sparetxtvar = ""
             self.txtRaiseEyebrows.setPlainText("Press to set new KeyBind")
 
         elif not self.changesMade:
-            self.txtRaiseEyebrows.setPlainText(self.heySexy)
+            self.txtRaiseEyebrows.setPlainText(self.sparetxtvar)
             self.txtRaiseEyebrows.setReadOnly(False)
 
     def get_userinput2(self, state):
         self.changesMade = not self.changesMade
         self.txtSmile.setReadOnly(True)
         if self.changesMade:
-            self.heySexy = ""
+            self.sparetxtvar = ""
             self.txtSmile.setPlainText("Press to set new KeyBind")
 
         elif not self.changesMade:
-            self.txtSmile.setPlainText(self.heySexy)
+            self.txtSmile.setPlainText(self.sparetxtvar)
             self.txtSmile.setReadOnly(False)
 
     def get_userinput3(self, state):
         self.changesMade = not self.changesMade
         self.txtSnarl.setReadOnly(True)
         if self.changesMade:
-            self.heySexy = ""
+            self.sparetxtvar = ""
             self.txtSnarl.setPlainText("Press to set new KeyBind")
 
         elif not self.changesMade:
-            self.txtSnarl.setPlainText(self.heySexy)
+            self.txtSnarl.setPlainText(self.sparetxtvar)
             self.txtSnarl.setReadOnly(False)
 
     def get_userinput4(self, state):
         self.changesMade = not self.changesMade
         self.txtBlink.setReadOnly(True)
         if self.changesMade:
-            self.heySexy = ""
+            self.sparetxtvar = ""
             self.txtBlink.setPlainText("Press to set new KeyBind")
 
         elif not self.changesMade:
-            self.txtBlink.setPlainText(self.heySexy)
+            self.txtBlink.setPlainText(self.sparetxtvar)
             self.txtBlink.setReadOnly(False)
 
     def keyPressEvent(self, e):
@@ -374,172 +374,177 @@ class App(QDialog):
 
             # Numerical
             if e.key() == Qt.Key_0:
-                self.heySexy += "0"
+                self.sparetxtvar += "0"
             elif e.key() == Qt.Key_1:
-                self.heySexy += "1"
+                self.sparetxtvar += "1"
             elif e.key() == Qt.Key_2:
-                self.heySexy += "2"
+                self.sparetxtvar += "2"
             elif e.key() == Qt.Key_3:
-                self.heySexy += "3"
+                self.sparetxtvar += "3"
             elif e.key() == Qt.Key_4:
-                self.heySexy += "4"
+                self.sparetxtvar += "4"
             elif e.key() == Qt.Key_5:
-                self.heySexy += "5"
+                self.sparetxtvar += "5"
             elif e.key() == Qt.Key_6:
-                self.heySexy += "6"
+                self.sparetxtvar += "6"
             elif e.key() == Qt.Key_7:
-                self.heySexy += "7"
+                self.sparetxtvar += "7"
             elif e.key() == Qt.Key_8:
-                self.heySexy += "8"
+                self.sparetxtvar += "8"
             elif e.key() == Qt.Key_9:
-                self.heySexy += "9"
+                self.sparetxtvar += "9"
 
             # Alphabetical
             elif e.key() == Qt.Key_A:
-                self.heySexy += "a"
+                self.sparetxtvar += "a"
             elif e.key() == Qt.Key_B:
-                self.heySexy += "b"
+                self.sparetxtvar += "b"
             elif e.key() == Qt.Key_C:
-                self.heySexy += "c"
+                self.sparetxtvar += "c"
             elif e.key() == Qt.Key_D:
-                self.heySexy += "d"
+                self.sparetxtvar += "d"
             elif e.key() == Qt.Key_E:
-                self.heySexy += "e"
+                self.sparetxtvar += "e"
             elif e.key() == Qt.Key_F:
-                self.heySexy += "f"
+                self.sparetxtvar += "f"
             elif e.key() == Qt.Key_G:
-                self.heySexy += "g"
+                self.sparetxtvar += "g"
             elif e.key() == Qt.Key_H:
-                self.heySexy += "h"
+                self.sparetxtvar += "h"
             elif e.key() == Qt.Key_I:
-                self.heySexy += "i"
+                self.sparetxtvar += "i"
             elif e.key() == Qt.Key_J:
-                self.heySexy += "j"
+                self.sparetxtvar += "j"
             elif e.key() == Qt.Key_K:
-                self.heySexy += "k"
+                self.sparetxtvar += "k"
             elif e.key() == Qt.Key_L:
-                self.heySexy += "l"
+                self.sparetxtvar += "l"
             elif e.key() == Qt.Key_M:
-                self.heySexy += "m"
+                self.sparetxtvar += "m"
             elif e.key() == Qt.Key_N:
-                self.heySexy += "n"
+                self.sparetxtvar += "n"
             elif e.key() == Qt.Key_O:
-                self.heySexy += "o"
+                self.sparetxtvar += "o"
             elif e.key() == Qt.Key_P:
-                self.heySexy += "p"
+                self.sparetxtvar += "p"
             elif e.key() == Qt.Key_Q:
-                self.heySexy += "q"
+                self.sparetxtvar += "q"
             elif e.key() == Qt.Key_R:
-                self.heySexy += "r"
+                self.sparetxtvar += "r"
             elif e.key() == Qt.Key_S:
-                self.heySexy += "s"
+                self.sparetxtvar += "s"
             elif e.key() == Qt.Key_T:
-                self.heySexy += "t"
+                self.sparetxtvar += "t"
             elif e.key() == Qt.Key_U:
-                self.heySexy += "u"
+                self.sparetxtvar += "u"
             elif e.key() == Qt.Key_V:
-                self.heySexy += "v"
+                self.sparetxtvar += "v"
             elif e.key() == Qt.Key_W:
-                self.heySexy += "w"
+                self.sparetxtvar += "w"
             elif e.key() == Qt.Key_X:
-                self.heySexy += "x"
+                self.sparetxtvar += "x"
             elif e.key() == Qt.Key_Y:
-                self.heySexy += "y"
+                self.sparetxtvar += "y"
             elif e.key() == Qt.Key_Z:
-                self.heySexy += "z"
+                self.sparetxtvar += "z"
+
+            elif e.key() == Qt.Key_Space:
+                self.sparetxtvar += " "
 
             # Modifiers
             elif e.key() == Qt.Key_Shift:
-                self.heySexy += "+"
+                self.sparetxtvar += "+"
             elif e.key() == Qt.Key_Control:
-                self.heySexy += "^"
+                self.sparetxtvar += "^"
             elif e.key() == Qt.Key_Alt:
-                self.heySexy += "%"
+                self.sparetxtvar += "%"
 
             # Left Right Up Down
             elif e.key() == Qt.Key_Left:
-                self.heySexy += "{LEFT}"
+                self.sparetxtvar += "{LEFT}"
             elif e.key() == Qt.Key_Right:
-                self.heySexy += "{RIGHT}"
+                self.sparetxtvar += "{RIGHT}"
             elif e.key() == Qt.Key_Down:
-                self.heySexy += "{DOWN}"
+                self.sparetxtvar += "{DOWN}"
             elif e.key() == Qt.Key_Up:
-                self.heySexy += "{UP}"
+                self.sparetxtvar += "{UP}"
 
             # Function keys
             elif e.key() == Qt.Key_F1:
-                self.heySexy += "{F1}"
+                self.sparetxtvar += "{F1}"
             elif e.key() == Qt.Key_F2:
-                self.heySexy += "{F2}"
+                self.sparetxtvar += "{F2}"
             elif e.key() == Qt.Key_F3:
-                self.heySexy += "{F3}"
+                self.sparetxtvar += "{F3}"
             elif e.key() == Qt.Key_F4:
-                self.heySexy += "{F4}"
+                self.sparetxtvar += "{F4}"
             elif e.key() == Qt.Key_F5:
-                self.heySexy += "{F5}"
+                self.sparetxtvar += "{F5}"
             elif e.key() == Qt.Key_F6:
-                self.heySexy += "{F6}"
+                self.sparetxtvar += "{F6}"
             elif e.key() == Qt.Key_F7:
-                self.heySexy += "{F7}"
+                self.sparetxtvar += "{F7}"
             elif e.key() == Qt.Key_F8:
-                self.heySexy += "{F8}"
+                self.sparetxtvar += "{F8}"
             elif e.key() == Qt.Key_F9:
-                self.heySexy += "{F9}"
+                self.sparetxtvar += "{F9}"
             elif e.key() == Qt.Key_F10:
-                self.heySexy += "{F10}"
+                self.sparetxtvar += "{F10}"
             elif e.key() == Qt.Key_F11:
-                self.heySexy += "{F11}"
+                self.sparetxtvar += "{F11}"
             elif e.key() == Qt.Key_F12:
-                self.heySexy += "{F12}"
+                self.sparetxtvar += "{F12}"
 
             # Goes all the way to F16 if required.
 
             # Alternative keys:
             # {BACKSPACE}
             elif e.key() == Qt.Key_Backspace:
-                self.heySexy += "{F12}"
+                self.sparetxtvar += "{F12}"
             # {CAPSLOCK}
             elif e.key() == Qt.Key_CapsLock:
-                self.heySexy += "{CAPSLOCK}"
+                self.sparetxtvar += "{CAPSLOCK}"
             # {CLEAR}
             elif e.key() == Qt.Key_Clear:
-                self.heySexy += "{CLEAR}"
+                self.sparetxtvar += "{CLEAR}"
             # {DELETE}
             elif e.key() == Qt.Key_Delete:
-                self.heySexy += "{DELETE}"
+                self.sparetxtvar += "{DELETE}"
             # {INSERT}
             elif e.key() == Qt.Key_Insert:
-                self.heySexy += "{INSERT}"
+                self.sparetxtvar += "{INSERT}"
             # {END}
             elif e.key() == Qt.Key_End:
-                self.heySexy += "{END}"
+                self.sparetxtvar += "{END}"
+
             # {ENTER}
             elif e.key() == Qt.Key_Enter:
-                self.heySexy += "{ENTER}"
+                self.sparetxtvar += "{ENTER}"
+
             # {ESCAPE}
             elif e.key() == Qt.Key_Escape:
-                self.heySexy += "{ESCAPE}"
+                self.sparetxtvar += "{ESCAPE}"
             # {HELP}
             elif e.key() == Qt.Key_Help:
-                self.heySexy += "{HELP}"
+                self.sparetxtvar += "{HELP}"
             # {HOME}
             elif e.key() == Qt.Key_Home:
-                self.heySexy += "{HOME}"
+                self.sparetxtvar += "{HOME}"
             # {NUMLOCK}
             elif e.key() == Qt.Key_NumLock:
-                self.heySexy += "{NUMLOCK}"
+                self.sparetxtvar += "{NUMLOCK}"
             # {PGDN} / Page Down
             elif e.key() == Qt.Key_PageDown:
-                self.heySexy += "{PGDN}"
+                self.sparetxtvar += "{PGDN}"
             # {PGUP} / Page Up
             elif e.key() == Qt.Key_PageUp:
-                self.heySexy += "{PGUP}"
+                self.sparetxtvar += "{PGUP}"
             # {SCROLLLOCK}
             elif e.key() == Qt.Key_ScrollLock:
-                self.heySexy += "{SCROLLLOCK}"
+                self.sparetxtvar += "{SCROLLLOCK}"
             # {TAB}
             elif e.key() == Qt.Key_Tab:
-                self.heySexy += "{TAB}"
+                self.sparetxtvar += "{TAB}"
 
             # {BREAK}
             # {PRTSC} ## Print Screen
