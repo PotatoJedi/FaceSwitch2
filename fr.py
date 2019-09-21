@@ -2,7 +2,7 @@ import sys
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtWidgets import QApplication, QDialog, QInputDialog, QMainWindow, QCheckBox, QWidget, QPushButton, QLabel, \
-    QMessageBox, QDesktopWidget, QFileDialog, QErrorMessage
+    QMessageBox, QDesktopWidget, QFileDialog, QErrorMessage, QInputDialog, QLineEdit
 from PyQt5.QtGui import QIcon, QPalette, QColor, QPixmap, QImage
 from PyQt5.QtCore import pyqtSlot, Qt, QPoint
 from imutils import face_utils
@@ -13,7 +13,7 @@ import win32com.client as comclt  # Used to insert keys
 import os
 
 import json  # for saving/loading settings
-
+import msvcrt
 
 class App(QDialog):
     def __init__(self):
@@ -44,6 +44,10 @@ class App(QDialog):
 
         self.base_line = 0
 
+
+        self.heySexy = "Press a key to keybind"
+        self.changesMade = False
+
         self.initUI()
         
         self.smileActivated = False
@@ -52,7 +56,7 @@ class App(QDialog):
         self.snarlActivated = False
         self.blinkActivated = False
         self.calibrate = False
-        self.changesMade = False
+
         
         self.wsh = comclt.Dispatch("WScript.Shell")  # Open keytyper
         
@@ -65,7 +69,6 @@ class App(QDialog):
         self.smileVar = 0
         self.snarlVar = 0
         self.blinkVar = 0
-
 
     def center(self):
         qr = self.frameGeometry()
@@ -259,6 +262,14 @@ class App(QDialog):
         palette.setColor(QPalette.HighlightedText, Qt.black)
         QApplication.setPalette(palette)
 
+        # Text boxes
+        #textEdit.mousePressEvent = text_click
+        self.txtOpenMouth.mousePressEvent = self.get_userinput
+        self.txtRaiseEyebrows.mousePressEvent = self.get_userinput1
+        self.txtSmile.mousePressEvent = self.get_userinput2
+        self.txtSnarl.mousePressEvent = self.get_userinput3
+        self.txtBlink.mousePressEvent = self.get_userinput4
+
         # Checkboxes
         self.cboxOpenMouth.stateChanged.connect(lambda: self.btn_state(self.cboxOpenMouth))
         self.cboxRaiseEyebrows.stateChanged.connect(lambda: self.btn_state(self.cboxRaiseEyebrows))
@@ -294,6 +305,245 @@ class App(QDialog):
         # webcam
         self.webcam.setText("Webcam")
         self.show()
+
+        #       self.txtRaiseEyebrows.mousePressEvent = self.get_userinput1
+        #       self.txtSmile.mousePressEvent = self.get_userinput2
+        #       self.txtSnarl.mousePressEvent = self.get_userinput3
+        #       self.txtBlink.mousePressEvent = self.get_userinput4
+
+    def get_userinput(self, state):
+        self.changesMade = not self.changesMade
+        self.txtOpenMouth.setReadOnly(True)
+
+        if self.changesMade:
+            self.heySexy = ""
+            self.txtOpenMouth.setPlainText("Press to set new KeyBind")
+
+        elif not self.changesMade:
+            self.txtOpenMouth.setPlainText(self.heySexy)
+            self.txtOpenMouth.setReadOnly(False)
+
+    def get_userinput1(self, state):
+        self.changesMade = not self.changesMade
+        self.txtRaiseEyebrows.setReadOnly(True)
+
+        if self.changesMade:
+            self.heySexy = ""
+            self.txtRaiseEyebrows.setPlainText("Press to set new KeyBind")
+
+        elif not self.changesMade:
+            self.txtRaiseEyebrows.setPlainText(self.heySexy)
+            self.txtRaiseEyebrows.setReadOnly(False)
+
+    def get_userinput2(self, state):
+        self.changesMade = not self.changesMade
+        self.txtSmile.setReadOnly(True)
+        if self.changesMade:
+            self.heySexy = ""
+            self.txtSmile.setPlainText("Press to set new KeyBind")
+
+        elif not self.changesMade:
+            self.txtSmile.setPlainText(self.heySexy)
+            self.txtSmile.setReadOnly(False)
+
+    def get_userinput3(self, state):
+        self.changesMade = not self.changesMade
+        self.txtSnarl.setReadOnly(True)
+        if self.changesMade:
+            self.heySexy = ""
+            self.txtSnarl.setPlainText("Press to set new KeyBind")
+
+        elif not self.changesMade:
+            self.txtSnarl.setPlainText(self.heySexy)
+            self.txtSnarl.setReadOnly(False)
+
+    def get_userinput4(self, state):
+        self.changesMade = not self.changesMade
+        self.txtBlink.setReadOnly(True)
+        if self.changesMade:
+            self.heySexy = ""
+            self.txtBlink.setPlainText("Press to set new KeyBind")
+
+        elif not self.changesMade:
+            self.txtBlink.setPlainText(self.heySexy)
+            self.txtBlink.setReadOnly(False)
+
+    def keyPressEvent(self, e):
+        if self.changesMade:
+            print(e.key())
+
+            # Numerical
+            if e.key() == Qt.Key_0:
+                self.heySexy += "0"
+            elif e.key() == Qt.Key_1:
+                self.heySexy += "1"
+            elif e.key() == Qt.Key_2:
+                self.heySexy += "2"
+            elif e.key() == Qt.Key_3:
+                self.heySexy += "3"
+            elif e.key() == Qt.Key_4:
+                self.heySexy += "4"
+            elif e.key() == Qt.Key_5:
+                self.heySexy += "5"
+            elif e.key() == Qt.Key_6:
+                self.heySexy += "6"
+            elif e.key() == Qt.Key_7:
+                self.heySexy += "7"
+            elif e.key() == Qt.Key_8:
+                self.heySexy += "8"
+            elif e.key() == Qt.Key_9:
+                self.heySexy += "9"
+
+            # Alphabetical
+            elif e.key() == Qt.Key_A:
+                self.heySexy += "a"
+            elif e.key() == Qt.Key_B:
+                self.heySexy += "b"
+            elif e.key() == Qt.Key_C:
+                self.heySexy += "c"
+            elif e.key() == Qt.Key_D:
+                self.heySexy += "d"
+            elif e.key() == Qt.Key_E:
+                self.heySexy += "e"
+            elif e.key() == Qt.Key_F:
+                self.heySexy += "f"
+            elif e.key() == Qt.Key_G:
+                self.heySexy += "g"
+            elif e.key() == Qt.Key_H:
+                self.heySexy += "h"
+            elif e.key() == Qt.Key_I:
+                self.heySexy += "i"
+            elif e.key() == Qt.Key_J:
+                self.heySexy += "j"
+            elif e.key() == Qt.Key_K:
+                self.heySexy += "k"
+            elif e.key() == Qt.Key_L:
+                self.heySexy += "l"
+            elif e.key() == Qt.Key_M:
+                self.heySexy += "m"
+            elif e.key() == Qt.Key_N:
+                self.heySexy += "n"
+            elif e.key() == Qt.Key_O:
+                self.heySexy += "o"
+            elif e.key() == Qt.Key_P:
+                self.heySexy += "p"
+            elif e.key() == Qt.Key_Q:
+                self.heySexy += "q"
+            elif e.key() == Qt.Key_R:
+                self.heySexy += "r"
+            elif e.key() == Qt.Key_S:
+                self.heySexy += "s"
+            elif e.key() == Qt.Key_T:
+                self.heySexy += "t"
+            elif e.key() == Qt.Key_U:
+                self.heySexy += "u"
+            elif e.key() == Qt.Key_V:
+                self.heySexy += "v"
+            elif e.key() == Qt.Key_W:
+                self.heySexy += "w"
+            elif e.key() == Qt.Key_X:
+                self.heySexy += "x"
+            elif e.key() == Qt.Key_Y:
+                self.heySexy += "y"
+            elif e.key() == Qt.Key_Z:
+                self.heySexy += "z"
+
+            # Modifiers
+            elif e.key() == Qt.Key_Shift:
+                self.heySexy += "+"
+            elif e.key() == Qt.Key_Control:
+                self.heySexy += "^"
+            elif e.key() == Qt.Key_Alt:
+                self.heySexy += "%"
+
+            # Left Right Up Down
+            elif e.key() == Qt.Key_Left:
+                self.heySexy += "{LEFT}"
+            elif e.key() == Qt.Key_Right:
+                self.heySexy += "{RIGHT}"
+            elif e.key() == Qt.Key_Down:
+                self.heySexy += "{DOWN}"
+            elif e.key() == Qt.Key_Up:
+                self.heySexy += "{UP}"
+
+            # Function keys
+            elif e.key() == Qt.Key_F1:
+                self.heySexy += "{F1}"
+            elif e.key() == Qt.Key_F2:
+                self.heySexy += "{F2}"
+            elif e.key() == Qt.Key_F3:
+                self.heySexy += "{F3}"
+            elif e.key() == Qt.Key_F4:
+                self.heySexy += "{F4}"
+            elif e.key() == Qt.Key_F5:
+                self.heySexy += "{F5}"
+            elif e.key() == Qt.Key_F6:
+                self.heySexy += "{F6}"
+            elif e.key() == Qt.Key_F7:
+                self.heySexy += "{F7}"
+            elif e.key() == Qt.Key_F8:
+                self.heySexy += "{F8}"
+            elif e.key() == Qt.Key_F9:
+                self.heySexy += "{F9}"
+            elif e.key() == Qt.Key_F10:
+                self.heySexy += "{F10}"
+            elif e.key() == Qt.Key_F11:
+                self.heySexy += "{F11}"
+            elif e.key() == Qt.Key_F12:
+                self.heySexy += "{F12}"
+
+            # Goes all the way to F16 if required.
+
+            # Alternative keys:
+            # {BACKSPACE}
+            elif e.key() == Qt.Key_Backspace:
+                self.heySexy += "{F12}"
+            # {CAPSLOCK}
+            elif e.key() == Qt.Key_CapsLock:
+                self.heySexy += "{CAPSLOCK}"
+            # {CLEAR}
+            elif e.key() == Qt.Key_Clear:
+                self.heySexy += "{CLEAR}"
+            # {DELETE}
+            elif e.key() == Qt.Key_Delete:
+                self.heySexy += "{DELETE}"
+            # {INSERT}
+            elif e.key() == Qt.Key_Insert:
+                self.heySexy += "{INSERT}"
+            # {END}
+            elif e.key() == Qt.Key_End:
+                self.heySexy += "{END}"
+            # {ENTER}
+            elif e.key() == Qt.Key_Enter:
+                self.heySexy += "{ENTER}"
+            # {ESCAPE}
+            elif e.key() == Qt.Key_Escape:
+                self.heySexy += "{ESCAPE}"
+            # {HELP}
+            elif e.key() == Qt.Key_Help:
+                self.heySexy += "{HELP}"
+            # {HOME}
+            elif e.key() == Qt.Key_Home:
+                self.heySexy += "{HOME}"
+            # {NUMLOCK}
+            elif e.key() == Qt.Key_NumLock:
+                self.heySexy += "{NUMLOCK}"
+            # {PGDN} / Page Down
+            elif e.key() == Qt.Key_PageDown:
+                self.heySexy += "{PGDN}"
+            # {PGUP} / Page Up
+            elif e.key() == Qt.Key_PageUp:
+                self.heySexy += "{PGUP}"
+            # {SCROLLLOCK}
+            elif e.key() == Qt.Key_ScrollLock:
+                self.heySexy += "{SCROLLLOCK}"
+            # {TAB}
+            elif e.key() == Qt.Key_Tab:
+                self.heySexy += "{TAB}"
+
+            # {BREAK}
+            # {PRTSC} ## Print Screen
+
 
     def btn_calibrate(self):
         if self.faceShapePredictorActivated:
