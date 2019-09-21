@@ -17,4 +17,4 @@ For example they could map a keystroke to the "open mouth" gesture. This would m
 - [imutils 0.5.2](https://pypi.org/project/imutils/)
 - [numpy 1.17.0 ](https://pypi.org/project/numpy/)
 - [pywin32 224](https://pypi.org/project/pywin32/)
-- [pygame 1.9.6](https://pypi.org/project/pygame/)
+- [cmake 3.14.4](https://pypi.org/project/cmake/)
