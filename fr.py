@@ -15,16 +15,18 @@ import os
 import json  # for saving/loading settings
 import msvcrt
 
-class App(QDialog):
-    def __init__(self):
-        super(App, self).__init__()
+
+class MainWindow(QDialog):
+    def __init__(self, parent=None):
+        super(MainWindow, self).__init__()
+
         self.title = 'Face Switch 2.0'
         self.closeEvent = self.closeEvent
         self.setWindowIcon(QtGui.QIcon('interface/icon.png'))
-        
+
         global app_dir  # Allow the variable to be used anywhere
         app_dir = os.environ['USERPROFILE'] + '/.FaceSwitch2'  # Path to application settings
-        
+
         if not os.path.isdir(app_dir):  # Create the directory if it does not already exist
             try:
                 os.mkdir(app_dir)  # Make the .FaceSwitch2 folder
@@ -32,24 +34,26 @@ class App(QDialog):
                 print("Creation of the directory %s failed" % app_dir)
             else:
                 print("Successfully created the directory %s " % app_dir)
-        
+
         self.captureFacePositions = True
         self.capturedPositions = False
         self.faceShapePredictorActivated = False
-        
+
         self.count = 0
         self.webcamActive = True
-        
+
         self.cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # gives an error without CAP_DSHOW
 
         self.base_line = 0
 
-
         self.sparetxtvar = "Press a key to keybind"
         self.changesMade = False
 
+        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocus()
+
         self.initUI()
-        
+
         self.smileActivated = False
         self.openMouthActivated = False
         self.raiseEyebrowsActivated = False
@@ -57,13 +61,12 @@ class App(QDialog):
         self.blinkActivated = False
         self.calibrate = False
 
-        
         self.wsh = comclt.Dispatch("WScript.Shell")  # Open keytyper
-        
+
         self.center()
         self.oldPos = self.pos()
         self.landmarks()
-        
+
         self.openMouthVar = 0
         self.raiseEyebrowsVar = 0
         self.smileVar = 0
@@ -369,9 +372,9 @@ class App(QDialog):
             self.txtBlink.setReadOnly(False)
 
     def keyPressEvent(self, e):
+
         if self.changesMade:
             print(e.key())
-
             # Numerical
             if e.key() == Qt.Key_0:
                 self.sparetxtvar += "0"
@@ -518,7 +521,7 @@ class App(QDialog):
                 self.sparetxtvar += "{END}"
 
             # {ENTER}
-            elif e.key() == Qt.Key_Enter:
+            elif e.key() == 16777220:
                 self.sparetxtvar += "{ENTER}"
 
             # {ESCAPE}
@@ -703,8 +706,6 @@ class App(QDialog):
             print("Gesture detection Activated!")
             self.btnInitialize.setText("Deactivate")
 
-    def warningbox(self):
-        pass
 
     def closeEvent(self, event):
         reply = QMessageBox.question(self, 'Message', "Are you sure you want to quit?", QMessageBox.Yes, QMessageBox.No)
@@ -723,8 +724,10 @@ class App(QDialog):
             event.ignore()
 
 
-app = QApplication(sys.argv)
-widget = App()
-widget.show()
-print("Now exiting")
-sys.exit()
+if __name__ == "__main__":
+    import sys
+    app = QApplication(sys.argv)
+    widget = MainWindow()
+    widget.show()
+    print("Now exiting")
+    sys.exit()
