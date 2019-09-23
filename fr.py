@@ -125,7 +125,7 @@ class App(QDialog):
                     self.base_line = ((shape[16][0]) - (shape[0][0]))
                     
                     # Recognise gestures
-                    """
+                    """ old calculation methods
                     # Open mouth
                     if self.openMouthActivated:
                         mouth_top = ((shape[61][1]) + (shape[62][1]) + (shape[63][1]))/3
@@ -225,7 +225,9 @@ class App(QDialog):
                         eyelid_bottom = ((shape[40][1]) + (shape[41][1]) + (shape[46][1]) + (shape[47][1]))/4
                         eyelid_height = eyelid_bottom - eyelid_top
                         try:
-                            if eyelid_height/self.base_line < float(self.blink_var):
+                            if self.neutral_gesture_vars['4'] - (eyelid_height/self.base_line) > float(self.blink_var):
+                                gesture_arr.append(4)
+                                gesture_arr.append(4)
                                 gesture_arr.append(4)
                                 detection = True
                         except:
@@ -235,7 +237,6 @@ class App(QDialog):
                     # This prevents gesture detections from the previous gesture carrying over to the next
                     if not detection:
                         gesture_arr.append(-1)
-                    
                     
                     gesture_output = -1  # Set the default value to -1 (no gesture)
                     #  Get the most common number (gesture) from the array and set it to be the registered gesture
@@ -269,7 +270,7 @@ class App(QDialog):
                             cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
                             
                     elif gesture_output == 4:
-                        print("Eye close detected! - ", (eyelid_height/self.base_line))
+                        print("Eye close detected! - ", self.neutral_gesture_vars['4'] - (eyelid_height/self.base_line))
                         self.wsh.SendKeys(self.txtBlink.toPlainText())
                         for t in range(36, 48, 1):
                             cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
@@ -277,47 +278,7 @@ class App(QDialog):
                     if 0 <= gesture_output <= 4: # If a gesture was output, reset the gesture array to give a small pause
                         gesture_arr = deque(maxlen=15)
                         gesture_arr.extend([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
-                    
-                    
-                    
-                    """
-                    if gesture_output == 0:
-                        print("Mouth opened! - ", (mouth_height/self.base_line))
-                        self.wsh.SendKeys(self.txtOpenMouth.toPlainText())
-                        for t in range(60, 68, 1):
-                            cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
                         
-                    elif gesture_output == 1:
-                        print("Eyebrows raised! - ", (eye_height/self.base_line))
-                        self.wsh.SendKeys(self.txtRaiseEyebrows.toPlainText())
-                        for t in range(17, 27, 1):
-                            cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
-                            
-                    elif gesture_output == 2:
-                        print("Smile detected! - ", (mouth_width/self.base_line))
-                        self.wsh.SendKeys(self.txtSmile.toPlainText())
-                        for t in range(54, 60, 1):
-                            cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
-                        cv2.circle(frame, (shape[48][0], shape[48][1]), 2, (255, 0, 0), -1)
-                        
-                    elif gesture_output == 3:
-                        print("Anger detected! - ", (nose_height/self.base_line))
-                        self.wsh.SendKeys(self.txtSnarl.toPlainText())
-                        for t in range(27, 36, 1):
-                            cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
-                            
-                    elif gesture_output == 4:
-                        print("Eye close detected! - ", (eyelid_height/self.base_line))
-                        self.wsh.SendKeys(self.txtBlink.toPlainText())
-                        for t in range(36, 48, 1):
-                            cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
-                
-                    if 0 <= gesture_output <= 4:
-                        gesture_arr = deque(maxlen=15)
-                        gesture_arr.extend([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
-                        print(gesture_output)
-                        
-                    """
             rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             image = QImage(rgb_frame.tobytes(), 
                 rgb_frame.shape[1],
