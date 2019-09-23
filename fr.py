@@ -209,23 +209,16 @@ class App(QDialog):
                         except:
                             pass
                     
-                    # If there was no gesture detected, add a default value to the array
-                    # This prevents gesture detections from the previous gesture carrying over to the next
-                    if not detection:
-                        gesture_arr.append(-1)
-                    
-                    """
-                    
                     # Scrunch nose / Snarl
                     if self.snarlActivated:
-                        nose_top = ((shape[21][1]) + (shape[22][1]))/2
-                        nose_bottom = ((shape[31][1]) + (shape[35][1]))/2
-                        nose_height = nose_bottom - nose_top
+                        nose_height = (((shape[31][1]) + (shape[35][1]))/2) - (((shape[21][1]) + (shape[22][1]))/2)
                         try:
-                            if nose_height/self.base_line < float(self.snarl_var):
+                            if self.neutral_gesture_vars['3'] - (nose_height/self.base_line) > float(self.snarl_var):
                                 gesture_arr.append(3)
+                                detection = True
                         except:
                             pass
+                    
                     # Blink
                     if self.blinkActivated:
                         eyelid_top = ((shape[37][1]) + (shape[38][1]) + (shape[43][1]) + (shape[44][1]))/4
@@ -234,9 +227,15 @@ class App(QDialog):
                         try:
                             if eyelid_height/self.base_line < float(self.blink_var):
                                 gesture_arr.append(4)
+                                detection = True
                         except:
                             pass
-                    """
+                    
+                    # If there was no gesture detected, add a default value to the array
+                    # This prevents gesture detections from the previous gesture carrying over to the next
+                    if not detection:
+                        gesture_arr.append(-1)
+                    
                     
                     gesture_output = -1  # Set the default value to -1 (no gesture)
                     #  Get the most common number (gesture) from the array and set it to be the registered gesture
@@ -264,7 +263,7 @@ class App(QDialog):
                         cv2.circle(frame, (shape[48][0], shape[48][1]), 2, (255, 0, 0), -1)
                         
                     elif gesture_output == 3:
-                        print("Anger detected! - ", (nose_height/self.base_line))
+                        print("Anger detected! - ", self.neutral_gesture_vars['3'] - (nose_height/self.base_line))
                         self.wsh.SendKeys(self.txtSnarl.toPlainText())
                         for t in range(27, 36, 1):
                             cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
