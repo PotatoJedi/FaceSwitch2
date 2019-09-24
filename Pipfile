@@ -4,15 +4,16 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+pyinstaller = "*"
 
 [packages]
-dlib = "*"
-opencv-python = "*"
-imutils = "*"
-numpy = "*"
+dlib = "==19.18.0"
+opencv-python = "==4.1.1.26"
+imutils = "==0.5.3"
+numpy = "==1.17.2"
 pywin32 = "==224"
-PyQt5 = "==5.13.0"
-cmake = "*"
+PyQt5 = "==5.13.1"
+cmake = "==3.14.4"
 
 [requires]
 python_version = "3.6"

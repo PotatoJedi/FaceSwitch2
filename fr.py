@@ -1,4 +1,4 @@
-import sys 
+import sys
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtWidgets import QApplication, QDialog, QInputDialog, QMainWindow, QCheckBox, QWidget, QPushButton, QLabel, \
@@ -10,10 +10,8 @@ from collections import deque
 import cv2
 import dlib
 import win32com.client as comclt  # Used to insert keys
-import os
-
+import os, sys
 import json  # for saving/loading settings
-import msvcrt
 
 
 class MainWindow(QDialog):
@@ -22,7 +20,7 @@ class MainWindow(QDialog):
 
         self.title = 'Face Switch 2.0'
         self.closeEvent = self.closeEvent
-        self.setWindowIcon(QtGui.QIcon('interface/icon.png'))
+        self.setWindowIcon(QtGui.QIcon('interfaces/icon.png'))
 
         global app_dir  # Allow the variable to be used anywhere
         app_dir = os.environ['USERPROFILE'] + '/.FaceSwitch2'  # Path to application settings
@@ -45,8 +43,7 @@ class MainWindow(QDialog):
         self.cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # gives an error without CAP_DSHOW
 
         self.base_line = 0
-
-        self.sparetxtvar = "Press a key to keybind"
+        self.sparetxtvar = ""
         self.changesMade = False
 
         self.setFocusPolicy(Qt.StrongFocus)
@@ -89,7 +86,6 @@ class MainWindow(QDialog):
 
     def landmarks(self):
         p = "resources/shape_predictor_68_face_landmarks.dat"  # p = our pre-trained model
-        
         detector = dlib.get_frontal_face_detector()
         predictor = dlib.shape_predictor(p)
 
@@ -238,7 +234,7 @@ class MainWindow(QDialog):
         self.cap.release()
         
     def initUI(self):
-        loadUi('interface/fr.ui', self)
+        loadUi('interfaces/fr.ui', self)
         
         # Load default settings
         self.value_changed()
@@ -266,12 +262,13 @@ class MainWindow(QDialog):
         QApplication.setPalette(palette)
 
         # Text boxes
-        #textEdit.mousePressEvent = text_click
+        # On mouse click
         self.txtOpenMouth.mousePressEvent = self.get_userinput
         self.txtRaiseEyebrows.mousePressEvent = self.get_userinput1
         self.txtSmile.mousePressEvent = self.get_userinput2
         self.txtSnarl.mousePressEvent = self.get_userinput3
         self.txtBlink.mousePressEvent = self.get_userinput4
+        #self.txtOpenMouth.mousePressEvent = self.get_keybind
 
         # Checkboxes
         self.cboxOpenMouth.stateChanged.connect(lambda: self.btn_state(self.cboxOpenMouth))
@@ -314,13 +311,28 @@ class MainWindow(QDialog):
         #       self.txtSnarl.mousePressEvent = self.get_userinput3
         #       self.txtBlink.mousePressEvent = self.get_userinput4
 
+
+    # code can be simplified - maybe put them in to classes of their own so they can call their
+    # own methods
+    # this is the code for when the user presses a QTextEdit box.
+
+    def get_keybind(self, state):
+        self.changesMade = True
+        #usrkeybind, ok = QInputDialog.getText(self, 'Enter KeyBind', '>')
+        usrkeybind, ok = QInputDialog.getText(self, 'Get Keybind', 'enter your name')
+        print(usrkeybind)
+
+        emptyVar = ""
+
+        self.txtOpenMouth.setPlainText(usrkeybind)
+
     def get_userinput(self, state):
         self.changesMade = not self.changesMade
         self.txtOpenMouth.setReadOnly(True)
 
         if self.changesMade:
             self.sparetxtvar = ""
-            self.txtOpenMouth.setPlainText("Press to set new KeyBind")
+            self.txtOpenMouth.setPlainText("Press some keys")
 
         elif not self.changesMade:
             self.txtOpenMouth.setPlainText(self.sparetxtvar)
@@ -332,7 +344,7 @@ class MainWindow(QDialog):
 
         if self.changesMade:
             self.sparetxtvar = ""
-            self.txtRaiseEyebrows.setPlainText("Press to set new KeyBind")
+            self.txtRaiseEyebrows.setPlainText("Press some keys")
 
         elif not self.changesMade:
             self.txtRaiseEyebrows.setPlainText(self.sparetxtvar)
@@ -343,7 +355,7 @@ class MainWindow(QDialog):
         self.txtSmile.setReadOnly(True)
         if self.changesMade:
             self.sparetxtvar = ""
-            self.txtSmile.setPlainText("Press to set new KeyBind")
+            self.txtSmile.setPlainText("Press some keys")
 
         elif not self.changesMade:
             self.txtSmile.setPlainText(self.sparetxtvar)
@@ -354,7 +366,7 @@ class MainWindow(QDialog):
         self.txtSnarl.setReadOnly(True)
         if self.changesMade:
             self.sparetxtvar = ""
-            self.txtSnarl.setPlainText("Press to set new KeyBind")
+            self.txtSnarl.setPlainText("Press some keys")
 
         elif not self.changesMade:
             self.txtSnarl.setPlainText(self.sparetxtvar)
@@ -365,7 +377,7 @@ class MainWindow(QDialog):
         self.txtBlink.setReadOnly(True)
         if self.changesMade:
             self.sparetxtvar = ""
-            self.txtBlink.setPlainText("Press to set new KeyBind")
+            self.txtBlink.setPlainText("Press some keys")
 
         elif not self.changesMade:
             self.txtBlink.setPlainText(self.sparetxtvar)
@@ -374,179 +386,181 @@ class MainWindow(QDialog):
     def keyPressEvent(self, e):
 
         if self.changesMade:
-            print(e.key())
+            key = e.key()
+            print(key)
+            #test = QMessageBox.information(self, "hello", "I m here")
             # Numerical
-            if e.key() == Qt.Key_0:
+            if key == 48:
                 self.sparetxtvar += "0"
-            elif e.key() == Qt.Key_1:
+            elif key == 49:
                 self.sparetxtvar += "1"
-            elif e.key() == Qt.Key_2:
+            elif key == 50:
                 self.sparetxtvar += "2"
-            elif e.key() == Qt.Key_3:
+            elif key == 51:
                 self.sparetxtvar += "3"
-            elif e.key() == Qt.Key_4:
+            elif key == 52:
                 self.sparetxtvar += "4"
-            elif e.key() == Qt.Key_5:
+            elif key == 53:
                 self.sparetxtvar += "5"
-            elif e.key() == Qt.Key_6:
+            elif key == 54:
                 self.sparetxtvar += "6"
-            elif e.key() == Qt.Key_7:
+            elif key == 55:
                 self.sparetxtvar += "7"
-            elif e.key() == Qt.Key_8:
+            elif key == 56:
                 self.sparetxtvar += "8"
-            elif e.key() == Qt.Key_9:
+            elif key == 57:
                 self.sparetxtvar += "9"
 
             # Alphabetical
-            elif e.key() == Qt.Key_A:
+            elif key == 65:
                 self.sparetxtvar += "a"
-            elif e.key() == Qt.Key_B:
+            elif key == 66:
                 self.sparetxtvar += "b"
-            elif e.key() == Qt.Key_C:
+            elif key == 67:
                 self.sparetxtvar += "c"
-            elif e.key() == Qt.Key_D:
+            elif key == 68:
                 self.sparetxtvar += "d"
-            elif e.key() == Qt.Key_E:
+            elif key == 69:
                 self.sparetxtvar += "e"
-            elif e.key() == Qt.Key_F:
+            elif key == 70:
                 self.sparetxtvar += "f"
-            elif e.key() == Qt.Key_G:
+            elif key == 71:
                 self.sparetxtvar += "g"
-            elif e.key() == Qt.Key_H:
+            elif key == 72:
                 self.sparetxtvar += "h"
-            elif e.key() == Qt.Key_I:
+            elif key == 73:
                 self.sparetxtvar += "i"
-            elif e.key() == Qt.Key_J:
+            elif key == 74:
                 self.sparetxtvar += "j"
-            elif e.key() == Qt.Key_K:
+            elif key == 75:
                 self.sparetxtvar += "k"
-            elif e.key() == Qt.Key_L:
+            elif key == 76:
                 self.sparetxtvar += "l"
-            elif e.key() == Qt.Key_M:
+            elif key == 77:
                 self.sparetxtvar += "m"
-            elif e.key() == Qt.Key_N:
+            elif key == 78:
                 self.sparetxtvar += "n"
-            elif e.key() == Qt.Key_O:
+            elif key == 79:
                 self.sparetxtvar += "o"
-            elif e.key() == Qt.Key_P:
+            elif key == 80:
                 self.sparetxtvar += "p"
-            elif e.key() == Qt.Key_Q:
+            elif key == 81:
                 self.sparetxtvar += "q"
-            elif e.key() == Qt.Key_R:
+            elif key == 82:
                 self.sparetxtvar += "r"
-            elif e.key() == Qt.Key_S:
+            elif key == 83:
                 self.sparetxtvar += "s"
-            elif e.key() == Qt.Key_T:
+            elif key == 84:
                 self.sparetxtvar += "t"
-            elif e.key() == Qt.Key_U:
+            elif key == 85:
                 self.sparetxtvar += "u"
-            elif e.key() == Qt.Key_V:
+            elif key == 86:
                 self.sparetxtvar += "v"
-            elif e.key() == Qt.Key_W:
+            elif key == 87:
                 self.sparetxtvar += "w"
-            elif e.key() == Qt.Key_X:
+            elif key == 88:
                 self.sparetxtvar += "x"
-            elif e.key() == Qt.Key_Y:
+            elif key == 89:
                 self.sparetxtvar += "y"
-            elif e.key() == Qt.Key_Z:
+            elif key == 90:
                 self.sparetxtvar += "z"
 
-            elif e.key() == Qt.Key_Space:
+            elif key == Qt.Key_Space:
                 self.sparetxtvar += " "
 
             # Modifiers
-            elif e.key() == Qt.Key_Shift:
+            elif key == Qt.Key_Shift:
                 self.sparetxtvar += "+"
-            elif e.key() == Qt.Key_Control:
+            elif key == Qt.Key_Control:
                 self.sparetxtvar += "^"
-            elif e.key() == Qt.Key_Alt:
+            elif key == Qt.Key_Alt:
                 self.sparetxtvar += "%"
 
             # Left Right Up Down
-            elif e.key() == Qt.Key_Left:
+            elif key == Qt.Key_Left:
                 self.sparetxtvar += "{LEFT}"
-            elif e.key() == Qt.Key_Right:
+            elif key == Qt.Key_Right:
                 self.sparetxtvar += "{RIGHT}"
-            elif e.key() == Qt.Key_Down:
+            elif key == Qt.Key_Down:
                 self.sparetxtvar += "{DOWN}"
-            elif e.key() == Qt.Key_Up:
+            elif key == Qt.Key_Up:
                 self.sparetxtvar += "{UP}"
 
             # Function keys
-            elif e.key() == Qt.Key_F1:
+            elif key == Qt.Key_F1:
                 self.sparetxtvar += "{F1}"
-            elif e.key() == Qt.Key_F2:
+            elif key == Qt.Key_F2:
                 self.sparetxtvar += "{F2}"
-            elif e.key() == Qt.Key_F3:
+            elif key == Qt.Key_F3:
                 self.sparetxtvar += "{F3}"
-            elif e.key() == Qt.Key_F4:
+            elif key == Qt.Key_F4:
                 self.sparetxtvar += "{F4}"
-            elif e.key() == Qt.Key_F5:
+            elif key == Qt.Key_F5:
                 self.sparetxtvar += "{F5}"
-            elif e.key() == Qt.Key_F6:
+            elif key == Qt.Key_F6:
                 self.sparetxtvar += "{F6}"
-            elif e.key() == Qt.Key_F7:
+            elif key == Qt.Key_F7:
                 self.sparetxtvar += "{F7}"
-            elif e.key() == Qt.Key_F8:
+            elif key == Qt.Key_F8:
                 self.sparetxtvar += "{F8}"
-            elif e.key() == Qt.Key_F9:
+            elif key == Qt.Key_F9:
                 self.sparetxtvar += "{F9}"
-            elif e.key() == Qt.Key_F10:
+            elif key == Qt.Key_F10:
                 self.sparetxtvar += "{F10}"
-            elif e.key() == Qt.Key_F11:
+            elif key == Qt.Key_F11:
                 self.sparetxtvar += "{F11}"
-            elif e.key() == Qt.Key_F12:
+            elif key == Qt.Key_F12:
                 self.sparetxtvar += "{F12}"
 
             # Goes all the way to F16 if required.
 
             # Alternative keys:
             # {BACKSPACE}
-            elif e.key() == Qt.Key_Backspace:
-                self.sparetxtvar += "{F12}"
+            elif key == Qt.Key_Backspace:
+                self.sparetxtvar += "{BACKSPACE}"
             # {CAPSLOCK}
-            elif e.key() == Qt.Key_CapsLock:
+            elif key == Qt.Key_CapsLock:
                 self.sparetxtvar += "{CAPSLOCK}"
             # {CLEAR}
-            elif e.key() == Qt.Key_Clear:
+            elif key == Qt.Key_Clear:
                 self.sparetxtvar += "{CLEAR}"
             # {DELETE}
-            elif e.key() == Qt.Key_Delete:
+            elif key == Qt.Key_Delete:
                 self.sparetxtvar += "{DELETE}"
             # {INSERT}
-            elif e.key() == Qt.Key_Insert:
+            elif key == Qt.Key_Insert:
                 self.sparetxtvar += "{INSERT}"
             # {END}
-            elif e.key() == Qt.Key_End:
+            elif key == Qt.Key_End:
                 self.sparetxtvar += "{END}"
 
             # {ENTER}
-            elif e.key() == 16777220:
+            elif key == 16777220:
                 self.sparetxtvar += "{ENTER}"
 
             # {ESCAPE}
-            elif e.key() == Qt.Key_Escape:
+            elif key == Qt.Key_Escape:
                 self.sparetxtvar += "{ESCAPE}"
             # {HELP}
-            elif e.key() == Qt.Key_Help:
+            elif key == Qt.Key_Help:
                 self.sparetxtvar += "{HELP}"
             # {HOME}
-            elif e.key() == Qt.Key_Home:
+            elif key == Qt.Key_Home:
                 self.sparetxtvar += "{HOME}"
             # {NUMLOCK}
-            elif e.key() == Qt.Key_NumLock:
+            elif key == Qt.Key_NumLock:
                 self.sparetxtvar += "{NUMLOCK}"
             # {PGDN} / Page Down
-            elif e.key() == Qt.Key_PageDown:
+            elif key == Qt.Key_PageDown:
                 self.sparetxtvar += "{PGDN}"
             # {PGUP} / Page Up
-            elif e.key() == Qt.Key_PageUp:
+            elif key == Qt.Key_PageUp:
                 self.sparetxtvar += "{PGUP}"
             # {SCROLLLOCK}
-            elif e.key() == Qt.Key_ScrollLock:
+            elif key == Qt.Key_ScrollLock:
                 self.sparetxtvar += "{SCROLLLOCK}"
             # {TAB}
-            elif e.key() == Qt.Key_Tab:
+            elif key == Qt.Key_Tab:
                 self.sparetxtvar += "{TAB}"
 
             # {BREAK}
@@ -557,6 +571,7 @@ class MainWindow(QDialog):
         if self.faceShapePredictorActivated:
             self.calibrate = not self.calibrate
         else:
+            pass
             print("Must be activated")
 
     def value_changed(self):
