@@ -1,168 +1,26 @@
+import os
 import sys
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtWidgets import QApplication, QDialog, QInputDialog, QMainWindow, QCheckBox, QWidget, QPushButton, QLabel, \
-    QMessageBox, QDesktopWidget, QFileDialog, QErrorMessage, QInputDialog, QLineEdit
+    QMessageBox, QDesktopWidget, QFileDialog
 from PyQt5.QtGui import QIcon, QPalette, QColor, QPixmap, QImage
-from PyQt5.QtCore import pyqtSlot, Qt, QPoint
+from PyQt5.QtCore import pyqtSlot, Qt
 from imutils import face_utils
 from collections import deque
 import cv2
 import dlib
 import win32com.client as comclt  # Used to insert keys
-import os, sys
+
 import json  # for saving/loading settings
-
-class SecondWindow(QDialog):
-    def __init__(self, parent=None):
-        super(SecondWindow, self).__init__()
-
-        self.closeEvent = self.closeEvent
-
-        self.title = 'Face Switch 2.0.2'
-        self.sparetxtvar = ""
-
-        self.basicWindow()
-
-    def basicWindow(self):
-        loadUi('interfaces/fr2.ui', self)
-        self.plainTextEdit.setReadOnly(True)
-
-    def keyPressEvent(self, e):
-        key = e.key()
-        #test = QMessageBox.information(self, "hello", "I m here")
-        print(key)
-        # Numerical
-        # Numbers
-        if 58 <= key <= 67:
-            self.sparetxtvar += chr(key)
-            # Characters
-        elif 48 <= key <= 90:
-            self.sparetxtvar += str(chr(key)).lower()
-        # Space key does not work
-        elif key == Qt.Key_Space:
-            self.sparetxtvar += " "
-        # Modifiers
-        elif key == Qt.Key_Shift:
-            self.sparetxtvar += "+"
-        elif key == Qt.Key_Control:
-            self.sparetxtvar += "^"
-        elif key == Qt.Key_Alt:
-            self.sparetxtvar += "%"
-
-        # Left Right Up Down
-        elif key == Qt.Key_Left:
-            self.sparetxtvar += "{LEFT}"
-        elif key == Qt.Key_Right:
-            self.sparetxtvar += "{RIGHT}"
-        elif key == Qt.Key_Down:
-            self.sparetxtvar += "{DOWN}"
-        elif key == Qt.Key_Up:
-            self.sparetxtvar += "{UP}"
-
-        # Function keys
-        elif key == Qt.Key_F1:
-            self.sparetxtvar += "{F1}"
-        elif key == Qt.Key_F2:
-            self.sparetxtvar += "{F2}"
-        elif key == Qt.Key_F3:
-            self.sparetxtvar += "{F3}"
-        elif key == Qt.Key_F4:
-            self.sparetxtvar += "{F4}"
-        elif key == Qt.Key_F5:
-            self.sparetxtvar += "{F5}"
-        elif key == Qt.Key_F6:
-            self.sparetxtvar += "{F6}"
-        elif key == Qt.Key_F7:
-            self.sparetxtvar += "{F7}"
-        elif key == Qt.Key_F8:
-            self.sparetxtvar += "{F8}"
-        elif key == Qt.Key_F9:
-            self.sparetxtvar += "{F9}"
-        elif key == Qt.Key_F10:
-            self.sparetxtvar += "{F10}"
-        elif key == Qt.Key_F11:
-            self.sparetxtvar += "{F11}"
-        elif key == Qt.Key_F12:
-            self.sparetxtvar += "{F12}"
-
-            # Goes all the way to F16 if required.
-
-            # Alternative keys:
-            # {BACKSPACE}
-        elif key == Qt.Key_Backspace:
-            self.sparetxtvar += "{BACKSPACE}"
-        # {CAPSLOCK}
-        elif key == Qt.Key_CapsLock:
-            self.sparetxtvar += "{CAPSLOCK}"
-        # {CLEAR}
-        elif key == Qt.Key_Clear:
-            self.sparetxtvar += "{CLEAR}"
-        # {DELETE}
-        elif key == Qt.Key_Delete:
-            self.sparetxtvar += "{DELETE}"
-        # {INSERT}
-        elif key == Qt.Key_Insert:
-            self.sparetxtvar += "{INSERT}"
-            # {END}
-        elif key == Qt.Key_End:
-            self.sparetxtvar += "{END}"
-
-            # {ENTER}
-        elif key == 16777220:
-            self.sparetxtvar += "{ENTER}"
-
-            # {ESCAPE}
-        elif key == Qt.Key_Escape:
-            self.sparetxtvar += "{ESCAPE}"
-            # {HELP}
-        elif key == Qt.Key_Help:
-            self.sparetxtvar += "{HELP}"
-            # {HOME}
-        elif key == Qt.Key_Home:
-            self.sparetxtvar += "{HOME}"
-            # {NUMLOCK}
-        elif key == Qt.Key_NumLock:
-            self.sparetxtvar += "{NUMLOCK}"
-            # {PGDN} / Page Down
-        elif key == Qt.Key_PageDown:
-            self.sparetxtvar += "{PGDN}"
-            # {PGUP} / Page Up
-        elif key == Qt.Key_PageUp:
-            self.sparetxtvar += "{PGUP}"
-            # {SCROLLLOCK}
-        elif key == Qt.Key_ScrollLock:
-            self.sparetxtvar += "{SCROLLLOCK}"
-            # {TAB}
-        elif key == Qt.Key_Tab:
-            self.sparetxtvar += "{TAB}"
-
-        self.plainTextEdit.setPlainText(self.sparetxtvar)
-            # {BREAK}
-            # {PRTSC} ## Print Screen
-
-    def returnSparetxtVar(self):
-        return self.sparetxtvar
-
-    def setSparetxtVar(self, uinput):
-        self.sparetxtvar = uinput
-
-    def closeEvent(self, event):
-        reply = QMessageBox.question(self, 'Message', "Are you sure you want to quit?", QMessageBox.Yes, QMessageBox.No)
-
-        if reply == QMessageBox.Yes:
-            event.accept()
-        else:
-            self.sparetxtvar = ""
-            event.ignore()
+import fr2 as fr2
 
 class MainWindow(QDialog):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__()
 
-        self.second = SecondWindow()
-
-        self.title = 'Face Switch 2.0.2'
+        self.secondWindow = fr2.SecondWindow()
+		
         self.closeEvent = self.closeEvent
         self.setWindowIcon(QtGui.QIcon('interfaces/icon.png'))
 
@@ -181,7 +39,6 @@ class MainWindow(QDialog):
         self.capturedPositions = False
         self.faceShapePredictorActivated = False
 
-        self.count = 0
         self.webcamActive = True
 
         self.cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # gives an error without CAP_DSHOW
@@ -190,10 +47,6 @@ class MainWindow(QDialog):
         self.base_line = 0
 
         self.sparetxtvar = ""
-        self.changesMade = False
-
-        self.setFocusPolicy(Qt.StrongFocus)
-        self.setFocus()
 
         self.initUI()
 
@@ -204,14 +57,9 @@ class MainWindow(QDialog):
         self.leftWinkActivated = False
         self.rightWinkActivated = False
 
-        self.blinkActivated = False
-        self.calibrate = False
-
         self.wsh = comclt.Dispatch("WScript.Shell")  # Open keytyper
 
         self.center()
-        self.oldPos = self.pos()
-        self.landmarks()
         
         self.facial_landmarks = 0
         
@@ -234,14 +82,6 @@ class MainWindow(QDialog):
         cp = QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)
         self.move(qr.topLeft())
-
-    def mousePressEvent(self, event):
-        self.oldPos = event.globalPos()
-
-    def mouseMoveEvent(self, event):
-        delta = QPoint (event.globalPos() - self.oldPos)
-        self.move(self.x() + delta.x(), self.y() + delta.y())
-        self.oldPos = event.globalPos()
 
     def landmarks(self):
         p = "resources/shape_predictor_68_face_landmarks.dat"  # p = our pre-trained model
@@ -453,7 +293,7 @@ class MainWindow(QDialog):
         self.txtSnarl.mousePressEvent = self.get_userinput3
         self.txtLeftWink.mousePressEvent = self.get_userinput4
         self.txtRightWink.mousePressEvent = self.get_userinput5
-
+		# type in to the box code
         self.txtOpenMouth.setReadOnly(True)
         self.txtRaiseEyebrows.setReadOnly(True)
         self.txtSmile.setReadOnly(True)
@@ -542,88 +382,72 @@ class MainWindow(QDialog):
         else:
             pass
             print("Must be activated")
-
-    def get_keybind(self, state):
-        self.changesMade = True
-        #usrkeybind, ok = QInputDialog.getText(self, 'Enter KeyBind', '>')
-        usrkeybind, ok = QInputDialog.getText(self, 'Get Keybind', 'enter your name')
-        print(usrkeybind)
-
-        emptyVar = ""
-
-        self.txtOpenMouth.setPlainText(usrkeybind)
-
-        self.txtOpenMouth.mousePressEvent = self.get_userinput
-        self.txtRaiseEyebrows.mousePressEvent = self.get_userinput1
-        self.txtSmile.mousePressEvent = self.get_userinput2
-        self.txtSnarl.mousePressEvent = self.get_userinput3
-        self.txtLeftWink.mousePressEvent = self.get_userinput4
-        self.txtRightWink.mousePressEvent = self.get_userinput5
+			
 
     def get_userinput(self, state):
-        retreivedVar = self.second.returnSparetxtVar()
+        retreivedVar = self.secondWindow.returnSparetxtVar()
 
         if retreivedVar != "":
-            self.second.setSparetxtVar("")
+            self.secondWindow.setSparetxtVar("")
 
-        if not self.second.exec_():
-            retreivedVar = self.second.returnSparetxtVar()
+        if not self.secondWindow.exec_():
+            retreivedVar = self.secondWindow.returnSparetxtVar()
             self.sparetxtvar = retreivedVar
             self.txtOpenMouth.setPlainText(self.sparetxtvar)
 
 
     def get_userinput1(self, state):
-        retreivedVar = self.second.returnSparetxtVar()
+        retreivedVar = self.secondWindow.returnSparetxtVar()
 
         if retreivedVar != "":
-            self.second.setSparetxtVar("")
+            self.secondWindow.setSparetxtVar("")
 
-        if not self.second.exec_():
-            retreivedVar = self.second.returnSparetxtVar()
+        if not self.secondWindow.exec_():
+            retreivedVar = self.secondWindow.returnSparetxtVar()
             self.sparetxtvar = retreivedVar
             self.txtRaiseEyebrows.setPlainText(self.sparetxtvar)
 
     def get_userinput2(self, state):
-        retreivedVar = self.second.returnSparetxtVar()
+        retreivedVar = self.secondWindow.returnSparetxtVar()
 
         if retreivedVar != "":
-            self.second.setSparetxtVar("")
+            self.secondWindow.setSparetxtVar("")
 
-        if not self.second.exec_():
-            retreivedVar = self.second.returnSparetxtVar()
+        if not self.secondWindow.exec_():
+            retreivedVar = self.secondWindow.returnSparetxtVar()
             self.sparetxtvar = retreivedVar
             self.txtSmile.setPlainText(self.sparetxtvar)
 
     def get_userinput3(self, state):
-        retreivedVar = self.second.returnSparetxtVar()
+        retreivedVar = self.secondWindow.returnSparetxtVar()
 
         if retreivedVar != "":
-            self.second.setSparetxtVar("")
+            self.secondWindow.setSparetxtVar("")
 
-        if not self.second.exec_():
-            retreivedVar = self.second.returnSparetxtVar()
+        if not self.secondWindow.exec_():
+            retreivedVar = self.secondWindow.returnSparetxtVar()
             self.sparetxtvar = retreivedVar
             self.txtSnarl.setPlainText(self.sparetxtvar)
 
     def get_userinput4(self, state):
-        retreivedVar = self.second.returnSparetxtVar()
+        retreivedVar = self.secondWindow.returnSparetxtVar()
 
         if retreivedVar != "":
-            self.second.setSparetxtVar("")
+            self.secondWindow.setSparetxtVar("")
 
-        if not self.second.exec_():
-            retreivedVar = self.second.returnSparetxtVar()
+        if not self.secondWindow.exec_():
+            retreivedVar = self.secondWindow.returnSparetxtVar()
             self.sparetxtvar = retreivedVar
             self.txtLeftWink.setPlainText(self.sparetxtvar)
 
     def get_userinput5(self, state):
-        retreivedVar = self.second.returnSparetxtVar()
+        retreivedVar = self.secondWindow.returnSparetxtVar()
 
         if retreivedVar != "":
-            self.second.setSparetxtVar("")
+            self.secondWindow.setSparetxtVar("")
 
-        if not self.second.exec_():
-            retreivedVar = self.second.returnSparetxtVar()
+        if not self.secondWindow.exec_():
+            retreivedVar = self.secondWindow.returnSparetxtVar()
             self.sparetxtvar = retreivedVar
             self.txtRightWink.setPlainText(self.sparetxtvar)
 
@@ -830,7 +654,7 @@ class MainWindow(QDialog):
 if __name__ == "__main__":
     import sys
     app = QApplication(sys.argv)
-    widget = MainWindow()
-    widget.show()
+    mainWindow = MainWindow()
+    mainWindow.show()
     print("Now exiting")
     sys.exit()
