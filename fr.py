@@ -1,8 +1,8 @@
-import sys 
+import sys
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtWidgets import QApplication, QDialog, QInputDialog, QMainWindow, QCheckBox, QWidget, QPushButton, QLabel, \
-    QMessageBox, QDesktopWidget, QFileDialog, QErrorMessage
+    QMessageBox, QDesktopWidget, QFileDialog, QErrorMessage, QInputDialog, QLineEdit
 from PyQt5.QtGui import QIcon, QPalette, QColor, QPixmap, QImage
 from PyQt5.QtCore import pyqtSlot, Qt, QPoint
 from imutils import face_utils
@@ -10,21 +10,21 @@ from collections import deque
 import cv2
 import dlib
 import win32com.client as comclt  # Used to insert keys
-import os
-
+import os, sys
 import json  # for saving/loading settings
 
 
-class App(QDialog):
-    def __init__(self):
-        super(App, self).__init__()
+class MainWindow(QDialog):
+    def __init__(self, parent=None):
+        super(MainWindow, self).__init__()
+
         self.title = 'Face Switch 2.0'
         self.closeEvent = self.closeEvent
-        self.setWindowIcon(QtGui.QIcon('interface/icon.png'))
-        
+        self.setWindowIcon(QtGui.QIcon('interfaces/icon.png'))
+
         global app_dir  # Allow the variable to be used anywhere
         app_dir = os.environ['USERPROFILE'] + '/.FaceSwitch2'  # Path to application settings
-        
+
         if not os.path.isdir(app_dir):  # Create the directory if it does not already exist
             try:
                 os.mkdir(app_dir)  # Make the .FaceSwitch2 folder
@@ -32,29 +32,39 @@ class App(QDialog):
                 print("Creation of the directory %s failed" % app_dir)
             else:
                 print("Successfully created the directory %s " % app_dir)
-        
+
         self.captureFacePositions = True
         self.capturedPositions = False
         self.faceShapePredictorActivated = False
-        
+
+        self.count = 0
         self.webcamActive = True
-        
+
         self.cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # gives an error without CAP_DSHOW
         
         self.neutral_gesture_vars = {}
         self.base_line = 0
-        
+
+        self.sparetxtvar = ""
+        self.changesMade = False
+
+        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocus()
+
         self.initUI()
-        
+
         self.smileActivated = False
         self.openMouthActivated = False
         self.raiseEyebrowsActivated = False
         self.snarlActivated = False
         self.leftWinkActivated = False
         self.rightWinkActivated = False
-        
+
+        self.blinkActivated = False
+        self.calibrate = False
+
         self.wsh = comclt.Dispatch("WScript.Shell")  # Open keytyper
-        
+
         self.center()
         self.oldPos = self.pos()
         self.landmarks()
@@ -91,7 +101,6 @@ class App(QDialog):
 
     def landmarks(self):
         p = "resources/shape_predictor_68_face_landmarks.dat"  # p = our pre-trained model
-        
         detector = dlib.get_frontal_face_detector()
         predictor = dlib.shape_predictor(p)
         
@@ -266,7 +275,7 @@ class App(QDialog):
         self.cap.release()
 
     def initUI(self):
-        loadUi('interface/fr.ui', self)
+        loadUi('interfaces/fr.ui', self)
         
         # Load default settings
         self.value_changed()
@@ -291,6 +300,15 @@ class App(QDialog):
         palette.setColor(QPalette.Highlight, QColor(42, 130, 218))
         palette.setColor(QPalette.HighlightedText, Qt.black)
         QApplication.setPalette(palette)
+
+        # Text boxes
+        # On mouse click
+        self.txtOpenMouth.mousePressEvent = self.get_userinput
+        self.txtRaiseEyebrows.mousePressEvent = self.get_userinput1
+        self.txtSmile.mousePressEvent = self.get_userinput2
+        self.txtSnarl.mousePressEvent = self.get_userinput3
+        self.txtLeftWink.mousePressEvent = self.get_userinput4
+        self.txtRightWink.mousePressEvent = self.get_userinput5
 
         # Checkboxes
         self.cboxOpenMouth.stateChanged.connect(lambda: self.btn_state(self.cboxOpenMouth))
@@ -324,51 +342,317 @@ class App(QDialog):
     def btn_calibrate(self, neutral_landmarks, base_line):
         self.neutral_landmarks = neutral_landmarks
         self.base_line = base_line
-        
+
         if self.faceShapePredictorActivated:
-            #print(self.neutral_landmarks.shape)
-            
+            # print(self.neutral_landmarks.shape)
+
             # Calculate facial feture distance ratios for the users neutral face
             # Closed mouth ratio
             self.neutral_open_mouth = self.neutral_landmarks[66][1] - self.neutral_landmarks[62][1]
             self.neutral_open_mouth /= base_line
             print("closed mouth:", self.neutral_open_mouth)
             # Normal eyebrow height ratio
-            self.neutral_raise_eyebrows = (self.neutral_landmarks[27][1]) - (((self.neutral_landmarks[19][1]) + (self.neutral_landmarks[24][1]))/2)
+            self.neutral_raise_eyebrows = (self.neutral_landmarks[27][1]) - (
+                        ((self.neutral_landmarks[19][1]) + (self.neutral_landmarks[24][1])) / 2)
             self.neutral_raise_eyebrows /= base_line
             print("eyebrows:", self.neutral_raise_eyebrows)
             # Normal mouth width ratio
-            self.neutral_smile = (((self.neutral_landmarks[54][0]) + (self.neutral_landmarks[64][0]))/2) - (((self.neutral_landmarks[48][0]) + (self.neutral_landmarks[60][0]))/2)
+            self.neutral_smile = (((self.neutral_landmarks[54][0]) + (self.neutral_landmarks[64][0])) / 2) - (
+                        ((self.neutral_landmarks[48][0]) + (self.neutral_landmarks[60][0])) / 2)
             self.neutral_smile /= base_line
             print("smile:", self.neutral_smile)
             # Normal non frown/snarl ratio
-            self.neutral_snarl = (((self.neutral_landmarks[31][1]) + (self.neutral_landmarks[35][1]))/2) - (((self.neutral_landmarks[21][1]) + (self.neutral_landmarks[22][1]))/2)
+            self.neutral_snarl = (((self.neutral_landmarks[31][1]) + (self.neutral_landmarks[35][1])) / 2) - (
+                        ((self.neutral_landmarks[21][1]) + (self.neutral_landmarks[22][1])) / 2)
             self.neutral_snarl /= base_line
             print("nose:", self.neutral_snarl)
             # Normal left eye height ratio
-            left_eye_top = ((self.neutral_landmarks[43][1]) + (self.neutral_landmarks[44][1]))/2
-            left_eye_bottom = ((self.neutral_landmarks[46][1]) + (self.neutral_landmarks[47][1]))/2
+            left_eye_top = ((self.neutral_landmarks[43][1]) + (self.neutral_landmarks[44][1])) / 2
+            left_eye_bottom = ((self.neutral_landmarks[46][1]) + (self.neutral_landmarks[47][1])) / 2
             self.neutral_left_wink = left_eye_bottom - left_eye_top
             self.neutral_left_wink /= base_line
             print("left eye:", self.neutral_left_wink)
             # Normal right eye height ratio
-            right_eye_top = ((self.neutral_landmarks[37][1]) + (self.neutral_landmarks[38][1]))/2
-            right_eye_bottom = ((self.neutral_landmarks[40][1]) + (self.neutral_landmarks[41][1]))/2
+            right_eye_top = ((self.neutral_landmarks[37][1]) + (self.neutral_landmarks[38][1])) / 2
+            right_eye_bottom = ((self.neutral_landmarks[40][1]) + (self.neutral_landmarks[41][1])) / 2
             self.neutral_right_wink = right_eye_bottom - right_eye_top
             self.neutral_right_wink /= base_line
             print("right eye:", self.neutral_right_wink)
-            
+
             # Fill the dictionary with the new calibration
             self.neutral_gesture_vars = {'0': self.neutral_open_mouth,
-                                    '1': self.neutral_raise_eyebrows,
-                                    '2': self.neutral_smile,
-                                    '3': self.neutral_snarl,
-                                    '4': self.neutral_left_wink,
-                                    '5': self.neutral_right_wink
-                                    }
-            
+                                         '1': self.neutral_raise_eyebrows,
+                                         '2': self.neutral_smile,
+                                         '3': self.neutral_snarl,
+                                         '4': self.neutral_left_wink,
+                                         '5': self.neutral_right_wink
+                                         }
+
         else:
+            pass
             print("Must be activated")
+
+    def get_keybind(self, state):
+        self.changesMade = True
+        #usrkeybind, ok = QInputDialog.getText(self, 'Enter KeyBind', '>')
+        usrkeybind, ok = QInputDialog.getText(self, 'Get Keybind', 'enter your name')
+        print(usrkeybind)
+
+        emptyVar = ""
+
+        self.txtOpenMouth.setPlainText(usrkeybind)
+
+    def get_userinput(self, state):
+        self.changesMade = not self.changesMade
+        self.txtOpenMouth.setReadOnly(True)
+
+        if self.changesMade:
+            self.sparetxtvar = ""
+            self.txtOpenMouth.setPlainText("Press some keys")
+
+        elif not self.changesMade:
+            self.txtOpenMouth.setPlainText(self.sparetxtvar)
+            self.txtOpenMouth.setReadOnly(False)
+
+    def get_userinput1(self, state):
+        self.changesMade = not self.changesMade
+        self.txtRaiseEyebrows.setReadOnly(True)
+
+        if self.changesMade:
+            self.sparetxtvar = ""
+            self.txtRaiseEyebrows.setPlainText("Press some keys")
+
+        elif not self.changesMade:
+            self.txtRaiseEyebrows.setPlainText(self.sparetxtvar)
+            self.txtRaiseEyebrows.setReadOnly(False)
+
+    def get_userinput2(self, state):
+        self.changesMade = not self.changesMade
+        self.txtSmile.setReadOnly(True)
+        if self.changesMade:
+            self.sparetxtvar = ""
+            self.txtSmile.setPlainText("Press some keys")
+
+        elif not self.changesMade:
+            self.txtSmile.setPlainText(self.sparetxtvar)
+            self.txtSmile.setReadOnly(False)
+
+    def get_userinput3(self, state):
+        self.changesMade = not self.changesMade
+        self.txtSnarl.setReadOnly(True)
+        if self.changesMade:
+            self.sparetxtvar = ""
+            self.txtSnarl.setPlainText("Press some keys")
+
+        elif not self.changesMade:
+            self.txtSnarl.setPlainText(self.sparetxtvar)
+            self.txtSnarl.setReadOnly(False)
+
+    def get_userinput4(self, state):
+        self.changesMade = not self.changesMade
+        self.txtLeftWink.setReadOnly(True)
+        if self.changesMade:
+            self.sparetxtvar = ""
+            self.txtLeftWink.setPlainText("Press some keys")
+
+        elif not self.changesMade:
+            self.txtLeftWink.setPlainText(self.sparetxtvar)
+            self.txtLeftWink.setReadOnly(False)
+
+    def get_userinput5(self, state):
+        self.changesMade = not self.changesMade
+        self.txtRightWink.setReadOnly(True)
+        if self.changesMade:
+            self.sparetxtvar = ""
+            self.txtRightWink.setPlainText("Press some keys")
+
+        elif not self.changesMade:
+            self.txtRightWink.setPlainText(self.sparetxtvar)
+            self.txtRightWink.setReadOnly(False)
+
+    def keyPressEvent(self, e):
+
+        if self.changesMade:
+            key = e.key()
+            print(key)
+            #test = QMessageBox.information(self, "hello", "I m here")
+            # Numerical
+            if key == 48:
+                self.sparetxtvar += "0"
+            elif key == 49:
+                self.sparetxtvar += "1"
+            elif key == 50:
+                self.sparetxtvar += "2"
+            elif key == 51:
+                self.sparetxtvar += "3"
+            elif key == 52:
+                self.sparetxtvar += "4"
+            elif key == 53:
+                self.sparetxtvar += "5"
+            elif key == 54:
+                self.sparetxtvar += "6"
+            elif key == 55:
+                self.sparetxtvar += "7"
+            elif key == 56:
+                self.sparetxtvar += "8"
+            elif key == 57:
+                self.sparetxtvar += "9"
+
+            # Alphabetical
+            elif key == 65:
+                self.sparetxtvar += "a"
+            elif key == 66:
+                self.sparetxtvar += "b"
+            elif key == 67:
+                self.sparetxtvar += "c"
+            elif key == 68:
+                self.sparetxtvar += "d"
+            elif key == 69:
+                self.sparetxtvar += "e"
+            elif key == 70:
+                self.sparetxtvar += "f"
+            elif key == 71:
+                self.sparetxtvar += "g"
+            elif key == 72:
+                self.sparetxtvar += "h"
+            elif key == 73:
+                self.sparetxtvar += "i"
+            elif key == 74:
+                self.sparetxtvar += "j"
+            elif key == 75:
+                self.sparetxtvar += "k"
+            elif key == 76:
+                self.sparetxtvar += "l"
+            elif key == 77:
+                self.sparetxtvar += "m"
+            elif key == 78:
+                self.sparetxtvar += "n"
+            elif key == 79:
+                self.sparetxtvar += "o"
+            elif key == 80:
+                self.sparetxtvar += "p"
+            elif key == 81:
+                self.sparetxtvar += "q"
+            elif key == 82:
+                self.sparetxtvar += "r"
+            elif key == 83:
+                self.sparetxtvar += "s"
+            elif key == 84:
+                self.sparetxtvar += "t"
+            elif key == 85:
+                self.sparetxtvar += "u"
+            elif key == 86:
+                self.sparetxtvar += "v"
+            elif key == 87:
+                self.sparetxtvar += "w"
+            elif key == 88:
+                self.sparetxtvar += "x"
+            elif key == 89:
+                self.sparetxtvar += "y"
+            elif key == 90:
+                self.sparetxtvar += "z"
+
+            elif key == Qt.Key_Space:
+                self.sparetxtvar += " "
+
+            # Modifiers
+            elif key == Qt.Key_Shift:
+                self.sparetxtvar += "+"
+            elif key == Qt.Key_Control:
+                self.sparetxtvar += "^"
+            elif key == Qt.Key_Alt:
+                self.sparetxtvar += "%"
+
+            # Left Right Up Down
+            elif key == Qt.Key_Left:
+                self.sparetxtvar += "{LEFT}"
+            elif key == Qt.Key_Right:
+                self.sparetxtvar += "{RIGHT}"
+            elif key == Qt.Key_Down:
+                self.sparetxtvar += "{DOWN}"
+            elif key == Qt.Key_Up:
+                self.sparetxtvar += "{UP}"
+
+            # Function keys
+            elif key == Qt.Key_F1:
+                self.sparetxtvar += "{F1}"
+            elif key == Qt.Key_F2:
+                self.sparetxtvar += "{F2}"
+            elif key == Qt.Key_F3:
+                self.sparetxtvar += "{F3}"
+            elif key == Qt.Key_F4:
+                self.sparetxtvar += "{F4}"
+            elif key == Qt.Key_F5:
+                self.sparetxtvar += "{F5}"
+            elif key == Qt.Key_F6:
+                self.sparetxtvar += "{F6}"
+            elif key == Qt.Key_F7:
+                self.sparetxtvar += "{F7}"
+            elif key == Qt.Key_F8:
+                self.sparetxtvar += "{F8}"
+            elif key == Qt.Key_F9:
+                self.sparetxtvar += "{F9}"
+            elif key == Qt.Key_F10:
+                self.sparetxtvar += "{F10}"
+            elif key == Qt.Key_F11:
+                self.sparetxtvar += "{F11}"
+            elif key == Qt.Key_F12:
+                self.sparetxtvar += "{F12}"
+
+            # Goes all the way to F16 if required.
+
+            # Alternative keys:
+            # {BACKSPACE}
+            elif key == Qt.Key_Backspace:
+                self.sparetxtvar += "{BACKSPACE}"
+            # {CAPSLOCK}
+            elif key == Qt.Key_CapsLock:
+                self.sparetxtvar += "{CAPSLOCK}"
+            # {CLEAR}
+            elif key == Qt.Key_Clear:
+                self.sparetxtvar += "{CLEAR}"
+            # {DELETE}
+            elif key == Qt.Key_Delete:
+                self.sparetxtvar += "{DELETE}"
+            # {INSERT}
+            elif key == Qt.Key_Insert:
+                self.sparetxtvar += "{INSERT}"
+            # {END}
+            elif key == Qt.Key_End:
+                self.sparetxtvar += "{END}"
+
+            # {ENTER}
+            elif key == 16777220:
+                self.sparetxtvar += "{ENTER}"
+
+            # {ESCAPE}
+            elif key == Qt.Key_Escape:
+                self.sparetxtvar += "{ESCAPE}"
+            # {HELP}
+            elif key == Qt.Key_Help:
+                self.sparetxtvar += "{HELP}"
+            # {HOME}
+            elif key == Qt.Key_Home:
+                self.sparetxtvar += "{HOME}"
+            # {NUMLOCK}
+            elif key == Qt.Key_NumLock:
+                self.sparetxtvar += "{NUMLOCK}"
+            # {PGDN} / Page Down
+            elif key == Qt.Key_PageDown:
+                self.sparetxtvar += "{PGDN}"
+            # {PGUP} / Page Up
+            elif key == Qt.Key_PageUp:
+                self.sparetxtvar += "{PGUP}"
+            # {SCROLLLOCK}
+            elif key == Qt.Key_ScrollLock:
+                self.sparetxtvar += "{SCROLLLOCK}"
+            # {TAB}
+            elif key == Qt.Key_Tab:
+                self.sparetxtvar += "{TAB}"
+
+            # {BREAK}
+            # {PRTSC} ## Print Screen
+
 
     def value_changed(self):
         self.open_mouth_var = round(float(self.sliderOpenMouth.value()) / 400, 2)
@@ -555,8 +839,6 @@ class App(QDialog):
             print("Gesture detection Activated!")
             self.btnInitialize.setText("Deactivate")
 
-    def warningbox(self):
-        pass
 
     def closeEvent(self, event):
         reply = QMessageBox.question(self, 'Message', "Are you sure you want to quit?", QMessageBox.Yes, QMessageBox.No)
@@ -572,8 +854,10 @@ class App(QDialog):
             event.ignore()
 
 
-app = QApplication(sys.argv)
-widget = App()
-widget.show()
-print("Now exiting")
-sys.exit()
+if __name__ == "__main__":
+    import sys
+    app = QApplication(sys.argv)
+    widget = MainWindow()
+    widget.show()
+    print("Now exiting")
+    sys.exit()
