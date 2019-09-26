@@ -13,12 +13,156 @@ import win32com.client as comclt  # Used to insert keys
 import os, sys
 import json  # for saving/loading settings
 
+class SecondWindow(QDialog):
+    def __init__(self, parent=None):
+        super(SecondWindow, self).__init__()
+
+        self.closeEvent = self.closeEvent
+
+        self.title = 'Face Switch 2.0.2'
+        self.sparetxtvar = ""
+
+        self.basicWindow()
+
+    def basicWindow(self):
+        loadUi('interfaces/fr2.ui', self)
+        self.plainTextEdit.setReadOnly(True)
+
+    def keyPressEvent(self, e):
+        key = e.key()
+        #test = QMessageBox.information(self, "hello", "I m here")
+        print(key)
+        # Numerical
+        # Numbers
+        if 58 <= key <= 67:
+            self.sparetxtvar += chr(key)
+            # Characters
+        elif 48 <= key <= 90:
+            self.sparetxtvar += str(chr(key)).lower()
+        # Space key does not work
+        elif key == Qt.Key_Space:
+            self.sparetxtvar += " "
+        # Modifiers
+        elif key == Qt.Key_Shift:
+            self.sparetxtvar += "+"
+        elif key == Qt.Key_Control:
+            self.sparetxtvar += "^"
+        elif key == Qt.Key_Alt:
+            self.sparetxtvar += "%"
+
+        # Left Right Up Down
+        elif key == Qt.Key_Left:
+            self.sparetxtvar += "{LEFT}"
+        elif key == Qt.Key_Right:
+            self.sparetxtvar += "{RIGHT}"
+        elif key == Qt.Key_Down:
+            self.sparetxtvar += "{DOWN}"
+        elif key == Qt.Key_Up:
+            self.sparetxtvar += "{UP}"
+
+        # Function keys
+        elif key == Qt.Key_F1:
+            self.sparetxtvar += "{F1}"
+        elif key == Qt.Key_F2:
+            self.sparetxtvar += "{F2}"
+        elif key == Qt.Key_F3:
+            self.sparetxtvar += "{F3}"
+        elif key == Qt.Key_F4:
+            self.sparetxtvar += "{F4}"
+        elif key == Qt.Key_F5:
+            self.sparetxtvar += "{F5}"
+        elif key == Qt.Key_F6:
+            self.sparetxtvar += "{F6}"
+        elif key == Qt.Key_F7:
+            self.sparetxtvar += "{F7}"
+        elif key == Qt.Key_F8:
+            self.sparetxtvar += "{F8}"
+        elif key == Qt.Key_F9:
+            self.sparetxtvar += "{F9}"
+        elif key == Qt.Key_F10:
+            self.sparetxtvar += "{F10}"
+        elif key == Qt.Key_F11:
+            self.sparetxtvar += "{F11}"
+        elif key == Qt.Key_F12:
+            self.sparetxtvar += "{F12}"
+
+            # Goes all the way to F16 if required.
+
+            # Alternative keys:
+            # {BACKSPACE}
+        elif key == Qt.Key_Backspace:
+            self.sparetxtvar += "{BACKSPACE}"
+        # {CAPSLOCK}
+        elif key == Qt.Key_CapsLock:
+            self.sparetxtvar += "{CAPSLOCK}"
+        # {CLEAR}
+        elif key == Qt.Key_Clear:
+            self.sparetxtvar += "{CLEAR}"
+        # {DELETE}
+        elif key == Qt.Key_Delete:
+            self.sparetxtvar += "{DELETE}"
+        # {INSERT}
+        elif key == Qt.Key_Insert:
+            self.sparetxtvar += "{INSERT}"
+            # {END}
+        elif key == Qt.Key_End:
+            self.sparetxtvar += "{END}"
+
+            # {ENTER}
+        elif key == 16777220:
+            self.sparetxtvar += "{ENTER}"
+
+            # {ESCAPE}
+        elif key == Qt.Key_Escape:
+            self.sparetxtvar += "{ESCAPE}"
+            # {HELP}
+        elif key == Qt.Key_Help:
+            self.sparetxtvar += "{HELP}"
+            # {HOME}
+        elif key == Qt.Key_Home:
+            self.sparetxtvar += "{HOME}"
+            # {NUMLOCK}
+        elif key == Qt.Key_NumLock:
+            self.sparetxtvar += "{NUMLOCK}"
+            # {PGDN} / Page Down
+        elif key == Qt.Key_PageDown:
+            self.sparetxtvar += "{PGDN}"
+            # {PGUP} / Page Up
+        elif key == Qt.Key_PageUp:
+            self.sparetxtvar += "{PGUP}"
+            # {SCROLLLOCK}
+        elif key == Qt.Key_ScrollLock:
+            self.sparetxtvar += "{SCROLLLOCK}"
+            # {TAB}
+        elif key == Qt.Key_Tab:
+            self.sparetxtvar += "{TAB}"
+
+        self.plainTextEdit.setPlainText(self.sparetxtvar)
+            # {BREAK}
+            # {PRTSC} ## Print Screen
+
+    def returnSparetxtVar(self):
+        return self.sparetxtvar
+
+    def setSparetxtVar(self, uinput):
+        self.sparetxtvar = uinput
+
+    def closeEvent(self, event):
+        reply = QMessageBox.question(self, 'Message', "Are you sure you want to quit?", QMessageBox.Yes, QMessageBox.No)
+
+        if reply == QMessageBox.Yes:
+            event.accept()
+        else:
+            self.sparetxtvar = ""
+            event.ignore()
 
 class MainWindow(QDialog):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__()
 
-        self.title = 'Face Switch 2.0'
+        self.second = SecondWindow()
+
+        self.title = 'Face Switch 2.0.2'
         self.closeEvent = self.closeEvent
         self.setWindowIcon(QtGui.QIcon('interfaces/icon.png'))
 
@@ -310,6 +454,13 @@ class MainWindow(QDialog):
         self.txtLeftWink.mousePressEvent = self.get_userinput4
         self.txtRightWink.mousePressEvent = self.get_userinput5
 
+        self.txtOpenMouth.setReadOnly(True)
+        self.txtRaiseEyebrows.setReadOnly(True)
+        self.txtSmile.setReadOnly(True)
+        self.txtSnarl.setReadOnly(True)
+        self.txtLeftWink.setReadOnly(True)
+        self.txtRightWink.setReadOnly(True)
+
         # Checkboxes
         self.cboxOpenMouth.stateChanged.connect(lambda: self.btn_state(self.cboxOpenMouth))
         self.cboxRaiseEyebrows.stateChanged.connect(lambda: self.btn_state(self.cboxRaiseEyebrows))
@@ -402,257 +553,79 @@ class MainWindow(QDialog):
 
         self.txtOpenMouth.setPlainText(usrkeybind)
 
+        self.txtOpenMouth.mousePressEvent = self.get_userinput
+        self.txtRaiseEyebrows.mousePressEvent = self.get_userinput1
+        self.txtSmile.mousePressEvent = self.get_userinput2
+        self.txtSnarl.mousePressEvent = self.get_userinput3
+        self.txtLeftWink.mousePressEvent = self.get_userinput4
+        self.txtRightWink.mousePressEvent = self.get_userinput5
+
     def get_userinput(self, state):
-        self.changesMade = not self.changesMade
-        self.txtOpenMouth.setReadOnly(True)
+        retreivedVar = self.second.returnSparetxtVar()
 
-        if self.changesMade:
-            self.sparetxtvar = ""
-            self.txtOpenMouth.setPlainText("Press some keys")
+        if retreivedVar != "":
+            self.second.setSparetxtVar("")
 
-        elif not self.changesMade:
+        if not self.second.exec_():
+            retreivedVar = self.second.returnSparetxtVar()
+            self.sparetxtvar = retreivedVar
             self.txtOpenMouth.setPlainText(self.sparetxtvar)
-            self.txtOpenMouth.setReadOnly(False)
+
 
     def get_userinput1(self, state):
-        self.changesMade = not self.changesMade
-        self.txtRaiseEyebrows.setReadOnly(True)
+        retreivedVar = self.second.returnSparetxtVar()
 
-        if self.changesMade:
-            self.sparetxtvar = ""
-            self.txtRaiseEyebrows.setPlainText("Press some keys")
+        if retreivedVar != "":
+            self.second.setSparetxtVar("")
 
-        elif not self.changesMade:
+        if not self.second.exec_():
+            retreivedVar = self.second.returnSparetxtVar()
+            self.sparetxtvar = retreivedVar
             self.txtRaiseEyebrows.setPlainText(self.sparetxtvar)
-            self.txtRaiseEyebrows.setReadOnly(False)
 
     def get_userinput2(self, state):
-        self.changesMade = not self.changesMade
-        self.txtSmile.setReadOnly(True)
-        if self.changesMade:
-            self.sparetxtvar = ""
-            self.txtSmile.setPlainText("Press some keys")
+        retreivedVar = self.second.returnSparetxtVar()
 
-        elif not self.changesMade:
+        if retreivedVar != "":
+            self.second.setSparetxtVar("")
+
+        if not self.second.exec_():
+            retreivedVar = self.second.returnSparetxtVar()
+            self.sparetxtvar = retreivedVar
             self.txtSmile.setPlainText(self.sparetxtvar)
-            self.txtSmile.setReadOnly(False)
 
     def get_userinput3(self, state):
-        self.changesMade = not self.changesMade
-        self.txtSnarl.setReadOnly(True)
-        if self.changesMade:
-            self.sparetxtvar = ""
-            self.txtSnarl.setPlainText("Press some keys")
+        retreivedVar = self.second.returnSparetxtVar()
 
-        elif not self.changesMade:
+        if retreivedVar != "":
+            self.second.setSparetxtVar("")
+
+        if not self.second.exec_():
+            retreivedVar = self.second.returnSparetxtVar()
+            self.sparetxtvar = retreivedVar
             self.txtSnarl.setPlainText(self.sparetxtvar)
-            self.txtSnarl.setReadOnly(False)
 
     def get_userinput4(self, state):
-        self.changesMade = not self.changesMade
-        self.txtLeftWink.setReadOnly(True)
-        if self.changesMade:
-            self.sparetxtvar = ""
-            self.txtLeftWink.setPlainText("Press some keys")
+        retreivedVar = self.second.returnSparetxtVar()
 
-        elif not self.changesMade:
+        if retreivedVar != "":
+            self.second.setSparetxtVar("")
+
+        if not self.second.exec_():
+            retreivedVar = self.second.returnSparetxtVar()
+            self.sparetxtvar = retreivedVar
             self.txtLeftWink.setPlainText(self.sparetxtvar)
-            self.txtLeftWink.setReadOnly(False)
 
     def get_userinput5(self, state):
-        self.changesMade = not self.changesMade
-        self.txtRightWink.setReadOnly(True)
-        if self.changesMade:
-            self.sparetxtvar = ""
-            self.txtRightWink.setPlainText("Press some keys")
+        retreivedVar = self.second.returnSparetxtVar()
 
-        elif not self.changesMade:
+        if retreivedVar != "":
+            self.second.setSparetxtVar("")
+
+        if not self.second.exec_():
+            retreivedVar = self.second.returnSparetxtVar()
+            self.sparetxtvar = retreivedVar
             self.txtRightWink.setPlainText(self.sparetxtvar)
-            self.txtRightWink.setReadOnly(False)
-
-    def keyPressEvent(self, e):
-
-        if self.changesMade:
-            key = e.key()
-            print(key)
-            #test = QMessageBox.information(self, "hello", "I m here")
-            # Numerical
-            if key == 48:
-                self.sparetxtvar += "0"
-            elif key == 49:
-                self.sparetxtvar += "1"
-            elif key == 50:
-                self.sparetxtvar += "2"
-            elif key == 51:
-                self.sparetxtvar += "3"
-            elif key == 52:
-                self.sparetxtvar += "4"
-            elif key == 53:
-                self.sparetxtvar += "5"
-            elif key == 54:
-                self.sparetxtvar += "6"
-            elif key == 55:
-                self.sparetxtvar += "7"
-            elif key == 56:
-                self.sparetxtvar += "8"
-            elif key == 57:
-                self.sparetxtvar += "9"
-
-            # Alphabetical
-            elif key == 65:
-                self.sparetxtvar += "a"
-            elif key == 66:
-                self.sparetxtvar += "b"
-            elif key == 67:
-                self.sparetxtvar += "c"
-            elif key == 68:
-                self.sparetxtvar += "d"
-            elif key == 69:
-                self.sparetxtvar += "e"
-            elif key == 70:
-                self.sparetxtvar += "f"
-            elif key == 71:
-                self.sparetxtvar += "g"
-            elif key == 72:
-                self.sparetxtvar += "h"
-            elif key == 73:
-                self.sparetxtvar += "i"
-            elif key == 74:
-                self.sparetxtvar += "j"
-            elif key == 75:
-                self.sparetxtvar += "k"
-            elif key == 76:
-                self.sparetxtvar += "l"
-            elif key == 77:
-                self.sparetxtvar += "m"
-            elif key == 78:
-                self.sparetxtvar += "n"
-            elif key == 79:
-                self.sparetxtvar += "o"
-            elif key == 80:
-                self.sparetxtvar += "p"
-            elif key == 81:
-                self.sparetxtvar += "q"
-            elif key == 82:
-                self.sparetxtvar += "r"
-            elif key == 83:
-                self.sparetxtvar += "s"
-            elif key == 84:
-                self.sparetxtvar += "t"
-            elif key == 85:
-                self.sparetxtvar += "u"
-            elif key == 86:
-                self.sparetxtvar += "v"
-            elif key == 87:
-                self.sparetxtvar += "w"
-            elif key == 88:
-                self.sparetxtvar += "x"
-            elif key == 89:
-                self.sparetxtvar += "y"
-            elif key == 90:
-                self.sparetxtvar += "z"
-
-            elif key == Qt.Key_Space:
-                self.sparetxtvar += " "
-
-            # Modifiers
-            elif key == Qt.Key_Shift:
-                self.sparetxtvar += "+"
-            elif key == Qt.Key_Control:
-                self.sparetxtvar += "^"
-            elif key == Qt.Key_Alt:
-                self.sparetxtvar += "%"
-
-            # Left Right Up Down
-            elif key == Qt.Key_Left:
-                self.sparetxtvar += "{LEFT}"
-            elif key == Qt.Key_Right:
-                self.sparetxtvar += "{RIGHT}"
-            elif key == Qt.Key_Down:
-                self.sparetxtvar += "{DOWN}"
-            elif key == Qt.Key_Up:
-                self.sparetxtvar += "{UP}"
-
-            # Function keys
-            elif key == Qt.Key_F1:
-                self.sparetxtvar += "{F1}"
-            elif key == Qt.Key_F2:
-                self.sparetxtvar += "{F2}"
-            elif key == Qt.Key_F3:
-                self.sparetxtvar += "{F3}"
-            elif key == Qt.Key_F4:
-                self.sparetxtvar += "{F4}"
-            elif key == Qt.Key_F5:
-                self.sparetxtvar += "{F5}"
-            elif key == Qt.Key_F6:
-                self.sparetxtvar += "{F6}"
-            elif key == Qt.Key_F7:
-                self.sparetxtvar += "{F7}"
-            elif key == Qt.Key_F8:
-                self.sparetxtvar += "{F8}"
-            elif key == Qt.Key_F9:
-                self.sparetxtvar += "{F9}"
-            elif key == Qt.Key_F10:
-                self.sparetxtvar += "{F10}"
-            elif key == Qt.Key_F11:
-                self.sparetxtvar += "{F11}"
-            elif key == Qt.Key_F12:
-                self.sparetxtvar += "{F12}"
-
-            # Goes all the way to F16 if required.
-
-            # Alternative keys:
-            # {BACKSPACE}
-            elif key == Qt.Key_Backspace:
-                self.sparetxtvar += "{BACKSPACE}"
-            # {CAPSLOCK}
-            elif key == Qt.Key_CapsLock:
-                self.sparetxtvar += "{CAPSLOCK}"
-            # {CLEAR}
-            elif key == Qt.Key_Clear:
-                self.sparetxtvar += "{CLEAR}"
-            # {DELETE}
-            elif key == Qt.Key_Delete:
-                self.sparetxtvar += "{DELETE}"
-            # {INSERT}
-            elif key == Qt.Key_Insert:
-                self.sparetxtvar += "{INSERT}"
-            # {END}
-            elif key == Qt.Key_End:
-                self.sparetxtvar += "{END}"
-
-            # {ENTER}
-            elif key == 16777220:
-                self.sparetxtvar += "{ENTER}"
-
-            # {ESCAPE}
-            elif key == Qt.Key_Escape:
-                self.sparetxtvar += "{ESCAPE}"
-            # {HELP}
-            elif key == Qt.Key_Help:
-                self.sparetxtvar += "{HELP}"
-            # {HOME}
-            elif key == Qt.Key_Home:
-                self.sparetxtvar += "{HOME}"
-            # {NUMLOCK}
-            elif key == Qt.Key_NumLock:
-                self.sparetxtvar += "{NUMLOCK}"
-            # {PGDN} / Page Down
-            elif key == Qt.Key_PageDown:
-                self.sparetxtvar += "{PGDN}"
-            # {PGUP} / Page Up
-            elif key == Qt.Key_PageUp:
-                self.sparetxtvar += "{PGUP}"
-            # {SCROLLLOCK}
-            elif key == Qt.Key_ScrollLock:
-                self.sparetxtvar += "{SCROLLLOCK}"
-            # {TAB}
-            elif key == Qt.Key_Tab:
-                self.sparetxtvar += "{TAB}"
-
-            # {BREAK}
-            # {PRTSC} ## Print Screen
-
 
     def value_changed(self):
         self.open_mouth_var = round(float(self.sliderOpenMouth.value()) / 400, 2)

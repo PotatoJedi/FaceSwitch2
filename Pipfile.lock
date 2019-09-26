@@ -1,11 +1,11 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "78fed43da7422820c425f49cf3c78542f54acbe61afb319b174d9bd435b9fb11"
+            "sha256": "736d5248078935cfbf60675e382df178e1e550524d1f942dec2203dec7c90ac0"
         },
         "pipfile-spec": 6,
         "requires": {
-            "python_version": "3.6.7"
+            "python_version": "3.6"
         },
         "sources": [
             {
@@ -101,13 +101,13 @@
         },
         "pyqt5": {
             "hashes": [
-                "sha256:4d51a245d64fbd85c77ba3dee12b8fe018a440ccb49fd1cb0e4587c360655d3c",
-                "sha256:70954a2d182c8634e3b5f9deeb4230f186b59ec1166f3142cb523b74876c0d98",
-                "sha256:aa75b829cd977ca796262fcfe0dc8fc72f8413da4e5e2795e63897e1abfd2258",
-                "sha256:afbee0925439124b5c52dacaf9a6d8d4e160e36b636a6f9023832a696e15e3e9"
+                "sha256:6420d8c9de8746917bd2afe24f29b3722aabde36d1e9f8c34354f5b7fb7b987d",
+                "sha256:73f982b60819cc6d7cb0007b8b0cd11073e2546d74e0463726149e6a9d087caa",
+                "sha256:8e6125f110133069e8f4a085022cfc6b4a0af5b3c9009999a749007c299e965d",
+                "sha256:f8e76070782e68ba200eb2b67babf89ac629df5e36d2f4c680ef34ae40c8f964"
             ],
             "index": "pypi",
-            "version": "==5.13.0"
+            "version": "==5.13.1"
         },
         "pyqt5-sip": {
             "hashes": [
