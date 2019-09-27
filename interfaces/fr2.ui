@@ -6,9 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>272</width>
-    <height>133</height>
+    <width>271</width>
+    <height>130</height>
    </rect>
+  </property>
+  <property name="focusPolicy">
+   <enum>Qt::NoFocus</enum>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
@@ -16,9 +19,9 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>20</y>
-     <width>121</width>
+     <x>100</x>
+     <y>10</y>
+     <width>81</width>
      <height>16</height>
     </rect>
    </property>
@@ -39,7 +42,7 @@
   <widget class="QPushButton" name="btnDeleteText">
    <property name="geometry">
     <rect>
-     <x>40</x>
+     <x>20</x>
      <y>100</y>
      <width>75</width>
      <height>23</height>
@@ -52,7 +55,7 @@
   <widget class="QPushButton" name="btnEnter">
    <property name="geometry">
     <rect>
-     <x>150</x>
+     <x>180</x>
      <y>100</y>
      <width>75</width>
      <height>23</height>

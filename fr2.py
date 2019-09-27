@@ -1,11 +1,12 @@
+import sys
+
 from PyQt5.QtWidgets import QDialog, QLabel, QMessageBox
 from PyQt5.uic import loadUi
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import pyqtSlot, Qt
 
 class SecondWindow(QDialog):
     def __init__(self, parent=None):
         super(SecondWindow, self).__init__()
-
         self.closeEvent = self.closeEvent
 
         self.sparetxtvar = ""
@@ -15,6 +16,19 @@ class SecondWindow(QDialog):
     def basicWindow(self):
         loadUi('interfaces/fr2.ui', self)
         self.plainTextEdit.setReadOnly(True)
+        self.setWindowTitle("keybind collector 1.0")
+        # buttons
+        self.btnEnter.clicked.connect(self.close)
+        self.btnDeleteText.clicked.connect(self.on_click_deleteText)
+
+        self.setWindowFlags(Qt.Window)
+        self.setWindowFlags(self.windowFlags() | Qt.CustomizeWindowHint)
+        self.setWindowFlags(self.windowFlags() & ~Qt.WindowMaximizeButtonHint)
+        #self.setStyleSheet("background-color: rgb(158, 123, 237)");
+
+    def on_click_deleteText(self):
+        self.sparetxtvar = ""
+        self.plainTextEdit.setPlainText(self.sparetxtvar)
 
     def keyPressEvent(self, e):
         key = e.key()
@@ -22,7 +36,7 @@ class SecondWindow(QDialog):
         print(key)
         # Numerical
         # Numbers
-        if 58 <= key <= 67:
+        if 49 <= key <= 57:
             self.sparetxtvar += chr(key)
             # Characters print out in capitals naturally.
         elif 48 <= key <= 90:
@@ -136,10 +150,6 @@ class SecondWindow(QDialog):
         self.sparetxtvar = uinput
 
     def closeEvent(self, event):
-        reply = QMessageBox.question(self, 'Message', "Are you sure you want to quit?", QMessageBox.Yes, QMessageBox.No)
-
-        if reply == QMessageBox.Yes:
+        self.directlyClose = True
+        if self.directlyClose:
             event.accept()
-        else:
-            self.sparetxtvar = ""
-            event.ignore()

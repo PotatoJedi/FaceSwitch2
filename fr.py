@@ -497,12 +497,12 @@ class MainWindow(QDialog):
     def save_state(self):
         data = self.prep_data_to_save()
         
-        filepathwithextension = app_dir + '/state_settings.json'
+        filepathwithextension = app_dir + '\state_settings.json'
         with open(filepathwithextension, 'w') as f:
             json.dump(data, f)
 
     def save_settings(self, path, file_name, data):
-        filepathwithextension = path + '/' + file_name + '.json'
+        filepathwithextension = path + "\\" + file_name + '.json'
         try:
             with open(filepathwithextension, 'w') as f:
                 json.dump(data, f)
