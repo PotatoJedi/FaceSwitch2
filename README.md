@@ -8,4 +8,4 @@ For example they could map a keystroke to the "open mouth" gesture. This would m
 
 ### Latest Patch 2.0.2
 
-* #### [Installation Guide](https://github.com/accessibilitysoftwarehub/FaceSwitch2/releases/tag/2.0.2) #
+* #### [Get it here](https://github.com/accessibilitysoftwarehub/FaceSwitch2/releases/tag/2.0.2) #
