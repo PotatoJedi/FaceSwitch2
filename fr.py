@@ -25,7 +25,7 @@ class MainWindow(QDialog):
         self.setWindowIcon(QtGui.QIcon('interfaces/icon.png'))
 
         global app_dir  # Allow the variable to be used anywhere
-        app_dir = os.environ['USERPROFILE'] + '/.FaceSwitch2'  # Path to application settings
+        app_dir = os.environ['USERPROFILE'] + '\.FaceSwitch2'  # Path to application settings
 
         if not os.path.isdir(app_dir):  # Create the directory if it does not already exist
             try:
@@ -49,7 +49,6 @@ class MainWindow(QDialog):
         self.sparetxtvar = ""
 
         self.initUI()
-
         self.smileActivated = False
         self.openMouthActivated = False
         self.raiseEyebrowsActivated = False
@@ -60,7 +59,7 @@ class MainWindow(QDialog):
         self.wsh = comclt.Dispatch("WScript.Shell")  # Open keytyper
 
         self.center()
-        
+
         self.facial_landmarks = 0
         
         self.neutral_open_mouth = 0
@@ -76,6 +75,8 @@ class MainWindow(QDialog):
         self.snarl_var = 0
         self.left_wink_var = 0
         self.right_wink_var = 0
+
+        self.landmarks()
 
     def center(self):
         qr = self.frameGeometry()
@@ -266,7 +267,7 @@ class MainWindow(QDialog):
         
         # Load previous state settings from file
         print("Checking for state settings...")
-        state_settings_path = app_dir + '/state_settings.json'
+        state_settings_path = app_dir + '\state_settings.json'
         self.load_settings(state_settings_path)  # Load the last settings that were last used
         QApplication.setStyle("Fusion")
         palette = QPalette()
@@ -325,7 +326,6 @@ class MainWindow(QDialog):
         self.sliderSnarl.valueChanged.connect(lambda: self.value_changed())
         self.sliderLeftWink.valueChanged.connect(lambda: self.value_changed())
         self.sliderRightWink.valueChanged.connect(lambda: self.value_changed())
-        
         # webcam
         self.webcam.setText("Webcam")
         self.show()
