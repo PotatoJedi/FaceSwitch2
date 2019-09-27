@@ -9,4 +9,4 @@ For example they could map a keystroke to the "open mouth" gesture. This would m
 ## Latest release 2.0.2
 ### [Click here to go to the latest release download page](https://github.com/accessibilitysoftwarehub/FaceSwitch2/releases/tag/2.0.2)
 
-### [Click here to view more information about this software](https://github.com/accessibilitysoftwarehub/FaceSwitch2/wiki)
+### [Click here to learn more about this software](https://github.com/accessibilitysoftwarehub/FaceSwitch2/wiki)
