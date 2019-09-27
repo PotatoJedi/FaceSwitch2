@@ -7,6 +7,6 @@ This software was created by students at the Otago Polytechnic for our Project 1
 For example they could map a keystroke to the "open mouth" gesture. This would mean that while running the software, they could open their mouth and the keystroke of their choosing would be sent to the computer by the software, rather than by the keyboard.
 
 ### Latest release 2.0.2
-#### [You can download the latest release here](https://github.com/accessibilitysoftwarehub/FaceSwitch2/releases/tag/2.0.2)
+#### [Click this to go to the Latest release](https://github.com/accessibilitysoftwarehub/FaceSwitch2/releases/tag/2.0.2)
 
-#### [Check the wiki](https://github.com/accessibilitysoftwarehub/FaceSwitch2/wiki)
+#### [Click here to view more information about this software](https://github.com/accessibilitysoftwarehub/FaceSwitch2/wiki)
