@@ -17,14 +17,18 @@ class SecondWindow(QDialog):
     def basicWindow(self):
         loadUi('interfaces/fr2.ui', self)
         self.plainTextEdit.setReadOnly(True)
-        self.setWindowTitle("keybind collector 1.0")
+        self.setWindowTitle("get keybind")
         # buttons
         self.btnEnter.clicked.connect(self.close)
         self.btnDeleteText.clicked.connect(self.on_click_deleteText)
 
         self.setWindowFlags(Qt.Window)
+       # self.setWindowFlags(Qt.FramelessWindowHint)
         self.setWindowFlags(self.windowFlags() | Qt.CustomizeWindowHint)
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowMaximizeButtonHint)
+
+        self.setStyleSheet("background-color: rgb(37, 22, 22);")
+
         self.plainTextEdit.setPlaceholderText('enter text here')
 
         self.setFocus()

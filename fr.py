@@ -22,7 +22,7 @@ class MainWindow(QDialog):
         self.secondWindow = fr2.SecondWindow()
 		
         self.closeEvent = self.closeEvent
-        self.setWindowIcon(QtGui.QIcon('interfaces/icon.png'))
+        self.setWindowIcon(QtGui.QIcon('interfaces/resources/shape_predictor_68_face_landmarks.ico'))
 
         global app_dir  # Allow the variable to be used anywhere
         app_dir = os.environ['USERPROFILE'] + '\.FaceSwitch2'  # Path to application settings
@@ -77,6 +77,11 @@ class MainWindow(QDialog):
         self.left_wink_var = 0
         self.right_wink_var = 0
 
+        self.hascalibrated = False
+        self.hascalibratedwarn = False
+
+        self.count = 0
+
         self.landmarks()
 
     def center(self):
@@ -112,136 +117,146 @@ class MainWindow(QDialog):
                     shape = predictor(gray, rect)
                     shape = face_utils.shape_to_np(shape)
                     self.facial_landmarks = shape # Set facial_landmarks to contain the data points from shape
-                    
+
                     detection = False # Boolean for determining if a gesture has been detected
 
                     for (x, y) in shape:
                         cv2.circle(frame, (x, y), 2, (0, 255, 0), -1)  # (0, 255, 0) = Green
-                    
+
                     # Create a base line variable so that the gesture detection will still work when the user moves towards/away from the camera
                     self.base_line = ((shape[16][0]) - (shape[0][0]))
-                    
-                    # Recognise gestures
-                    # Open mouth
-                    if self.openMouthActivated:
-                        mouth_height = (shape[66][1]) - (shape[62][1])
-                        try:
-                            if self.neutral_gesture_vars['0'] + (mouth_height/self.base_line) > float(self.open_mouth_var):
-                                gesture_arr.append(0)
-                                detection = True
-                        except:
-                            pass
-                    
-                    # Raise Eyebrow
-                    if self.raiseEyebrowsActivated:
-                        eye_height = (shape[27][1]) - (((shape[19][1]) + (shape[24][1]))/2)
-                        try:
-                            if (eye_height/self.base_line) - self.neutral_gesture_vars['1'] > float(self.raise_eyebrows_var):
-                                gesture_arr.append(1)
-                                detection = True
-                        except:
-                            pass
-                    
-                    # Smile
-                    if self.smileActivated:
-                        mouth_width = (((shape[54][0]) + (shape[64][0]))/2) - (((shape[48][0]) + (shape[60][0]))/2)
-                        try:
-                            if (mouth_width/self.base_line) - self.neutral_gesture_vars['2'] > float(self.smile_var):
-                                gesture_arr.append(2)
-                                detection = True
-                        except:
-                            pass
-                    
-                    # Scrunch nose / Snarl
-                    if self.snarlActivated:
-                        nose_height = (((shape[31][1]) + (shape[35][1]))/2) - (((shape[21][1]) + (shape[22][1]))/2)
-                        try:
-                            if self.neutral_gesture_vars['3'] - (nose_height/self.base_line) > float(self.snarl_var):
-                                gesture_arr.append(3)
-                                detection = True
-                        except:
-                            pass
-                    
-                    # Left Wink
-                    if self.leftWinkActivated:
-                        left_eye_top = ((shape[43][1]) + (shape[44][1]))/2
-                        left_eye_bottom = ((shape[46][1]) + (shape[47][1]))/2
-                        left_eye_height = left_eye_bottom - left_eye_top
-                        try:
-                            if self.neutral_gesture_vars['4'] - (left_eye_height/self.base_line) > float(self.left_wink_var):
-                                gesture_arr.append(4)
-                                gesture_arr.append(4)
-                                gesture_arr.append(4)
-                                detection = True
-                        except:
-                            pass
-                    
-                    # Right Wink
-                    if self.rightWinkActivated:
-                        right_eye_top = ((shape[37][1]) + (shape[38][1]))/2
-                        right_eye_bottom = ((shape[40][1]) + (shape[41][1]))/2
-                        right_eye_height = right_eye_bottom - right_eye_top
-                        try:
-                            if self.neutral_gesture_vars['5'] - (right_eye_height/self.base_line) > float(self.right_wink_var):
-                                gesture_arr.append(5)
-                                gesture_arr.append(5)
-                                gesture_arr.append(5)
-                                detection = True
-                        except:
-                            pass
-                    
-                    # If there was no gesture detected, add a default value to the array
-                    # This prevents gesture detections from the previous gesture carrying over to the next
-                    if not detection:
-                        gesture_arr.append(-1)
-                    
-                    gesture_output = -1  # Set the default value to -1 (no gesture)
-                    #  Get the most common number (gesture) from the array and set it to be the registered gesture
-                    #  (eliminates noise)
-                    if -1 not in gesture_arr:  #  Only if the array is full of gesture recognitions (i.e no default values)
-                        gesture_output = max(set(gesture_arr), key=gesture_arr.count)
-                    
-                    if gesture_output == 0:
-                        print("Mouth opened! - ", self.neutral_gesture_vars['0'] + (mouth_height/self.base_line))
-                        self.wsh.SendKeys(self.txtOpenMouth.toPlainText())
-                        for t in range(60, 68, 1):
-                            cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
-                        
-                    elif gesture_output == 1:
-                        print("Eyebrows raised! - ", (eye_height/self.base_line) - self.neutral_gesture_vars['1'])
-                        self.wsh.SendKeys(self.txtRaiseEyebrows.toPlainText())
-                        for t in range(17, 27, 1):
-                            cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
-                            
-                    elif gesture_output == 2:
-                        print("Smile detected! - ", (mouth_width/self.base_line) - self.neutral_gesture_vars['2'])
-                        self.wsh.SendKeys(self.txtSmile.toPlainText())
-                        for t in range(54, 60, 1):
-                            cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
-                        cv2.circle(frame, (shape[48][0], shape[48][1]), 2, (255, 0, 0), -1)
-                        
-                    elif gesture_output == 3:
-                        print("Anger detected! - ", self.neutral_gesture_vars['3'] - (nose_height/self.base_line))
-                        self.wsh.SendKeys(self.txtSnarl.toPlainText())
-                        for t in range(27, 36, 1):
-                            cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
-                            
-                    elif gesture_output == 4:
-                        print("Left wink detected! - ", self.neutral_gesture_vars['4'] - (left_eye_height/self.base_line))
-                        self.wsh.SendKeys(self.txtLeftWink.toPlainText())
-                        for t in range(42, 48, 1):
-                            cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
-                    
-                    elif gesture_output == 5:
-                        print("Right wink detected! - ", self.neutral_gesture_vars['5'] - (right_eye_height/self.base_line))
-                        self.wsh.SendKeys(self.txtRightWink.toPlainText())
-                        for t in range(36, 42, 1):
-                            cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
-                    
-                    if 0 <= gesture_output <= 5: # If a gesture was output, reset the gesture array to give a small pause
-                        gesture_arr = deque(maxlen=10)
-                        gesture_arr.extend([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
-                        
+
+                    self.count += 1
+
+                    #if self.count is 100:
+                    #    self.count = 0
+                    #    self.hascalibratedwarn = False
+
+                    if self.hascalibrated:
+                        # Recognise gestures
+                        # Open mouth
+                        if self.openMouthActivated:
+                            mouth_height = (shape[66][1]) - (shape[62][1])
+                            try:
+                                if self.neutral_gesture_vars['0'] + (mouth_height/self.base_line) > float(self.open_mouth_var):
+                                    gesture_arr.append(0)
+                                    detection = True
+                            except:
+                                pass
+
+                        # Raise Eyebrow
+                        if self.raiseEyebrowsActivated:
+                            eye_height = (shape[27][1]) - (((shape[19][1]) + (shape[24][1]))/2)
+                            try:
+                                if (eye_height/self.base_line) - self.neutral_gesture_vars['1'] > float(self.raise_eyebrows_var):
+                                    gesture_arr.append(1)
+                                    detection = True
+                            except:
+                                pass
+
+                        # Smile
+                        if self.smileActivated:
+                            mouth_width = (((shape[54][0]) + (shape[64][0]))/2) - (((shape[48][0]) + (shape[60][0]))/2)
+                            try:
+                                if (mouth_width/self.base_line) - self.neutral_gesture_vars['2'] > float(self.smile_var):
+                                    gesture_arr.append(2)
+                                    detection = True
+                            except:
+                                pass
+
+                        # Scrunch nose / Snarl
+                        if self.snarlActivated:
+                            nose_height = (((shape[31][1]) + (shape[35][1]))/2) - (((shape[21][1]) + (shape[22][1]))/2)
+                            try:
+                                if self.neutral_gesture_vars['3'] - (nose_height/self.base_line) > float(self.snarl_var):
+                                    gesture_arr.append(3)
+                                    detection = True
+                            except:
+                                pass
+
+                        # Left Wink
+                        if self.leftWinkActivated:
+                            left_eye_top = ((shape[43][1]) + (shape[44][1]))/2
+                            left_eye_bottom = ((shape[46][1]) + (shape[47][1]))/2
+                            left_eye_height = left_eye_bottom - left_eye_top
+                            try:
+                                if self.neutral_gesture_vars['4'] - (left_eye_height/self.base_line) > float(self.left_wink_var):
+                                    gesture_arr.append(4)
+                                    gesture_arr.append(4)
+                                    gesture_arr.append(4)
+                                    detection = True
+                            except:
+                                pass
+
+                        # Right Wink
+                        if self.rightWinkActivated:
+                            right_eye_top = ((shape[37][1]) + (shape[38][1]))/2
+                            right_eye_bottom = ((shape[40][1]) + (shape[41][1]))/2
+                            right_eye_height = right_eye_bottom - right_eye_top
+                            try:
+                                if self.neutral_gesture_vars['5'] - (right_eye_height/self.base_line) > float(self.right_wink_var):
+                                    gesture_arr.append(5)
+                                    gesture_arr.append(5)
+                                    gesture_arr.append(5)
+                                    detection = True
+                            except:
+                                pass
+
+                        # If there was no gesture detected, add a default value to the array
+                        # This prevents gesture detections from the previous gesture carrying over to the next
+                        if not detection:
+                            gesture_arr.append(-1)
+
+                        gesture_output = -1  # Set the default value to -1 (no gesture)
+                        #  Get the most common number (gesture) from the array and set it to be the registered gesture
+                        #  (eliminates noise)
+                        if -1 not in gesture_arr:  #  Only if the array is full of gesture recognitions (i.e no default values)
+                            gesture_output = max(set(gesture_arr), key=gesture_arr.count)
+
+                        if gesture_output == 0:
+                            print("Mouth opened! - ", self.neutral_gesture_vars['0'] + (mouth_height/self.base_line))
+                            self.wsh.SendKeys(self.txtOpenMouth.toPlainText())
+                            for t in range(60, 68, 1):
+                                cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
+
+                        elif gesture_output == 1:
+                            print("Eyebrows raised! - ", (eye_height/self.base_line) - self.neutral_gesture_vars['1'])
+                            self.wsh.SendKeys(self.txtRaiseEyebrows.toPlainText())
+                            for t in range(17, 27, 1):
+                                cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
+
+                        elif gesture_output == 2:
+                            print("Smile detected! - ", (mouth_width/self.base_line) - self.neutral_gesture_vars['2'])
+                            self.wsh.SendKeys(self.txtSmile.toPlainText())
+                            for t in range(54, 60, 1):
+                                cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
+                            cv2.circle(frame, (shape[48][0], shape[48][1]), 2, (255, 0, 0), -1)
+
+                        elif gesture_output == 3:
+                            print("Anger detected! - ", self.neutral_gesture_vars['3'] - (nose_height/self.base_line))
+                            self.wsh.SendKeys(self.txtSnarl.toPlainText())
+                            for t in range(27, 36, 1):
+                                cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
+
+                        elif gesture_output == 4:
+                            print("Left wink detected! - ", self.neutral_gesture_vars['4'] - (left_eye_height/self.base_line))
+                            self.wsh.SendKeys(self.txtLeftWink.toPlainText())
+                            for t in range(42, 48, 1):
+                                cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
+
+                        elif gesture_output == 5:
+                            print("Right wink detected! - ", self.neutral_gesture_vars['5'] - (right_eye_height/self.base_line))
+                            self.wsh.SendKeys(self.txtRightWink.toPlainText())
+                            for t in range(36, 42, 1):
+                                cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
+                        if 0 <= gesture_output <= 5: # If a gesture was output, reset the gesture array to give a small pause
+                            gesture_arr = deque(maxlen=10)
+                            gesture_arr.extend([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
+                    else:
+                        if self.hascalibratedwarn is False:
+                            print("> Calibration required ")
+                            self.hascalibratedwarn = True
+
             rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             image = QImage(rgb_frame.tobytes(), 
                 rgb_frame.shape[1],
@@ -379,9 +394,8 @@ class MainWindow(QDialog):
                                          '4': self.neutral_left_wink,
                                          '5': self.neutral_right_wink
                                          }
-
+            self.hascalibrated = True
         else:
-            pass
             print("Must be activated")
 			
 
@@ -569,6 +583,10 @@ class MainWindow(QDialog):
     def btn_state(self, state):
         # checkBox activations
         # open mouth checkbox
+
+        #if self.hascalibrated:
+        #if self.faceShapePredictorActivated:
+
         if state.objectName() == "cboxOpenMouth":
             if state.isChecked():
                 if not self.openMouthActivated:
@@ -594,8 +612,8 @@ class MainWindow(QDialog):
                     self.smileActivated = True
             else:
                 self.smileActivated = False
-                print("Smile detection deactivated")	
-                
+                print("Smile detection deactivated")
+
         # snarl checkbox
         if state.objectName() == "cboxSnarl":
             if state.isChecked():
@@ -614,7 +632,7 @@ class MainWindow(QDialog):
             else:
                 self.leftWinkActivated = False
                 print("Left Wink detection deactivated")
-                
+
         # right wink checkbox
         if state.objectName() == "cboxRightWink":
             if state.isChecked():
@@ -624,6 +642,8 @@ class MainWindow(QDialog):
             else:
                 self.rightWinkActivated = False
                 print("Right Wink detection deactivated")
+        #else:
+            #QMessageBox.information(self, '', 'Activation required')
 
     @pyqtSlot()
     def on_click_initialize(self):  # Used to turn the gesture detection ON or OFF
