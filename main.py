@@ -13,13 +13,13 @@ import dlib
 import win32com.client as comclt  # Used to insert keys
 
 import json  # for saving/loading settings
-import fr2 as fr2
+import keybinder as keybinder
 
 class MainWindow(QDialog):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__()
 
-        self.secondWindow = fr2.SecondWindow()
+        self.secondWindow = keybinder.SecondWindow()
 		
         self.closeEvent = self.closeEvent
         self.setWindowIcon(QtGui.QIcon('interfaces/resources/shape_predictor_68_face_landmarks.ico'))
