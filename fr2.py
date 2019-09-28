@@ -10,6 +10,7 @@ class SecondWindow(QDialog):
         self.closeEvent = self.closeEvent
 
         self.sparetxtvar = ""
+        self.changedText = False
 
         self.basicWindow()
 
@@ -24,124 +25,105 @@ class SecondWindow(QDialog):
         self.setWindowFlags(Qt.Window)
         self.setWindowFlags(self.windowFlags() | Qt.CustomizeWindowHint)
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowMaximizeButtonHint)
-        #self.setStyleSheet("background-color: rgb(158, 123, 237)");
+        self.plainTextEdit.setPlaceholderText('enter text here')
+
+        self.setFocus()
 
     def on_click_deleteText(self):
         self.sparetxtvar = ""
         self.plainTextEdit.setPlainText(self.sparetxtvar)
 
     def keyPressEvent(self, e):
-        key = e.key()
-        #test = QMessageBox.information(self, "hello", "I m here")
-        print(key)
-        # Numerical
-        # Numbers
-        if 49 <= key <= 57:
-            self.sparetxtvar += chr(key)
-            # Characters print out in capitals naturally.
-        elif 48 <= key <= 90:
-            self.sparetxtvar += str(chr(key)).lower()
-        # Space key does not work
-        #elif key == Qt.Key_Space:
-        #   self.sparetxtvar += " "
-        # Modifiers
-        elif key == Qt.Key_Shift:
-            self.sparetxtvar += "+"
-        elif key == Qt.Key_Control:
-            self.sparetxtvar += "^"
-        elif key == Qt.Key_Alt:
-            self.sparetxtvar += "%"
+        if not self.changedText:
+            #self.plainTextEdit.setPlaceholderText('')
+            self.changedText = True
 
-        # Left Right Up Down
-        elif key == Qt.Key_Left:
-            self.sparetxtvar += "{LEFT}"
-        elif key == Qt.Key_Right:
-            self.sparetxtvar += "{RIGHT}"
-        elif key == Qt.Key_Down:
-            self.sparetxtvar += "{DOWN}"
-        elif key == Qt.Key_Up:
-            self.sparetxtvar += "{UP}"
+        if self.changedText:
+            self.setFocus()
+            key = e.key()
+            print(key)
+            if 49 <= key <= 57:
+                self.sparetxtvar += chr(key)
+            elif 48 <= key <= 90:
+                self.sparetxtvar += str(chr(key)).lower()
+            elif key == Qt.Key_Space:
+                self.sparetxtvar += " "
+            elif key == Qt.Key_Shift:
+                self.sparetxtvar += "+"
+            elif key == Qt.Key_Control:
+                self.sparetxtvar += "^"
+            elif key == Qt.Key_Alt:
+                self.sparetxtvar += "%"
 
-        # Function keys
-        elif key == Qt.Key_F1:
-            self.sparetxtvar += "{F1}"
-        elif key == Qt.Key_F2:
-            self.sparetxtvar += "{F2}"
-        elif key == Qt.Key_F3:
-            self.sparetxtvar += "{F3}"
-        elif key == Qt.Key_F4:
-            self.sparetxtvar += "{F4}"
-        elif key == Qt.Key_F5:
-            self.sparetxtvar += "{F5}"
-        elif key == Qt.Key_F6:
-            self.sparetxtvar += "{F6}"
-        elif key == Qt.Key_F7:
-            self.sparetxtvar += "{F7}"
-        elif key == Qt.Key_F8:
-            self.sparetxtvar += "{F8}"
-        elif key == Qt.Key_F9:
-            self.sparetxtvar += "{F9}"
-        elif key == Qt.Key_F10:
-            self.sparetxtvar += "{F10}"
-        elif key == Qt.Key_F11:
-            self.sparetxtvar += "{F11}"
-        elif key == Qt.Key_F12:
-            self.sparetxtvar += "{F12}"
+            elif key == Qt.Key_Left:
+                self.sparetxtvar += "{LEFT}"
+            elif key == Qt.Key_Right:
+                self.sparetxtvar += "{RIGHT}"
+            elif key == Qt.Key_Down:
+                self.sparetxtvar += "{DOWN}"
+            elif key == Qt.Key_Up:
+                self.sparetxtvar += "{UP}"
 
-            # Goes all the way to F16 if required.
+            elif key == Qt.Key_F1:
+                self.sparetxtvar += "{F1}"
+            elif key == Qt.Key_F2:
+                self.sparetxtvar += "{F2}"
+            elif key == Qt.Key_F3:
+                self.sparetxtvar += "{F3}"
+            elif key == Qt.Key_F4:
+                self.sparetxtvar += "{F4}"
+            elif key == Qt.Key_F5:
+                self.sparetxtvar += "{F5}"
+            elif key == Qt.Key_F6:
+                self.sparetxtvar += "{F6}"
+            elif key == Qt.Key_F7:
+                self.sparetxtvar += "{F7}"
+            elif key == Qt.Key_F8:
+                self.sparetxtvar += "{F8}"
+            elif key == Qt.Key_F9:
+                self.sparetxtvar += "{F9}"
+            elif key == Qt.Key_F10:
+                self.sparetxtvar += "{F10}"
+            elif key == Qt.Key_F11:
+                self.sparetxtvar += "{F11}"
+            elif key == Qt.Key_F12:
+                self.sparetxtvar += "{F12}"
+                # Goes all the way to F16 if required.
 
-            # Alternative keys:
-            # {BACKSPACE}
-        elif key == 16777219:
-            self.sparetxtvar += "{BACKSPACE}"
-        # {CAPSLOCK}
-        elif key == Qt.Key_CapsLock:
-            self.sparetxtvar += "{CAPSLOCK}"
-        # {CLEAR}
-        elif key == Qt.Key_Clear:
-            self.sparetxtvar += "{CLEAR}"
-        # {DELETE}
-        elif key == Qt.Key_Delete:
-            self.sparetxtvar += "{DELETE}"
-        # {INSERT}
-        elif key == Qt.Key_Insert:
-            self.sparetxtvar += "{INSERT}"
-            # {END}
-        elif key == Qt.Key_End:
-            self.sparetxtvar += "{END}"
+            elif key == 16777219:
+                self.sparetxtvar += "{BACKSPACE}"
+            elif key == Qt.Key_CapsLock:
+                self.sparetxtvar += "{CAPSLOCK}"
+            elif key == Qt.Key_Clear:
+                self.sparetxtvar += "{CLEAR}"
+            elif key == Qt.Key_Delete:
+                self.sparetxtvar += "{DELETE}"
+            elif key == Qt.Key_Insert:
+                self.sparetxtvar += "{INSERT}"
+            elif key == Qt.Key_End:
+                self.sparetxtvar += "{END}"
+            elif key == 16777220:
+                self.sparetxtvar += "{ENTER}"
+            elif key == Qt.Key_Escape:
+                self.sparetxtvar += "{ESCAPE}"
+            elif key == Qt.Key_Help:
+                self.sparetxtvar += "{HELP}"
+            elif key == Qt.Key_Home:
+                self.sparetxtvar += "{HOME}"
+            elif key == Qt.Key_NumLock:
+                self.sparetxtvar += "{NUMLOCK}"
+            elif key == Qt.Key_PageDown:
+                self.sparetxtvar += "{PGDN}"
+            elif key == Qt.Key_PageUp:
+                self.sparetxtvar += "{PGUP}"
+            elif key == Qt.Key_ScrollLock:
+                self.sparetxtvar += "{SCROLLLOCK}"
+            elif key == Qt.Key_Tab:
+                self.sparetxtvar += "{TAB}"
 
-            # {ENTER}
-        elif key == 16777220:
-            self.sparetxtvar += "{ENTER}"
-
-            # {ESCAPE}
-        elif key == Qt.Key_Escape:
-            self.sparetxtvar += "{ESCAPE}"
-            # {HELP}
-        elif key == Qt.Key_Help:
-            self.sparetxtvar += "{HELP}"
-            # {HOME}
-        elif key == Qt.Key_Home:
-            self.sparetxtvar += "{HOME}"
-            # {NUMLOCK}
-        elif key == Qt.Key_NumLock:
-            self.sparetxtvar += "{NUMLOCK}"
-            # {PGDN} / Page Down
-        elif key == Qt.Key_PageDown:
-            self.sparetxtvar += "{PGDN}"
-            # {PGUP} / Page Up
-        elif key == Qt.Key_PageUp:
-            self.sparetxtvar += "{PGUP}"
-            # {SCROLLLOCK}
-        elif key == Qt.Key_ScrollLock:
-            self.sparetxtvar += "{SCROLLLOCK}"
-            # {TAB}
-        elif key == Qt.Key_Tab:
-            self.sparetxtvar += "{TAB}"
-
-        self.plainTextEdit.setPlainText(self.sparetxtvar)
-            # {BREAK}
-            # {PRTSC} ## Print Screen
+            self.plainTextEdit.setPlainText(self.sparetxtvar)
+                # {BREAK}
+                # {PRTSC} ## Print Screen
 
     def returnSparetxtVar(self):
         return self.sparetxtvar
@@ -152,4 +134,7 @@ class SecondWindow(QDialog):
     def closeEvent(self, event):
         self.directlyClose = True
         if self.directlyClose:
+            self.plainTextEdit.setPlainText("")
+            self.plainTextEdit.setPlaceholderText('enter text here')
+            self.btnEnter.setFocus()
             event.accept()

@@ -49,6 +49,7 @@ class MainWindow(QDialog):
         self.sparetxtvar = ""
 
         self.initUI()
+		
         self.smileActivated = False
         self.openMouthActivated = False
         self.raiseEyebrowsActivated = False
