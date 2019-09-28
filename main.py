@@ -13,76 +13,11 @@ import dlib
 import win32com.client as comclt  # Used to insert keys
 
 import json  # for saving/loading settings
-import keybinder as keybinder
+import textboxhandler as tbh
 
 class MainWindow(QDialog):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__()
-
-        self.secondWindow = keybinder.SecondWindow()
-		
-        self.closeEvent = self.closeEvent
-        self.setWindowIcon(QtGui.QIcon('interfaces/resources/shape_predictor_68_face_landmarks.ico'))
-
-        global app_dir  # Allow the variable to be used anywhere
-        app_dir = os.environ['USERPROFILE'] + '\.FaceSwitch2'  # Path to application settings
-
-        if not os.path.isdir(app_dir):  # Create the directory if it does not already exist
-            try:
-                os.mkdir(app_dir)  # Make the .FaceSwitch2 folder
-            except OSError:
-                print("Creation of the directory %s failed" % app_dir)
-            else:
-                print("Successfully created the directory %s " % app_dir)
-
-        self.captureFacePositions = True
-        self.capturedPositions = False
-        self.faceShapePredictorActivated = False
-
-        self.webcamActive = True
-
-        self.cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # gives an error without CAP_DSHOW
-        
-        self.neutral_gesture_vars = {}
-        self.base_line = 0
-
-        self.sparetxtvar = ""
-
-        self.initUI()
-		
-        self.smileActivated = False
-        self.openMouthActivated = False
-        self.raiseEyebrowsActivated = False
-        self.snarlActivated = False
-        self.leftWinkActivated = False
-        self.rightWinkActivated = False
-
-        self.wsh = comclt.Dispatch("WScript.Shell")  # Open keytyper
-
-        self.center()
-
-        self.facial_landmarks = 0
-        
-        self.neutral_open_mouth = 0
-        self.neutral_raise_eyebrows = 0
-        self.neutral_smile = 0
-        self.neutral_snarl = 0
-        self.neutral_left_wink = 0
-        self.neutral_right_wink = 0
-        
-        self.open_mouth_var = 0
-        self.raise_eyebrows_var = 0
-        self.smile_var = 0
-        self.snarl_var = 0
-        self.left_wink_var = 0
-        self.right_wink_var = 0
-
-        self.hascalibrated = False
-        self.hascalibratedwarn = False
-
-        self.count = 0
-
-        self.landmarks()
 
     def center(self):
         qr = self.frameGeometry()
@@ -276,6 +211,33 @@ class MainWindow(QDialog):
         self.cap.release()
 
     def initUI(self):
+        self.closeEvent = self.closeEvent
+        self.setWindowIcon(QtGui.QIcon('interfaces/resources/shape_predictor_68_face_landmarks.ico'))
+
+        global app_dir  # Allow the variable to be used anywhere
+        app_dir = os.environ['USERPROFILE'] + '\.FaceSwitch2'  # Path to application settings
+
+        if not os.path.isdir(app_dir):  # Create the directory if it does not already exist
+            try:
+                os.mkdir(app_dir)  # Make the .FaceSwitch2 folder
+            except OSError:
+                print("Creation of the directory %s failed" % app_dir)
+            else:
+                print("Successfully created the directory %s " % app_dir)
+
+        self.captureFacePositions = True
+        self.capturedPositions = False
+        self.faceShapePredictorActivated = False
+
+        self.webcamActive = True
+
+        self.cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # gives an error without CAP_DSHOW
+
+        self.neutral_gesture_vars = {}
+        self.base_line = 0
+
+        self.sparetxtvar = ""
+
         loadUi('interfaces/fr.ui', self)
         
         # Load default settings
@@ -302,14 +264,23 @@ class MainWindow(QDialog):
         palette.setColor(QPalette.HighlightedText, Qt.black)
         QApplication.setPalette(palette)
 
+        self.openmouthtxt = tbh.textBox("openmouth")
+        self.raiseeyebrowstxt = tbh.textBox("raiseeyebrows")
+        self.smiletxt = tbh.textBox("smile")
+        self.snarltxt = tbh.textBox("snarl")
+        self.leftwinktxt = tbh.textBox("leftwink")
+        self.rightwinktxt = tbh.textBox("rightwink")
+
         # Text boxes
         # On mouse click
+
         self.txtOpenMouth.mousePressEvent = self.get_userinput
-        self.txtRaiseEyebrows.mousePressEvent = self.get_userinput1
-        self.txtSmile.mousePressEvent = self.get_userinput2
-        self.txtSnarl.mousePressEvent = self.get_userinput3
-        self.txtLeftWink.mousePressEvent = self.get_userinput4
-        self.txtRightWink.mousePressEvent = self.get_userinput5
+        self.txtRaiseEyebrows.mousePressEvent = self.get_userinput
+        self.txtSmile.mousePressEvent = self.get_userinput
+        self.txtSnarl.mousePressEvent = self.get_userinput
+        self.txtLeftWink.mousePressEvent = self.get_userinput
+        self.txtRightWink.mousePressEvent = self.get_userinput
+
 		# type in to the box code
         self.txtOpenMouth.setReadOnly(True)
         self.txtRaiseEyebrows.setReadOnly(True)
@@ -345,6 +316,72 @@ class MainWindow(QDialog):
         # webcam
         self.webcam.setText("Webcam")
         self.show()
+
+        self.smileActivated = False
+        self.openMouthActivated = False
+        self.raiseEyebrowsActivated = False
+        self.snarlActivated = False
+        self.leftWinkActivated = False
+        self.rightWinkActivated = False
+
+        self.wsh = comclt.Dispatch("WScript.Shell")  # Open keytyper
+
+        self.center()
+
+        self.facial_landmarks = 0
+
+        self.neutral_open_mouth = 0
+        self.neutral_raise_eyebrows = 0
+        self.neutral_smile = 0
+        self.neutral_snarl = 0
+        self.neutral_left_wink = 0
+        self.neutral_right_wink = 0
+
+        self.open_mouth_var = 0
+        self.raise_eyebrows_var = 0
+        self.smile_var = 0
+        self.snarl_var = 0
+        self.left_wink_var = 0
+        self.right_wink_var = 0
+
+        self.hascalibrated = False
+        self.hascalibratedwarn = False
+
+        self.count = 0
+
+        self.txtOpenMouth.mousePressEvent = self.get_userinput1
+        self.txtRaiseEyebrows.mousePressEvent = self.get_userinput2
+        self.txtSmile.mousePressEvent = self.get_userinput3
+        self.txtSnarl.mousePressEvent = self.get_userinput4
+        self.txtLeftWink.mousePressEvent = self.get_userinput5
+        self.txtRightWink.mousePressEvent = self.get_userinput6
+
+    # Disgruntled by multiple definitions of the same thing!
+    # Halp
+    def get_userinput1(self, state):
+        if self.openmouthtxt.name == "openmouth":
+            self.openmouthtxt.getUserInput()
+            self.txtOpenMouth.setPlainText(self.openmouthtxt.getSpareTxtVar())
+    def get_userinput2(self, state):
+        if self.raiseeyebrowstxt.name == "raiseeyebrows":
+            self.raiseeyebrowstxt.getUserInput()
+            self.txtRaiseEyebrows.setPlainText(self.raiseeyebrowstxt.getSpareTxtVar())
+    def get_userinput3(self, state):
+        if self.smiletxt.name == "smile":
+            self.smiletxt.getUserInput()
+            self.txtSmile.setPlainText(self.smiletxt.getSpareTxtVar())
+    def get_userinput4(self, state):
+        if self.snarltxt.name == "snarl":
+            self.snarltxt.getUserInput()
+            self.txtSnarl.setPlainText(self.snarltxt.getSpareTxtVar())
+    def get_userinput5(self, state):
+        if self.leftwinktxt.name == "leftwink":
+            self.leftwinktxt.getUserInput()
+            self.txtLeftWink.setPlainText(self.leftwinktxt.getSpareTxtVar())
+    def get_userinput6(self, state):
+        if self.rightwinktxt.name == "rightwink":
+            self.rightwinktxt.getUserInput()
+            self.txtRightWink.setPlainText(self.rightwinktxt.getSpareTxtVar())
 
     def btn_calibrate(self, neutral_landmarks, base_line):
         self.neutral_landmarks = neutral_landmarks
@@ -397,74 +434,6 @@ class MainWindow(QDialog):
             self.hascalibrated = True
         else:
             print("Must be activated")
-			
-
-    def get_userinput(self, state):
-        retreivedVar = self.secondWindow.returnSparetxtVar()
-
-        if retreivedVar != "":
-            self.secondWindow.setSparetxtVar("")
-
-        if not self.secondWindow.exec_():
-            retreivedVar = self.secondWindow.returnSparetxtVar()
-            self.sparetxtvar = retreivedVar
-            self.txtOpenMouth.setPlainText(self.sparetxtvar)
-
-
-    def get_userinput1(self, state):
-        retreivedVar = self.secondWindow.returnSparetxtVar()
-
-        if retreivedVar != "":
-            self.secondWindow.setSparetxtVar("")
-
-        if not self.secondWindow.exec_():
-            retreivedVar = self.secondWindow.returnSparetxtVar()
-            self.sparetxtvar = retreivedVar
-            self.txtRaiseEyebrows.setPlainText(self.sparetxtvar)
-
-    def get_userinput2(self, state):
-        retreivedVar = self.secondWindow.returnSparetxtVar()
-
-        if retreivedVar != "":
-            self.secondWindow.setSparetxtVar("")
-
-        if not self.secondWindow.exec_():
-            retreivedVar = self.secondWindow.returnSparetxtVar()
-            self.sparetxtvar = retreivedVar
-            self.txtSmile.setPlainText(self.sparetxtvar)
-
-    def get_userinput3(self, state):
-        retreivedVar = self.secondWindow.returnSparetxtVar()
-
-        if retreivedVar != "":
-            self.secondWindow.setSparetxtVar("")
-
-        if not self.secondWindow.exec_():
-            retreivedVar = self.secondWindow.returnSparetxtVar()
-            self.sparetxtvar = retreivedVar
-            self.txtSnarl.setPlainText(self.sparetxtvar)
-
-    def get_userinput4(self, state):
-        retreivedVar = self.secondWindow.returnSparetxtVar()
-
-        if retreivedVar != "":
-            self.secondWindow.setSparetxtVar("")
-
-        if not self.secondWindow.exec_():
-            retreivedVar = self.secondWindow.returnSparetxtVar()
-            self.sparetxtvar = retreivedVar
-            self.txtLeftWink.setPlainText(self.sparetxtvar)
-
-    def get_userinput5(self, state):
-        retreivedVar = self.secondWindow.returnSparetxtVar()
-
-        if retreivedVar != "":
-            self.secondWindow.setSparetxtVar("")
-
-        if not self.secondWindow.exec_():
-            retreivedVar = self.secondWindow.returnSparetxtVar()
-            self.sparetxtvar = retreivedVar
-            self.txtRightWink.setPlainText(self.sparetxtvar)
 
     def value_changed(self):
         self.open_mouth_var = round(float(self.sliderOpenMouth.value()) / 400, 2)
@@ -676,6 +645,8 @@ if __name__ == "__main__":
     import sys
     app = QApplication(sys.argv)
     mainWindow = MainWindow()
+    mainWindow.initUI()
+    mainWindow.landmarks()
     mainWindow.show()
     print("Now exiting")
     sys.exit()

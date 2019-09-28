@@ -12,8 +12,6 @@ class SecondWindow(QDialog):
         self.sparetxtvar = ""
         self.changedText = False
 
-        self.basicWindow()
-
     def basicWindow(self):
         loadUi('interfaces/fr2.ui', self)
         self.plainTextEdit.setReadOnly(True)
