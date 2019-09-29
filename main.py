@@ -5,7 +5,7 @@ from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtWidgets import QApplication, QDialog, QInputDialog, QMainWindow, QCheckBox, QWidget, QPushButton, QLabel, \
     QMessageBox, QDesktopWidget, QFileDialog
 from PyQt5.QtGui import QIcon, QPalette, QColor, QPixmap, QImage
-from PyQt5.QtCore import pyqtSlot, Qt
+from PyQt5.QtCore import pyqtSlot, Qt, QPoint
 from imutils import face_utils
 from collections import deque
 import cv2
@@ -18,12 +18,6 @@ import textboxhandler as tbh
 class MainWindow(QDialog):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__()
-
-    def center(self):
-        qr = self.frameGeometry()
-        cp = QDesktopWidget().availableGeometry().center()
-        qr.moveCenter(cp)
-        self.move(qr.topLeft())
 
     def landmarks(self):
         p = "resources/shape_predictor_68_face_landmarks.dat"  # p = our pre-trained model
@@ -239,7 +233,17 @@ class MainWindow(QDialog):
         self.sparetxtvar = ""
 
         loadUi('interfaces/fr.ui', self)
-        
+
+        self.setWindowFlags(Qt.FramelessWindowHint)
+        self.setWindowFlags(Qt.Window
+                           | Qt.WindowMinimizeButtonHint
+                                | Qt.WindowCloseButtonHint)
+        self.setFixedSize(1100, 595)
+
+        self.center()
+
+        self.oldPos = self.pos()
+
         # Load default settings
         self.value_changed()
         
@@ -270,16 +274,6 @@ class MainWindow(QDialog):
         self.snarltxt = tbh.textBox("snarl")
         self.leftwinktxt = tbh.textBox("leftwink")
         self.rightwinktxt = tbh.textBox("rightwink")
-
-        # Text boxes
-        # On mouse click
-
-        self.txtOpenMouth.mousePressEvent = self.get_userinput
-        self.txtRaiseEyebrows.mousePressEvent = self.get_userinput
-        self.txtSmile.mousePressEvent = self.get_userinput
-        self.txtSnarl.mousePressEvent = self.get_userinput
-        self.txtLeftWink.mousePressEvent = self.get_userinput
-        self.txtRightWink.mousePressEvent = self.get_userinput
 
 		# type in to the box code
         self.txtOpenMouth.setReadOnly(True)
@@ -325,8 +319,6 @@ class MainWindow(QDialog):
         self.rightWinkActivated = False
 
         self.wsh = comclt.Dispatch("WScript.Shell")  # Open keytyper
-
-        self.center()
 
         self.facial_landmarks = 0
 
@@ -382,6 +374,22 @@ class MainWindow(QDialog):
         if self.rightwinktxt.name == "rightwink":
             self.rightwinktxt.getUserInput()
             self.txtRightWink.setPlainText(self.rightwinktxt.getSpareTxtVar())
+
+    #center
+    def center(self):
+        qr = self.frameGeometry()
+        cp = QDesktopWidget().availableGeometry().center()
+        qr.moveCenter(cp)
+        self.move(qr.topLeft())
+
+    def mousePressEvent(self, event):
+        self.oldPos = event.globalPos()
+
+    def mouseMoveEvent(self, event):
+        delta = QPoint (event.globalPos() - self.oldPos)
+        #print(delta)
+        self.move(self.x() + delta.x(), self.y() + delta.y())
+        self.oldPos = event.globalPos()
 
     def btn_calibrate(self, neutral_landmarks, base_line):
         self.neutral_landmarks = neutral_landmarks
