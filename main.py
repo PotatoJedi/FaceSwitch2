@@ -282,6 +282,13 @@ class MainWindow(QDialog):
         self.txtSnarl.setReadOnly(True)
         self.txtLeftWink.setReadOnly(True)
         self.txtRightWink.setReadOnly(True)
+		
+        self.txtOpenMouth.setStyleSheet("border: 1px solid rgb(42, 130, 218);")
+        self.txtRaiseEyebrows.setStyleSheet("border: 1px solid rgb(42, 130, 218);")
+        self.txtSmile.setStyleSheet("border: 1px solid rgb(42, 130, 218);")
+        self.txtSnarl.setStyleSheet("border: 1px solid rgb(42, 130, 218);")
+        self.txtLeftWink.setStyleSheet("border: 1px solid rgb(42, 130, 218);")
+        self.txtRightWink.setStyleSheet("border: 1px solid rgb(42, 130, 218);")
 
         # Checkboxes
         self.cboxOpenMouth.stateChanged.connect(lambda: self.btn_state(self.cboxOpenMouth))
