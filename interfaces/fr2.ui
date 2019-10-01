@@ -38,6 +38,12 @@
      <height>61</height>
     </rect>
    </property>
+   <property name="frameShape">
+    <enum>QFrame::Panel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Plain</enum>
+   </property>
   </widget>
   <widget class="QPushButton" name="btnDeleteText">
    <property name="geometry">
@@ -45,7 +51,7 @@
      <x>10</x>
      <y>100</y>
      <width>131</width>
-     <height>41</height>
+     <height>31</height>
     </rect>
    </property>
    <property name="text">
@@ -58,7 +64,7 @@
      <x>150</x>
      <y>100</y>
      <width>131</width>
-     <height>41</height>
+     <height>31</height>
     </rect>
    </property>
    <property name="text">

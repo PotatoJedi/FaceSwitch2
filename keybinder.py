@@ -3,6 +3,7 @@ import sys
 from PyQt5.QtWidgets import QDialog, QLabel, QMessageBox
 from PyQt5.uic import loadUi
 from PyQt5.QtCore import pyqtSlot, Qt
+from PyQt5.QtGui import QColor
 
 class SecondWindow(QDialog):
     def __init__(self, parent=None):
@@ -15,7 +16,7 @@ class SecondWindow(QDialog):
     def basicWindow(self):
         loadUi('interfaces/fr2.ui', self)
         self.plainTextEdit.setReadOnly(True)
-        self.setWindowTitle("get keybind")
+        self.setWindowTitle("Start typing!")
         # buttons
         self.btnEnter.clicked.connect(self.close)
         self.btnDeleteText.clicked.connect(self.on_click_deleteText)
@@ -25,11 +26,16 @@ class SecondWindow(QDialog):
         self.setWindowFlags(self.windowFlags() | Qt.CustomizeWindowHint)
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowMaximizeButtonHint)
 
-        self.setStyleSheet("background-color: rgb(37, 22, 22);")
+        self.setStyleSheet("background-color: rgb(48, 52, 52);")
 
-        self.plainTextEdit.setPlaceholderText('enter text here')
+        self.plainTextEdit.setPlaceholderText('enter text')
+        self.plainTextEdit.setObjectName("myObject")
+        self.plainTextEdit.setLineWidth(0)
+        self.plainTextEdit.setMidLineWidth(3)
+        self.plainTextEdit.setContentsMargins(0, 0, 0, 0)
+		
+        self.setStyleSheet("#myObject { border: 1px solid rgb(42, 130, 218); }")
 
-        self.setFocus()
 
     def on_click_deleteText(self):
         self.sparetxtvar = ""
