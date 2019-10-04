@@ -13,7 +13,7 @@ import dlib
 import win32com.client as comclt  # Used to insert keys
 
 import json  # for saving/loading settings
-import textboxhandler as tbh
+import textboxHandler as tbh
 
 class MainWindow(QDialog):
     def __init__(self, parent=None):
