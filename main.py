@@ -206,7 +206,6 @@ class MainWindow(QDialog):
 
     def initUI(self):
         self.closeEvent = self.closeEvent
-        self.setWindowIcon(QtGui.QIcon('interfaces/resources/shape_predictor_68_face_landmarks.ico'))
 
         global app_dir  # Allow the variable to be used anywhere
         app_dir = os.environ['USERPROFILE'] + '\.FaceSwitch2'  # Path to application settings
@@ -234,11 +233,14 @@ class MainWindow(QDialog):
 
         loadUi('interfaces/fr.ui', self)
 
+        self.setWindowIcon(QIcon('resources/facial_landmarks_68markup-768x619-transparent.png'))
+
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setWindowFlags(Qt.Window
                            | Qt.WindowMinimizeButtonHint
                                 | Qt.WindowCloseButtonHint)
-        self.setFixedSize(1100, 595)
+		# This is so the user doesn't change size of the window accidently.!
+        self.setFixedSize(1100, 569)
 
         self.center()
 
@@ -283,12 +285,14 @@ class MainWindow(QDialog):
         self.txtLeftWink.setReadOnly(True)
         self.txtRightWink.setReadOnly(True)
 		
-        self.txtOpenMouth.setStyleSheet("border: 1px solid rgb(42, 130, 218);")
-        self.txtRaiseEyebrows.setStyleSheet("border: 1px solid rgb(42, 130, 218);")
-        self.txtSmile.setStyleSheet("border: 1px solid rgb(42, 130, 218);")
-        self.txtSnarl.setStyleSheet("border: 1px solid rgb(42, 130, 218);")
-        self.txtLeftWink.setStyleSheet("border: 1px solid rgb(42, 130, 218);")
-        self.txtRightWink.setStyleSheet("border: 1px solid rgb(42, 130, 218);")
+		# Set blue
+		# Using (https://github.com/ColinDuquesnoy/QDarkStyleSheet/blob/master/qdarkstyle/style.qss) designer.exe stylesheet instead.
+        #self.txtOpenMouth.setStyleSheet("border: 1px solid rgb(42, 130, 218);")
+        #self.txtRaiseEyebrows.setStyleSheet("border: 1px solid rgb(42, 130, 218);")
+        #self.txtSmile.setStyleSheet("border: 1px solid rgb(42, 130, 218);")
+        #self.txtSnarl.setStyleSheet("border: 1px solid rgb(42, 130, 218);")
+        #self.txtLeftWink.setStyleSheet("border: 1px solid rgb(42, 130, 218);")
+        #self.txtRightWink.setStyleSheet("border: 1px solid rgb(42, 130, 218);")
 
         # Checkboxes
         self.cboxOpenMouth.stateChanged.connect(lambda: self.btn_state(self.cboxOpenMouth))

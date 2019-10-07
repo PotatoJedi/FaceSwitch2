@@ -3,7 +3,7 @@ import sys
 from PyQt5.QtWidgets import QDialog, QLabel, QMessageBox
 from PyQt5.uic import loadUi
 from PyQt5.QtCore import pyqtSlot, Qt
-from PyQt5.QtGui import QColor
+from PyQt5.QtGui import QColor, QIcon
 
 class SecondWindow(QDialog):
     def __init__(self, parent=None):
@@ -15,6 +15,9 @@ class SecondWindow(QDialog):
 
     def basicWindow(self):
         loadUi('interfaces/fr2.ui', self)
+		
+        self.setWindowIcon(QIcon('resources/facial_landmarks_68markup-768x619-transparent.png'))
+
         self.plainTextEdit.setReadOnly(True)
         self.setWindowTitle("Start typing!")
         # buttons
@@ -28,13 +31,14 @@ class SecondWindow(QDialog):
 
         self.setStyleSheet("background-color: rgb(48, 52, 52);")
 
-        self.plainTextEdit.setPlaceholderText('enter text')
+        self.plainTextEdit.setPlaceholderText('enter text here')
         self.plainTextEdit.setObjectName("myObject")
         self.plainTextEdit.setLineWidth(0)
         self.plainTextEdit.setMidLineWidth(3)
         self.plainTextEdit.setContentsMargins(0, 0, 0, 0)
 		
-        self.setStyleSheet("#myObject { border: 1px solid rgb(42, 130, 218); }")
+		#Turn blue edge
+        #self.setStyleSheet("#myObject { border: 1px solid rgb(42, 130, 218); }")
 
 
     def on_click_deleteText(self):

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>293</width>
-    <height>144</height>
+    <height>117</height>
    </rect>
   </property>
   <property name="focusPolicy">
@@ -16,27 +16,33 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QLabel" name="label">
-   <property name="geometry">
-    <rect>
-     <x>110</x>
-     <y>0</y>
-     <width>61</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>start typing</string>
-   </property>
-  </widget>
   <widget class="QPlainTextEdit" name="plainTextEdit">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>30</y>
+     <y>10</y>
      <width>271</width>
      <height>61</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPlainTextEdit {
+  background-color: #353535;
+  color: #F0F0F0;
+  border-radius: 4px;
+  border: 1px solid #32414B;
+  text-align: center;
+}
+
+QPlainTextEdit:hover {
+  border: 1px solid #148CD2;
+  color: #F0F0F0;
+}
+
+QPlainTextEdit:selected {
+  background: #1464A0;
+  color: #32414B;
+}</string>
    </property>
    <property name="frameShape">
     <enum>QFrame::Panel</enum>
@@ -49,7 +55,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>100</y>
+     <y>80</y>
      <width>131</width>
      <height>31</height>
     </rect>
@@ -62,7 +68,7 @@
    <property name="geometry">
     <rect>
      <x>150</x>
-     <y>100</y>
+     <y>80</y>
      <width>131</width>
      <height>31</height>
     </rect>
