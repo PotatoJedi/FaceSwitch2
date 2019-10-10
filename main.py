@@ -27,6 +27,8 @@ class MainWindow(QDialog):
         gesture_arr = deque(maxlen=10)
         gesture_arr.extend([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
         
+        self.webcam.setFocus()
+		
         while self.webcamActive:
             # Getting out image by webcam 
             _, frame = self.cap.read()
@@ -49,9 +51,14 @@ class MainWindow(QDialog):
 
                     detection = False # Boolean for determining if a gesture has been detected
 
+                    counttX = 0
+                    counttY = 0
                     for (x, y) in shape:
                         cv2.circle(frame, (x, y), 2, (0, 255, 0), -1)  # (0, 255, 0) = Green
-
+                        if (counttX != 0):
+                            cv2.line(frame, (x, y), (counttX, counttY), (0, 255, 0), 1)
+                        counttX = x
+                        counttY = y
                     # Create a base line variable so that the gesture detection will still work when the user moves towards/away from the camera
                     self.base_line = ((shape[16][0]) - (shape[0][0]))
 
