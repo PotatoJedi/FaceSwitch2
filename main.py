@@ -18,8 +18,8 @@ import textboxHandler as tbh
 class MainWindow(QDialog):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__()
-        self.formWidth = 842
-        self.formHeight = 549
+        self.formWidth = 1162
+        self.formHeight = 569
 
     def landmarks(self):
         p = "resources/shape_predictor_68_face_landmarks.dat"  # p = our pre-trained model
@@ -57,8 +57,9 @@ class MainWindow(QDialog):
                     counttY = 0
                     for (x, y) in shape:
                         cv2.circle(frame, (x, y), 2, (0, 255, 0), -1)  # (0, 255, 0) = Green
-                        if (counttX != 0):
-                            cv2.line(frame, (x, y), (counttX, counttY), (0, 255, 0), 1)
+                        #if (counttX != 0):
+							# Left dormant until needed.
+                            #cv2.line(frame, (x, y), (counttX, counttY), (0, 255, 0), 1)
                         counttX = x
                         counttY = y
                     # Create a base line variable so that the gesture detection will still work when the user moves towards/away from the camera
@@ -374,43 +375,43 @@ class MainWindow(QDialog):
     def get_userinput1(self, state):
         if self.openmouthtxt.name == "openmouth":
             self.openmouthtxt.getUserInput()
-            self.txtOpenMouth.setPlainText("")
             var = self.openmouthtxt.getSpareTxtVar()
+            self.txtOpenMouth.setPlainText(var)
             self.txtOpenMouth.setToolTip(var)
 
     def get_userinput2(self, state):
         if self.raiseeyebrowstxt.name == "raiseeyebrows":
             self.raiseeyebrowstxt.getUserInput()
-            self.txtRaiseEyebrows.setPlainText("")
             var = self.raiseeyebrowstxt.getSpareTxtVar()
+            self.txtRaiseEyebrows.setPlainText(var)
             self.txtRaiseEyebrows.setToolTip(var)
 			
     def get_userinput3(self, state):
         if self.smiletxt.name == "smile":
             self.smiletxt.getUserInput()
-            self.txtSmile.setPlainText("")
-            var = self.smiletxt.getSpareTxtVar()
+            var = self.smiletxt.getSpareTxtVar()			
+            self.txtSmile.setPlainText(var)
             self.txtSmile.setToolTip(var)
 			
     def get_userinput4(self, state):
         if self.snarltxt.name == "snarl":
             self.snarltxt.getUserInput()
-            self.txtSnarl.setPlainText("")
-            var = self.snarltxt.getSpareTxtVar()
+            var = self.snarltxt.getSpareTxtVar()			
+            self.txtSnarl.setPlainText(var)
             self.txtSnarl.setToolTip(var)
 			
     def get_userinput5(self, state):
         if self.leftwinktxt.name == "leftwink":
             self.leftwinktxt.getUserInput()
-            self.txtLeftWink.setPlainText("")
-            var = self.leftwinktxt.getSpareTxtVar()
+            var = self.leftwinktxt.getSpareTxtVar()			
+            self.txtLeftWink.setPlainText(var)
             self.txtLeftWink.setToolTip(var)
 			
     def get_userinput6(self, state):
         if self.rightwinktxt.name == "rightwink":
             self.rightwinktxt.getUserInput()
-            self.txtRightWink.setPlainText("")
             var = self.rightwinktxt.getSpareTxtVar()
+            self.txtRightWink.setPlainText("")
             self.txtRightWink.setToolTip(var)
 
     #center
