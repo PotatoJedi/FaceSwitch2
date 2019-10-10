@@ -18,6 +18,8 @@ import textboxHandler as tbh
 class MainWindow(QDialog):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__()
+        self.formWidth = 842
+        self.formHeight = 549
 
     def landmarks(self):
         p = "resources/shape_predictor_68_face_landmarks.dat"  # p = our pre-trained model
@@ -247,7 +249,7 @@ class MainWindow(QDialog):
                            | Qt.WindowMinimizeButtonHint
                                 | Qt.WindowCloseButtonHint)
 		# This is so the user doesn't change size of the window accidently.!
-        self.setFixedSize(1100, 569)
+        self.setFixedSize(self.formWidth, self.formHeight)
 
         self.center()
 
@@ -291,6 +293,7 @@ class MainWindow(QDialog):
         self.txtSnarl.setReadOnly(True)
         self.txtLeftWink.setReadOnly(True)
         self.txtRightWink.setReadOnly(True)
+
 		
 		# Set blue
 		# Using (https://github.com/ColinDuquesnoy/QDarkStyleSheet/blob/master/qdarkstyle/style.qss) designer.exe stylesheet instead.
@@ -365,33 +368,50 @@ class MainWindow(QDialog):
         self.txtSnarl.mousePressEvent = self.get_userinput4
         self.txtLeftWink.mousePressEvent = self.get_userinput5
         self.txtRightWink.mousePressEvent = self.get_userinput6
-
+		
     # Disgruntled by multiple definitions of the same thing!
     # Halp
     def get_userinput1(self, state):
         if self.openmouthtxt.name == "openmouth":
             self.openmouthtxt.getUserInput()
-            self.txtOpenMouth.setPlainText(self.openmouthtxt.getSpareTxtVar())
+            self.txtOpenMouth.setPlainText("")
+            var = self.openmouthtxt.getSpareTxtVar()
+            self.txtOpenMouth.setToolTip(var)
+
     def get_userinput2(self, state):
         if self.raiseeyebrowstxt.name == "raiseeyebrows":
             self.raiseeyebrowstxt.getUserInput()
-            self.txtRaiseEyebrows.setPlainText(self.raiseeyebrowstxt.getSpareTxtVar())
+            self.txtRaiseEyebrows.setPlainText("")
+            var = self.raiseeyebrowstxt.getSpareTxtVar()
+            self.txtRaiseEyebrows.setToolTip(var)
+			
     def get_userinput3(self, state):
         if self.smiletxt.name == "smile":
             self.smiletxt.getUserInput()
-            self.txtSmile.setPlainText(self.smiletxt.getSpareTxtVar())
+            self.txtSmile.setPlainText("")
+            var = self.smiletxt.getSpareTxtVar()
+            self.txtSmile.setToolTip(var)
+			
     def get_userinput4(self, state):
         if self.snarltxt.name == "snarl":
             self.snarltxt.getUserInput()
-            self.txtSnarl.setPlainText(self.snarltxt.getSpareTxtVar())
+            self.txtSnarl.setPlainText("")
+            var = self.snarltxt.getSpareTxtVar()
+            self.txtSnarl.setToolTip(var)
+			
     def get_userinput5(self, state):
         if self.leftwinktxt.name == "leftwink":
             self.leftwinktxt.getUserInput()
-            self.txtLeftWink.setPlainText(self.leftwinktxt.getSpareTxtVar())
+            self.txtLeftWink.setPlainText("")
+            var = self.leftwinktxt.getSpareTxtVar()
+            self.txtLeftWink.setToolTip(var)
+			
     def get_userinput6(self, state):
         if self.rightwinktxt.name == "rightwink":
             self.rightwinktxt.getUserInput()
-            self.txtRightWink.setPlainText(self.rightwinktxt.getSpareTxtVar())
+            self.txtRightWink.setPlainText("")
+            var = self.rightwinktxt.getSpareTxtVar()
+            self.txtRightWink.setToolTip(var)
 
     #center
     def center(self):

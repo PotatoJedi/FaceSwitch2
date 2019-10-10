@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1100</width>
-    <height>569</height>
+    <width>842</width>
+    <height>549</height>
    </rect>
   </property>
   <property name="font">
@@ -27,9 +27,9 @@
   <widget class="QPushButton" name="btnInitialize">
    <property name="geometry">
     <rect>
-     <x>610</x>
-     <y>510</y>
-     <width>481</width>
+     <x>430</x>
+     <y>490</y>
+     <width>401</width>
      <height>51</height>
     </rect>
    </property>
@@ -54,9 +54,9 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>150</y>
+     <y>130</y>
      <width>131</width>
-     <height>17</height>
+     <height>41</height>
     </rect>
    </property>
    <property name="font">
@@ -79,7 +79,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>210</y>
+     <y>200</y>
      <width>131</width>
      <height>17</height>
     </rect>
@@ -101,7 +101,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>270</y>
+     <y>260</y>
      <width>131</width>
      <height>17</height>
     </rect>
@@ -123,7 +123,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>330</y>
+     <y>320</y>
      <width>131</width>
      <height>17</height>
     </rect>
@@ -145,7 +145,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>390</y>
+     <y>380</y>
      <width>131</width>
      <height>17</height>
     </rect>
@@ -166,10 +166,10 @@
   <widget class="QPlainTextEdit" name="txtOpenMouth">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>140</y>
-     <width>131</width>
-     <height>51</height>
+     <x>160</x>
+     <y>130</y>
+     <width>31</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="font">
@@ -215,10 +215,10 @@ QPlainTextEdit:selected {
   <widget class="QPlainTextEdit" name="txtRaiseEyebrows">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>200</y>
-     <width>131</width>
-     <height>51</height>
+     <x>160</x>
+     <y>190</y>
+     <width>31</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="font">
@@ -254,10 +254,10 @@ QPlainTextEdit:selected {
   <widget class="QPlainTextEdit" name="txtSmile">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>260</y>
-     <width>131</width>
-     <height>51</height>
+     <x>160</x>
+     <y>250</y>
+     <width>31</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="font">
@@ -293,10 +293,10 @@ QPlainTextEdit:selected {
   <widget class="QPlainTextEdit" name="txtSnarl">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>320</y>
-     <width>131</width>
-     <height>51</height>
+     <x>160</x>
+     <y>310</y>
+     <width>31</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="font">
@@ -332,10 +332,10 @@ QPlainTextEdit:selected {
   <widget class="QPlainTextEdit" name="txtLeftWink">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>380</y>
-     <width>131</width>
-     <height>51</height>
+     <x>160</x>
+     <y>370</y>
+     <width>31</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="font">
@@ -378,10 +378,10 @@ QPlainTextEdit:selected {
   <widget class="QLabel" name="webcam">
    <property name="geometry">
     <rect>
-     <x>490</x>
-     <y>30</y>
-     <width>591</width>
-     <height>461</height>
+     <x>410</x>
+     <y>40</y>
+     <width>421</width>
+     <height>411</height>
     </rect>
    </property>
    <property name="font">
@@ -405,8 +405,8 @@ QPlainTextEdit:selected {
   <widget class="QSlider" name="sliderOpenMouth">
    <property name="geometry">
     <rect>
-     <x>300</x>
-     <y>150</y>
+     <x>220</x>
+     <y>140</y>
      <width>91</width>
      <height>22</height>
     </rect>
@@ -439,8 +439,8 @@ QPlainTextEdit:selected {
   <widget class="QSlider" name="sliderRaiseEyebrows">
    <property name="geometry">
     <rect>
-     <x>300</x>
-     <y>210</y>
+     <x>220</x>
+     <y>200</y>
      <width>91</width>
      <height>22</height>
     </rect>
@@ -467,8 +467,8 @@ QPlainTextEdit:selected {
   <widget class="QSlider" name="sliderSmile">
    <property name="geometry">
     <rect>
-     <x>300</x>
-     <y>270</y>
+     <x>220</x>
+     <y>260</y>
      <width>91</width>
      <height>22</height>
     </rect>
@@ -495,8 +495,8 @@ QPlainTextEdit:selected {
   <widget class="QSlider" name="sliderSnarl">
    <property name="geometry">
     <rect>
-     <x>300</x>
-     <y>330</y>
+     <x>220</x>
+     <y>320</y>
      <width>91</width>
      <height>22</height>
     </rect>
@@ -523,8 +523,8 @@ QPlainTextEdit:selected {
   <widget class="QSlider" name="sliderLeftWink">
    <property name="geometry">
     <rect>
-     <x>300</x>
-     <y>390</y>
+     <x>220</x>
+     <y>380</y>
      <width>91</width>
      <height>22</height>
     </rect>
@@ -552,8 +552,8 @@ QPlainTextEdit:selected {
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>510</y>
-     <width>181</width>
+     <y>490</y>
+     <width>131</width>
      <height>51</height>
     </rect>
    </property>
@@ -572,9 +572,9 @@ QPlainTextEdit:selected {
   <widget class="QLabel" name="lblOpenMouthT">
    <property name="geometry">
     <rect>
-     <x>410</x>
-     <y>150</y>
-     <width>61</width>
+     <x>330</x>
+     <y>140</y>
+     <width>51</width>
      <height>31</height>
     </rect>
    </property>
@@ -600,9 +600,9 @@ QPlainTextEdit:selected {
   <widget class="QLabel" name="lblRaiseEyebrowsT">
    <property name="geometry">
     <rect>
-     <x>410</x>
-     <y>210</y>
-     <width>61</width>
+     <x>330</x>
+     <y>200</y>
+     <width>51</width>
      <height>31</height>
     </rect>
    </property>
@@ -628,9 +628,9 @@ QPlainTextEdit:selected {
   <widget class="QLabel" name="lblSmileT">
    <property name="geometry">
     <rect>
-     <x>410</x>
-     <y>270</y>
-     <width>61</width>
+     <x>330</x>
+     <y>260</y>
+     <width>51</width>
      <height>31</height>
     </rect>
    </property>
@@ -656,9 +656,9 @@ QPlainTextEdit:selected {
   <widget class="QLabel" name="lblSnarlT">
    <property name="geometry">
     <rect>
-     <x>410</x>
-     <y>330</y>
-     <width>61</width>
+     <x>330</x>
+     <y>320</y>
+     <width>51</width>
      <height>31</height>
     </rect>
    </property>
@@ -684,9 +684,9 @@ QPlainTextEdit:selected {
   <widget class="QLabel" name="lblLeftWinkT">
    <property name="geometry">
     <rect>
-     <x>410</x>
-     <y>390</y>
-     <width>61</width>
+     <x>330</x>
+     <y>380</y>
+     <width>51</width>
      <height>31</height>
     </rect>
    </property>
@@ -712,9 +712,9 @@ QPlainTextEdit:selected {
   <widget class="QPushButton" name="btnLoad">
    <property name="geometry">
     <rect>
-     <x>210</x>
-     <y>510</y>
-     <width>181</width>
+     <x>150</x>
+     <y>490</y>
+     <width>131</width>
      <height>51</height>
     </rect>
    </property>
@@ -734,7 +734,7 @@ QPlainTextEdit:selected {
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>90</y>
+     <y>80</y>
      <width>131</width>
      <height>31</height>
     </rect>
@@ -754,8 +754,8 @@ QPlainTextEdit:selected {
   <widget class="QLabel" name="lblKeys">
    <property name="geometry">
     <rect>
-     <x>160</x>
-     <y>90</y>
+     <x>150</x>
+     <y>80</y>
      <width>51</width>
      <height>31</height>
     </rect>
@@ -775,8 +775,8 @@ QPlainTextEdit:selected {
   <widget class="QLabel" name="lblThresholds">
    <property name="geometry">
     <rect>
-     <x>300</x>
-     <y>90</y>
+     <x>220</x>
+     <y>80</y>
      <width>161</width>
      <height>31</height>
     </rect>
@@ -797,7 +797,7 @@ QPlainTextEdit:selected {
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>10</y>
+     <y>0</y>
      <width>381</width>
      <height>71</height>
     </rect>
@@ -816,9 +816,9 @@ QPlainTextEdit:selected {
   <widget class="QPushButton" name="btnCalibrate">
    <property name="geometry">
     <rect>
-     <x>410</x>
-     <y>510</y>
-     <width>181</width>
+     <x>290</x>
+     <y>490</y>
+     <width>131</width>
      <height>51</height>
     </rect>
    </property>
@@ -837,8 +837,8 @@ QPlainTextEdit:selected {
   <widget class="QSlider" name="sliderRightWink">
    <property name="geometry">
     <rect>
-     <x>300</x>
-     <y>450</y>
+     <x>220</x>
+     <y>440</y>
      <width>91</width>
      <height>22</height>
     </rect>
@@ -866,7 +866,7 @@ QPlainTextEdit:selected {
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>450</y>
+     <y>440</y>
      <width>131</width>
      <height>17</height>
     </rect>
@@ -887,10 +887,10 @@ QPlainTextEdit:selected {
   <widget class="QPlainTextEdit" name="txtRightWink">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>440</y>
-     <width>131</width>
-     <height>51</height>
+     <x>160</x>
+     <y>430</y>
+     <width>31</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="font">
@@ -933,9 +933,9 @@ QPlainTextEdit:selected {
   <widget class="QLabel" name="lblRightWinkT">
    <property name="geometry">
     <rect>
-     <x>410</x>
-     <y>450</y>
-     <width>61</width>
+     <x>330</x>
+     <y>440</y>
+     <width>51</width>
      <height>31</height>
     </rect>
    </property>

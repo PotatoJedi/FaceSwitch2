@@ -6,12 +6,13 @@ class textBox(QDialog):
     def __init__(self, name):
         super(textBox, self).__init__()
 
-        self.secondWindow = keybinder.SecondWindow()
 
         self.name = name
         self.sparetxtvar = ""
 
     def getUserInput(self):
+        self.secondWindow = keybinder.SecondWindow(self.sparetxtvar)
+
         self.secondWindow.basicWindow()
         retreivedVar = self.secondWindow.returnSparetxtVar()
 

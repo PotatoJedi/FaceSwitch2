@@ -6,11 +6,14 @@ from PyQt5.QtCore import pyqtSlot, Qt
 from PyQt5.QtGui import QColor, QIcon
 
 class SecondWindow(QDialog):
-    def __init__(self, parent=None):
+    def __init__(self, sparetxtvar):
         super(SecondWindow, self).__init__()
         self.closeEvent = self.closeEvent
-
-        self.sparetxtvar = ""
+		
+        if sparetxtvar != "":
+            self.sparetxtvar = sparetxtvar
+        else:
+            self.sparetxtvar = ""
         self.changedText = False
 
     def basicWindow(self):
@@ -31,7 +34,7 @@ class SecondWindow(QDialog):
 
         self.setStyleSheet("background-color: rgb(48, 52, 52);")
 
-        self.plainTextEdit.setPlaceholderText('enter text here')
+        self.plainTextEdit.setPlaceholderText(self.sparetxtvar)
         self.plainTextEdit.setObjectName("myObject")
         self.plainTextEdit.setLineWidth(0)
         self.plainTextEdit.setMidLineWidth(3)
