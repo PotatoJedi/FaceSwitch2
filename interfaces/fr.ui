@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>842</width>
+    <width>844</width>
     <height>549</height>
    </rect>
   </property>
@@ -27,9 +27,9 @@
   <widget class="QPushButton" name="btnInitialize">
    <property name="geometry">
     <rect>
-     <x>430</x>
+     <x>460</x>
      <y>490</y>
-     <width>401</width>
+     <width>371</width>
      <height>51</height>
     </rect>
    </property>
@@ -379,9 +379,9 @@ QPlainTextEdit:selected {
    <property name="geometry">
     <rect>
      <x>410</x>
-     <y>40</y>
+     <y>70</y>
      <width>421</width>
-     <height>411</height>
+     <height>401</height>
     </rect>
    </property>
    <property name="font">
@@ -553,7 +553,7 @@ QPlainTextEdit:selected {
     <rect>
      <x>10</x>
      <y>490</y>
-     <width>131</width>
+     <width>141</width>
      <height>51</height>
     </rect>
    </property>
@@ -712,9 +712,9 @@ QPlainTextEdit:selected {
   <widget class="QPushButton" name="btnLoad">
    <property name="geometry">
     <rect>
-     <x>150</x>
+     <x>160</x>
      <y>490</y>
-     <width>131</width>
+     <width>141</width>
      <height>51</height>
     </rect>
    </property>
@@ -816,9 +816,9 @@ QPlainTextEdit:selected {
   <widget class="QPushButton" name="btnCalibrate">
    <property name="geometry">
     <rect>
-     <x>290</x>
+     <x>310</x>
      <y>490</y>
-     <width>131</width>
+     <width>141</width>
      <height>51</height>
     </rect>
    </property>
