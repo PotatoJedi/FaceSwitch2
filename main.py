@@ -561,12 +561,28 @@ class MainWindow(QDialog):
         try:
             with open(name, 'r') as f:
                 data = json.load(f)
+                #  Set gesture activation booleans
+                self.openMouthActivated = data['openMouthCheck']
+                self.raiseEyebrowsActivated = data['raiseEyebrowCheck']
+                self.smileActivated = data['smileCheck']
+                self.snarlActivated = data['snarlCheck']
+                self.leftWinkActivated = data['leftWinkCheck']
+                self.rightWinkActivated = data['rightWinkCheck']
+                #  Set checkbox states
+                self.cboxOpenMouth.setChecked(self.openMouthActivated)
+                self.cboxRaiseEyebrows.setChecked(self.raiseEyebrowsActivated)
+                self.cboxSmile.setChecked(self.smileActivated)
+                self.cboxSnarl.setChecked(self.snarlActivated)
+                self.cboxLeftWink.setChecked(self.leftWinkActivated)
+                self.cboxRightWink.setChecked(self.rightWinkActivated)
+                #  Set keybind texts
                 self.txtOpenMouth.setPlainText(str(data['openMouthKey']))
                 self.txtRaiseEyebrows.setPlainText(str(data['raiseEyebrowsKey']))
                 self.txtSmile.setPlainText(str(data['smileKey']))
                 self.txtSnarl.setPlainText(str(data['snarlKey']))
                 self.txtLeftWink.setPlainText(str(data['leftWinkKey']))
                 self.txtRightWink.setPlainText(str(data['rightWinkKey']))
+                #  Set slider values
                 self.sliderOpenMouth.setValue(int(data['open_mouth_var']*400))
                 self.sliderRaiseEyebrows.setValue(int(data['raise_eyebrows_var']*1250))
                 self.sliderSmile.setValue(int(data['smile_var']*500))
@@ -579,6 +595,7 @@ class MainWindow(QDialog):
             print("Settings file: '" + name + "' not found or corrupt!")
         else:
             try:
+                #  Set calibration data
                 self.neutral_open_mouth = float(data['0'])
                 self.neutral_raise_eyebrows = float(data['1'])
                 self.neutral_smile = float(data['2'])
@@ -604,11 +621,11 @@ class MainWindow(QDialog):
 
     def btn_state(self, state):
         # checkBox activations
-        # open mouth checkbox
 
         #if self.hascalibrated:
         #if self.faceShapePredictorActivated:
-
+        
+        # open mouth checkbox
         if state.objectName() == "cboxOpenMouth":
             if state.isChecked():
                 if not self.openMouthActivated:
