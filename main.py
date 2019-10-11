@@ -333,9 +333,9 @@ class MainWindow(QDialog):
         self.webcam.setText("Webcam")
         self.show()
 
-        self.smileActivated = False
         self.openMouthActivated = False
         self.raiseEyebrowsActivated = False
+        self.smileActivated = False
         self.snarlActivated = False
         self.leftWinkActivated = False
         self.rightWinkActivated = False
@@ -498,7 +498,13 @@ class MainWindow(QDialog):
         self.lblRightWinkT.setText(str(self.right_wink_var))
 
     def prep_data_to_save(self):
-        data = {'openMouthKey': self.txtOpenMouth.toPlainText(),
+        data = {'openMouthCheck': self.openMouthActivated,
+                'raiseEyebrowCheck': self.raiseEyebrowsActivated,
+                'smileCheck': self.smileActivated,
+                'snarlCheck': self.snarlActivated,
+                'leftWinkCheck': self.leftWinkActivated,
+                'rightWinkCheck': self.rightWinkActivated,
+                'openMouthKey': self.txtOpenMouth.toPlainText(),
                 'raiseEyebrowsKey': self.txtRaiseEyebrows.toPlainText(),
                 'smileKey': self.txtSmile.toPlainText(),
                 'snarlKey': self.txtSnarl.toPlainText(),
