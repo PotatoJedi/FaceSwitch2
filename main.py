@@ -243,7 +243,7 @@ class MainWindow(QDialog):
 
         loadUi('interfaces/fr.ui', self)
 
-        self.setWindowIcon(QIcon('resources/facial_landmarks_68markup-768x619-transparent.png'))
+        self.setWindowIcon(QIcon('resources/face_switch_2_icon_black.ico'))
 
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setWindowFlags(Qt.Window
