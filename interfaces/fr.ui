@@ -206,7 +206,7 @@ QPlainTextEdit:selected {
 }</string>
    </property>
    <property name="verticalScrollBarPolicy">
-    <enum>Qt::ScrollBarAlwaysOff</enum>
+    <enum>Qt::ScrollBarAsNeeded</enum>
    </property>
    <property name="plainText">
     <string>a</string>
@@ -245,7 +245,7 @@ QPlainTextEdit:selected {
 }</string>
    </property>
    <property name="verticalScrollBarPolicy">
-    <enum>Qt::ScrollBarAlwaysOff</enum>
+    <enum>Qt::ScrollBarAsNeeded</enum>
    </property>
    <property name="plainText">
     <string>b</string>
@@ -284,7 +284,7 @@ QPlainTextEdit:selected {
 }</string>
    </property>
    <property name="verticalScrollBarPolicy">
-    <enum>Qt::ScrollBarAlwaysOff</enum>
+    <enum>Qt::ScrollBarAsNeeded</enum>
    </property>
    <property name="plainText">
     <string>c</string>
@@ -323,7 +323,7 @@ QPlainTextEdit:selected {
 }</string>
    </property>
    <property name="verticalScrollBarPolicy">
-    <enum>Qt::ScrollBarAlwaysOff</enum>
+    <enum>Qt::ScrollBarAsNeeded</enum>
    </property>
    <property name="plainText">
     <string>d</string>
@@ -366,7 +366,7 @@ QPlainTextEdit:selected {
 }</string>
    </property>
    <property name="verticalScrollBarPolicy">
-    <enum>Qt::ScrollBarAlwaysOff</enum>
+    <enum>Qt::ScrollBarAsNeeded</enum>
    </property>
    <property name="plainText">
     <string>e</string>
@@ -921,7 +921,7 @@ QPlainTextEdit:selected {
 }</string>
    </property>
    <property name="verticalScrollBarPolicy">
-    <enum>Qt::ScrollBarAlwaysOff</enum>
+    <enum>Qt::ScrollBarAsNeeded</enum>
    </property>
    <property name="plainText">
     <string>f</string>

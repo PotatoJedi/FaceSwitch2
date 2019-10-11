@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>293</width>
-    <height>117</height>
+    <width>261</width>
+    <height>138</height>
    </rect>
   </property>
   <property name="focusPolicy">
@@ -21,9 +21,14 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>271</width>
-     <height>61</height>
+     <width>241</width>
+     <height>71</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>15</pointsize>
+    </font>
    </property>
    <property name="styleSheet">
     <string notr="true">QPlainTextEdit {
@@ -55,9 +60,9 @@ QPlainTextEdit:selected {
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>80</y>
-     <width>131</width>
-     <height>31</height>
+     <y>90</y>
+     <width>116</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="text">
@@ -67,10 +72,10 @@ QPlainTextEdit:selected {
   <widget class="QPushButton" name="btnEnter">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>80</y>
-     <width>131</width>
-     <height>31</height>
+     <x>135</x>
+     <y>90</y>
+     <width>116</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="text">

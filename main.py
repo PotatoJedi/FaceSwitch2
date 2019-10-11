@@ -227,10 +227,9 @@ class MainWindow(QDialog):
                 print("Creation of the directory %s failed" % app_dir)
             else:
                 print("Successfully created the directory %s " % app_dir)
-
+        self.faceShapePredictorActivated = False
         self.captureFacePositions = True
         self.capturedPositions = False
-        self.faceShapePredictorActivated = False
 
         self.webcamActive = True
 

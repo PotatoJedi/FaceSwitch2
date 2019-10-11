@@ -13,16 +13,16 @@ class SecondWindow(QDialog):
         if sparetxtvar != "":
             self.sparetxtvar = sparetxtvar
         else:
-            self.sparetxtvar = ""
+            self.sparetxtvar = "start typing"
         self.changedText = False
 
     def basicWindow(self):
         loadUi('interfaces/fr2.ui', self)
 		
-        self.setWindowIcon(QIcon('resources/facial_landmarks_68markup-768x619-transparent.png'))
+        self.setWindowIcon(QIcon('resources/face_switch_2_icon_black.ico'))
 
         self.plainTextEdit.setReadOnly(True)
-        self.setWindowTitle("Start typing!")
+        self.setWindowTitle("Keybinder 2.0")
         # buttons
         self.btnEnter.clicked.connect(self.close)
         self.btnDeleteText.clicked.connect(self.on_click_deleteText)
