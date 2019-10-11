@@ -498,7 +498,8 @@ class MainWindow(QDialog):
         self.lblRightWinkT.setText(str(self.right_wink_var))
 
     def prep_data_to_save(self):
-        data = {'openMouthCheck': self.openMouthActivated,
+        data = {'initializeBool': self.faceShapePredictorActivated,
+                'openMouthCheck': self.openMouthActivated,
                 'raiseEyebrowCheck': self.raiseEyebrowsActivated,
                 'smileCheck': self.smileActivated,
                 'snarlCheck': self.snarlActivated,
@@ -561,6 +562,12 @@ class MainWindow(QDialog):
         try:
             with open(name, 'r') as f:
                 data = json.load(f)
+                #  Set overall program activation
+                self.faceShapePredictorActivated = data['initializeBool']
+                if self.faceShapePredictorActivated:
+                    self.btnInitialize.setText("Deactivate")
+                elif not self.faceShapePredictorActivated:
+                    self.btnInitialize.setText("Activate")
                 #  Set gesture activation booleans
                 self.openMouthActivated = data['openMouthCheck']
                 self.raiseEyebrowsActivated = data['raiseEyebrowCheck']
