@@ -151,21 +151,23 @@ class MainWindow(QDialog):
                         #  (eliminates noise)
                         if -1 not in gesture_arr:  #  Only if the array is full of gesture recognitions (i.e no default values)
                             gesture_output = max(set(gesture_arr), key=gesture_arr.count)
-
                         if gesture_output == 0:
                             print("Mouth opened! - ", self.neutral_gesture_vars['0'] + (mouth_height/self.base_line))
+                            self.btnCalibrate.setFocus()
                             self.wsh.SendKeys(self.txtOpenMouth.toPlainText())
                             for t in range(60, 68, 1):
                                 cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
 
                         elif gesture_output == 1:
                             print("Eyebrows raised! - ", (eye_height/self.base_line) - self.neutral_gesture_vars['1'])
+                            self.btnCalibrate.setFocus()
                             self.wsh.SendKeys(self.txtRaiseEyebrows.toPlainText())
                             for t in range(17, 27, 1):
                                 cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
 
                         elif gesture_output == 2:
                             print("Smile detected! - ", (mouth_width/self.base_line) - self.neutral_gesture_vars['2'])
+                            self.btnCalibrate.setFocus()
                             self.wsh.SendKeys(self.txtSmile.toPlainText())
                             for t in range(54, 60, 1):
                                 cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
@@ -173,18 +175,21 @@ class MainWindow(QDialog):
 
                         elif gesture_output == 3:
                             print("Anger detected! - ", self.neutral_gesture_vars['3'] - (nose_height/self.base_line))
+                            self.btnCalibrate.setFocus()
                             self.wsh.SendKeys(self.txtSnarl.toPlainText())
                             for t in range(27, 36, 1):
                                 cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
 
                         elif gesture_output == 4:
                             print("Left wink detected! - ", self.neutral_gesture_vars['4'] - (left_eye_height/self.base_line))
+                            self.btnCalibrate.setFocus()
                             self.wsh.SendKeys(self.txtLeftWink.toPlainText())
                             for t in range(42, 48, 1):
                                 cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
 
                         elif gesture_output == 5:
                             print("Right wink detected! - ", self.neutral_gesture_vars['5'] - (right_eye_height/self.base_line))
+                            self.btnCalibrate.setFocus()
                             self.wsh.SendKeys(self.txtRightWink.toPlainText())
                             for t in range(36, 42, 1):
                                 cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
@@ -193,7 +198,7 @@ class MainWindow(QDialog):
                             gesture_arr.extend([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
                     else:
                         if self.hascalibratedwarn is False:
-                            print("> Calibration required ")
+                            print("> Calibration is required ")
                             self.hascalibratedwarn = True
 
             rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -215,8 +220,6 @@ class MainWindow(QDialog):
         self.cap.release()
 
     def initUI(self):
-        self.closeEvent = self.closeEvent
-
         global app_dir  # Allow the variable to be used anywhere
         app_dir = os.environ['USERPROFILE'] + '\.FaceSwitch2'  # Path to application settings
 
@@ -227,41 +230,32 @@ class MainWindow(QDialog):
                 print("Creation of the directory %s failed" % app_dir)
             else:
                 print("Successfully created the directory %s " % app_dir)
+		
         self.faceShapePredictorActivated = False
         self.captureFacePositions = True
         self.capturedPositions = False
-
         self.webcamActive = True
-
-        self.cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # gives an error without CAP_DSHOW
 
         self.neutral_gesture_vars = {}
         self.base_line = 0
-
         self.sparetxtvar = ""
-
+		
+		# Set up closeEvent method.
+        #self.closeEvent = self.closeEvent
+		
+		
+		### UI ####
+		
         loadUi('interfaces/fr.ui', self)
-
         self.setWindowIcon(QIcon('resources/face_switch_2_icon_black.ico'))
-
-        self.setWindowFlags(Qt.FramelessWindowHint)
-        self.setWindowFlags(Qt.Window
-                           | Qt.WindowMinimizeButtonHint
-                                | Qt.WindowCloseButtonHint)
-		# This is so the user doesn't change size of the window accidently.!
+        #self.setWindowFlags(Qt.FramelessWindowHint)
+        #self.setWindowFlags(Qt.Window
+        #                   | Qt.WindowMinimizeButtonHint
+        #                        | Qt.WindowCloseButtonHint)
         self.setFixedSize(self.formWidth, self.formHeight)
-
         self.center()
-
         self.oldPos = self.pos()
-
-        # Load default settings
-        self.value_changed()
-        
-        # Load previous state settings from file
-        print("Checking for state settings...")
-        state_settings_path = app_dir + '\state_settings.json'
-        self.load_settings(state_settings_path)  # Load the last settings that were last used
+		
         QApplication.setStyle("Fusion")
         palette = QPalette()
         palette.setColor(QPalette.Window, QColor(53, 53, 53))
@@ -279,6 +273,44 @@ class MainWindow(QDialog):
         palette.setColor(QPalette.HighlightedText, Qt.black)
         QApplication.setPalette(palette)
 
+		### END UI ###
+		
+        # LOAD DEFAULT S
+        self.value_changed()
+        self.hascalibrated = False
+        self.hascalibratedwarn = False
+        # Load previous state settings from file
+        print("Checking for state settings...")
+        state_settings_path = app_dir + '\state_settings.json'
+        self.load_settings(state_settings_path)  # Load the last settings that were last used
+		# END LOAD DEFAULT SETTINGS #
+
+		# WIDGETS #
+		
+		# Using stylesheet from (https://github.com/ColinDuquesnoy/QDarkStyleSheet/blob/master/qdarkstyle/style.qss)
+        # Checkboxes
+        self.cboxOpenMouth.stateChanged.connect(lambda: self.btn_state(self.cboxOpenMouth))
+        self.cboxRaiseEyebrows.stateChanged.connect(lambda: self.btn_state(self.cboxRaiseEyebrows))
+        self.cboxSmile.stateChanged.connect(lambda: self.btn_state(self.cboxSmile))
+        self.cboxSnarl.stateChanged.connect(lambda: self.btn_state(self.cboxSnarl))
+        self.cboxLeftWink.stateChanged.connect(lambda: self.btn_state(self.cboxLeftWink))
+        self.cboxRightWink.stateChanged.connect(lambda: self.btn_state(self.cboxRightWink))
+        # Buttons
+        self.btnInitialize.setToolTip('Toggle Gesture Detection ON/OFF')
+        self.btnInitialize.clicked.connect(self.on_click_initialize)
+        self.btnSave.setToolTip('Save Settings')		
+        self.btnSave.clicked.connect(lambda: self.btn_save_settings())
+        self.btnLoad.setToolTip('Load Settings')
+        self.btnLoad.clicked.connect(lambda: self.btn_load_settings())
+        self.btnCalibrate.clicked.connect(lambda: self.btn_calibrate(self.facial_landmarks, self.base_line))
+        # sliders
+        self.sliderOpenMouth.valueChanged.connect(lambda: self.value_changed())
+        self.sliderRaiseEyebrows.valueChanged.connect(lambda: self.value_changed())
+        self.sliderSmile.valueChanged.connect(lambda: self.value_changed())
+        self.sliderSnarl.valueChanged.connect(lambda: self.value_changed())
+        self.sliderLeftWink.valueChanged.connect(lambda: self.value_changed())
+        self.sliderRightWink.valueChanged.connect(lambda: self.value_changed())
+		# Textboxes 
         self.openmouthtxt = tbh.textBox("openmouth")
         self.raiseeyebrowstxt = tbh.textBox("raiseeyebrows")
         self.smiletxt = tbh.textBox("smile")
@@ -293,54 +325,25 @@ class MainWindow(QDialog):
         self.txtSnarl.setReadOnly(True)
         self.txtLeftWink.setReadOnly(True)
         self.txtRightWink.setReadOnly(True)
-
 		
-		# Set blue
-		# Using (https://github.com/ColinDuquesnoy/QDarkStyleSheet/blob/master/qdarkstyle/style.qss) designer.exe stylesheet instead.
-        #self.txtOpenMouth.setStyleSheet("border: 1px solid rgb(42, 130, 218);")
-        #self.txtRaiseEyebrows.setStyleSheet("border: 1px solid rgb(42, 130, 218);")
-        #self.txtSmile.setStyleSheet("border: 1px solid rgb(42, 130, 218);")
-        #self.txtSnarl.setStyleSheet("border: 1px solid rgb(42, 130, 218);")
-        #self.txtLeftWink.setStyleSheet("border: 1px solid rgb(42, 130, 218);")
-        #self.txtRightWink.setStyleSheet("border: 1px solid rgb(42, 130, 218);")
-
-        # Checkboxes
-        self.cboxOpenMouth.stateChanged.connect(lambda: self.btn_state(self.cboxOpenMouth))
-        self.cboxRaiseEyebrows.stateChanged.connect(lambda: self.btn_state(self.cboxRaiseEyebrows))
-        self.cboxSmile.stateChanged.connect(lambda: self.btn_state(self.cboxSmile))
-        self.cboxSnarl.stateChanged.connect(lambda: self.btn_state(self.cboxSnarl))
-        self.cboxLeftWink.stateChanged.connect(lambda: self.btn_state(self.cboxLeftWink))
-        self.cboxRightWink.stateChanged.connect(lambda: self.btn_state(self.cboxRightWink))
-        
-        # Buttons
-        self.btnInitialize.setToolTip('Toggle Gesture Detection ON/OFF')
-        self.btnInitialize.clicked.connect(self.on_click_initialize)
-        self.btnSave.setToolTip('Save Settings')		
-        self.btnSave.clicked.connect(lambda: self.btn_save_settings())
-        self.btnLoad.setToolTip('Load Settings')
-        self.btnLoad.clicked.connect(lambda: self.btn_load_settings())
-        self.btnCalibrate.clicked.connect(lambda: self.btn_calibrate(self.facial_landmarks, self.base_line))
-
-        # sliders
-        self.sliderOpenMouth.valueChanged.connect(lambda: self.value_changed())
-        self.sliderRaiseEyebrows.valueChanged.connect(lambda: self.value_changed())
-        self.sliderSmile.valueChanged.connect(lambda: self.value_changed())
-        self.sliderSnarl.valueChanged.connect(lambda: self.value_changed())
-        self.sliderLeftWink.valueChanged.connect(lambda: self.value_changed())
-        self.sliderRightWink.valueChanged.connect(lambda: self.value_changed())
-        # webcam
+		# Text box on click event
+        self.txtOpenMouth.mousePressEvent = self.get_userinput1
+        self.txtRaiseEyebrows.mousePressEvent = self.get_userinput2
+        self.txtSmile.mousePressEvent = self.get_userinput3
+        self.txtSnarl.mousePressEvent = self.get_userinput4
+        self.txtLeftWink.mousePressEvent = self.get_userinput5
+        self.txtRightWink.mousePressEvent = self.get_userinput6
+		
+		# END OF WIDGETS #
+		
+        # WEBCAM
+        self.cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
         self.webcam.setText("Webcam")
-        self.show()
+		
+		# KEY TYPER
+        self.wsh = comclt.Dispatch("WScript.Shell")
 
-        self.openMouthActivated = False
-        self.raiseEyebrowsActivated = False
-        self.smileActivated = False
-        self.snarlActivated = False
-        self.leftWinkActivated = False
-        self.rightWinkActivated = False
-
-        self.wsh = comclt.Dispatch("WScript.Shell")  # Open keytyper
-
+		# 
         self.facial_landmarks = 0
 
         self.neutral_open_mouth = 0
@@ -357,20 +360,10 @@ class MainWindow(QDialog):
         self.left_wink_var = 0
         self.right_wink_var = 0
 
-        self.hascalibrated = False
-        self.hascalibratedwarn = False
-
         self.count = 0
-
-        self.txtOpenMouth.mousePressEvent = self.get_userinput1
-        self.txtRaiseEyebrows.mousePressEvent = self.get_userinput2
-        self.txtSmile.mousePressEvent = self.get_userinput3
-        self.txtSnarl.mousePressEvent = self.get_userinput4
-        self.txtLeftWink.mousePressEvent = self.get_userinput5
-        self.txtRightWink.mousePressEvent = self.get_userinput6
 		
-    # Disgruntled by multiple definitions of the same thing!
-    # Halp
+        self.show()
+
     def get_userinput1(self, state):
         if self.openmouthtxt.name == "openmouth":
             self.openmouthtxt.getUserInput()
@@ -413,7 +406,7 @@ class MainWindow(QDialog):
             self.txtRightWink.setPlainText("")
             self.txtRightWink.setToolTip(var)
 
-    #center
+    # Used to position the program in the middle of the screen.
     def center(self):
         qr = self.frameGeometry()
         cp = QDesktopWidget().availableGeometry().center()
@@ -526,9 +519,11 @@ class MainWindow(QDialog):
                         '5': self.neutral_right_wink
                         }
             data.update(calibration)
+            self.hascalibrated = True
+            print("Calibration activated")
         except:
             print("No calibration detected!")
-            
+        
         return data
 
     def save_state(self):
@@ -615,9 +610,11 @@ class MainWindow(QDialog):
                                             '4': self.neutral_left_wink,
                                             '5': self.neutral_right_wink
                                             }
+                self.hascalibrated = True
+                print("User profile has had calibration activated!")
             except:
                 print("Error with calibration data!")
-            
+        self.hascalibrated = True
         self.value_changed()
 
     def btn_load_settings(self):
