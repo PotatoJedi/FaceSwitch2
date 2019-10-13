@@ -8,23 +8,23 @@ class textBox(QDialog):
 
 
         self.name = name
-        self.sparetxtvar = ""
+        self.spare_text_variable = ""
 
     def getUserInput(self):
-        self.secondWindow = keybinder.SecondWindow(self.sparetxtvar)
+        self.secondWindow = keybinder.SecondWindow(self.spare_text_variable)
 
         self.secondWindow.basicWindow()
-        retreivedVar = self.secondWindow.returnSparetxtVar()
+        retreivedVar = self.secondWindow.returnspare_text_variable()
 
         if retreivedVar != "":
-            self.secondWindow.setSparetxtVar("")
+            self.secondWindow.setspare_text_variable("")
 
         if not self.secondWindow.exec_():
-            retreivedVar = self.secondWindow.returnSparetxtVar()
-            self.sparetxtvar = retreivedVar
+            retreivedVar = self.secondWindow.returnspare_text_variable()
+            self.spare_text_variable = retreivedVar
 
-    def getSpareTxtVar(self):
-        return self.sparetxtvar
+    def getspare_text_variable(self):
+        return self.spare_text_variable
 
     def getName(self):
         return name

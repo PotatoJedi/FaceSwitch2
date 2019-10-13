@@ -7,14 +7,17 @@ from PyQt5.QtGui import QColor, QIcon
 
 
 class SecondWindow(QDialog):
-    def __init__(self, sparetxtvar):
+    def __init__(self, spare_text_variable):
         super(SecondWindow, self).__init__()
         self.closeEvent = self.closeEvent
-		
-        if sparetxtvar != "":
-            self.sparetxtvar = sparetxtvar
+
+        self.form_width = 261
+        self.form_height = 138
+
+        if spare_text_variable != "":
+            self.spare_text_variable = spare_text_variable
         else:
-            self.sparetxtvar = "start typing"
+            self.spare_text_variable = "type in to here"
         self.changedText = False
 
     def basicWindow(self):
@@ -25,26 +28,41 @@ class SecondWindow(QDialog):
         self.plainTextEdit.setReadOnly(True)
         self.setWindowTitle("Keybinder 2.0")
         # buttons
-        self.btnEnter.clicked.connect(self.close)
+        #self.btnEnter.clicked.connect(self.close)
         self.btnDeleteText.clicked.connect(self.on_click_deleteText)
 
-        self.setWindowFlags(Qt.Window)
+        #self.setWindowFlags(Qt.Window)
        # self.setWindowFlags(Qt.FramelessWindowHint)
-        self.setWindowFlags(self.windowFlags() | Qt.CustomizeWindowHint)
-        self.setWindowFlags(self.windowFlags() & ~Qt.WindowMaximizeButtonHint)
+        #self.setWindowFlags(self.windowFlags() | Qt.CustomizeWindowHint)
+        #self.setWindowFlags(self.windowFlags() & ~Qt.WindowMaximizeButtonHint)
 
+        self.setFixedSize(self.form_width, self.form_height)
         self.setStyleSheet("background-color: rgb(48, 52, 52);")
 
-        self.plainTextEdit.setPlaceholderText(self.sparetxtvar)
+        self.plainTextEdit.setPlaceholderText(self.spare_text_variable)
         self.plainTextEdit.setObjectName("myObject")
         self.plainTextEdit.setLineWidth(0)
         self.plainTextEdit.setMidLineWidth(3)
         self.plainTextEdit.setContentsMargins(0, 0, 0, 0)
+		
+		
+		
+        self.btnRightClick.clicked.connect(lambda: self.right_click())
+        self.btnLeftClick.clicked.connect(lambda: self.left_click())
 
-
+    def right_click(self):
+        print("Right click")
+        self.spare_text_variable += "{RIGHTCLICK}"
+        self.plainTextEdit.setPlainText(self.spare_text_variable)
+		
+    def left_click(self):
+        print("Left click")
+        self.spare_text_variable += "{LEFTCLICK}"
+        self.plainTextEdit.setPlainText(self.spare_text_variable)
+		
     def on_click_deleteText(self):
-        self.sparetxtvar = ""
-        self.plainTextEdit.setPlainText(self.sparetxtvar)
+        self.spare_text_variable = ""
+        self.plainTextEdit.setPlainText(self.spare_text_variable)
 
     def keyPressEvent(self, e):
         if not self.changedText:
@@ -56,98 +74,98 @@ class SecondWindow(QDialog):
             key = e.key()
             print(key)
             if 49 <= key <= 57:
-                self.sparetxtvar += chr(key)
+                self.spare_text_variable += chr(key)
             elif 48 <= key <= 90:
-                self.sparetxtvar += str(chr(key)).lower()
+                self.spare_text_variable += str(chr(key)).lower()
             elif key == Qt.Key_Space:
-                self.sparetxtvar += " "
+                self.spare_text_variable += " "
             elif key == Qt.Key_Shift:
-                self.sparetxtvar += "+"
+                self.spare_text_variable += "+"
             elif key == Qt.Key_Control:
-                self.sparetxtvar += "^"
+                self.spare_text_variable += "^"
             elif key == Qt.Key_Alt:
-                self.sparetxtvar += "%"
+                self.spare_text_variable += "%"
 
             elif key == Qt.Key_Left:
-                self.sparetxtvar += "{LEFT}"
+                self.spare_text_variable += "{LEFT}"
             elif key == Qt.Key_Right:
-                self.sparetxtvar += "{RIGHT}"
+                self.spare_text_variable += "{RIGHT}"
             elif key == Qt.Key_Down:
-                self.sparetxtvar += "{DOWN}"
+                self.spare_text_variable += "{DOWN}"
             elif key == Qt.Key_Up:
-                self.sparetxtvar += "{UP}"
+                self.spare_text_variable += "{UP}"
 
             elif key == Qt.Key_F1:
-                self.sparetxtvar += "{F1}"
+                self.spare_text_variable += "{F1}"
             elif key == Qt.Key_F2:
-                self.sparetxtvar += "{F2}"
+                self.spare_text_variable += "{F2}"
             elif key == Qt.Key_F3:
-                self.sparetxtvar += "{F3}"
+                self.spare_text_variable += "{F3}"
             elif key == Qt.Key_F4:
-                self.sparetxtvar += "{F4}"
+                self.spare_text_variable += "{F4}"
             elif key == Qt.Key_F5:
-                self.sparetxtvar += "{F5}"
+                self.spare_text_variable += "{F5}"
             elif key == Qt.Key_F6:
-                self.sparetxtvar += "{F6}"
+                self.spare_text_variable += "{F6}"
             elif key == Qt.Key_F7:
-                self.sparetxtvar += "{F7}"
+                self.spare_text_variable += "{F7}"
             elif key == Qt.Key_F8:
-                self.sparetxtvar += "{F8}"
+                self.spare_text_variable += "{F8}"
             elif key == Qt.Key_F9:
-                self.sparetxtvar += "{F9}"
+                self.spare_text_variable += "{F9}"
             elif key == Qt.Key_F10:
-                self.sparetxtvar += "{F10}"
+                self.spare_text_variable += "{F10}"
             elif key == Qt.Key_F11:
-                self.sparetxtvar += "{F11}"
+                self.spare_text_variable += "{F11}"
             elif key == Qt.Key_F12:
-                self.sparetxtvar += "{F12}"
+                self.spare_text_variable += "{F12}"
                 # Goes all the way to F16 if required.
 
             elif key == 16777219:
-                self.sparetxtvar += "{BACKSPACE}"
+                self.spare_text_variable += "{BACKSPACE}"
             elif key == Qt.Key_CapsLock:
-                self.sparetxtvar += "{CAPSLOCK}"
+                self.spare_text_variable += "{CAPSLOCK}"
             elif key == Qt.Key_Clear:
-                self.sparetxtvar += "{CLEAR}"
+                self.spare_text_variable += "{CLEAR}"
             elif key == Qt.Key_Delete:
-                self.sparetxtvar += "{DELETE}"
+                self.spare_text_variable += "{DELETE}"
             elif key == Qt.Key_Insert:
-                self.sparetxtvar += "{INSERT}"
+                self.spare_text_variable += "{INSERT}"
             elif key == Qt.Key_End:
-                self.sparetxtvar += "{END}"
+                self.spare_text_variable += "{END}"
             elif key == 16777220:
-                self.sparetxtvar += "{ENTER}"
+                self.spare_text_variable += "{ENTER}"
             elif key == Qt.Key_Escape:
-                self.sparetxtvar += "{ESCAPE}"
+                self.spare_text_variable += "{ESCAPE}"
             elif key == Qt.Key_Help:
-                self.sparetxtvar += "{HELP}"
+                self.spare_text_variable += "{HELP}"
             elif key == Qt.Key_Home:
-                self.sparetxtvar += "{HOME}"
+                self.spare_text_variable += "{HOME}"
             elif key == Qt.Key_NumLock:
-                self.sparetxtvar += "{NUMLOCK}"
+                self.spare_text_variable += "{NUMLOCK}"
             elif key == Qt.Key_PageDown:
-                self.sparetxtvar += "{PGDN}"
+                self.spare_text_variable += "{PGDN}"
             elif key == Qt.Key_PageUp:
-                self.sparetxtvar += "{PGUP}"
+                self.spare_text_variable += "{PGUP}"
             elif key == Qt.Key_ScrollLock:
-                self.sparetxtvar += "{SCROLLLOCK}"
+                self.spare_text_variable += "{SCROLLLOCK}"
             elif key == Qt.Key_Tab:
-                self.sparetxtvar += "{TAB}"
+                self.spare_text_variable += "{TAB}"
 
-            self.plainTextEdit.setPlainText(self.sparetxtvar)
+            self.plainTextEdit.setPlainText(self.spare_text_variable)
                 # {BREAK}
                 # {PRTSC} ## Print Screen
 
-    def returnSparetxtVar(self):
-        return self.sparetxtvar
+    def returnspare_text_variable(self):
+        return self.spare_text_variable
 
-    def setSparetxtVar(self, uinput):
-        self.sparetxtvar = uinput
+    def setspare_text_variable(self, uinput):
+        self.spare_text_variable = uinput
 
     def closeEvent(self, event):
         self.directlyClose = True
         if self.directlyClose:
             self.plainTextEdit.setPlainText("")
             self.plainTextEdit.setPlaceholderText('enter text here')
-            self.btnEnter.setFocus()
+            #self.btnEnter.setFocus()
             event.accept()

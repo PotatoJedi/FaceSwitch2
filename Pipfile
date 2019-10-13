@@ -14,6 +14,7 @@ numpy = "==1.17.2"
 pywin32 = "==224"
 PyQt5 = "==5.13.1"
 cmake = "==3.14.4"
+pynput = "*"
 
 [requires]
 python_version = "3.6.7"

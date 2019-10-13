@@ -17,12 +17,16 @@ import textboxHandler as tbh
 
 from win32gui import GetWindowText, GetForegroundWindow
 
+from pynput.mouse import Button, Controller
+
 class MainWindow(QDialog):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__()
         self.window_name = "Face Switch 2.0.3"
         self.form_width = 1162
         self.form_height = 569
+		
+        self.mouse = Controller()
 
     def landmarks(self):
         p = "resources/shape_predictor_68_face_landmarks.dat"  # p = our pre-trained model
@@ -150,22 +154,41 @@ class MainWindow(QDialog):
                             gesture_output = max(set(gesture_arr), key=gesture_arr.count)
                         if gesture_output == 0:
                             print("Mouth opened! - ", self.neutral_gesture_vars['0'] + (mouth_height/self.base_line))
+							
                             if GetWindowText(GetForegroundWindow()) != self.window_name:
-                                self.wsh.SendKeys(self.txtOpenMouth.toPlainText())
+                                if self.txtOpenMouth.toPlainText()[:11] == "{LEFTCLICK}":
+                                    self.mouse.click(Button.left, 1)
+                                elif self.txtOpenMouth.toPlainText() == "{RIGHTCLICK}":
+                                    self.mouse.click(Button.right, 1)
+                                else:
+                                    self.wsh.SendKeys(self.txtOpenMouth.toPlainText())
+								
                             for t in range(60, 68, 1):
                                 cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
 
                         elif gesture_output == 1:
                             print("Eyebrows raised! - ", (eye_height/self.base_line) - self.neutral_gesture_vars['1'])
                             if GetWindowText(GetForegroundWindow()) != self.window_name:
-                                self.wsh.SendKeys(self.txtRaiseEyebrows.toPlainText())
+                                if self.txtRaiseEyebrows.toPlainText()[:11] == "{LEFTCLICK}":
+                                    self.mouse.click(Button.left, 1)
+                                elif self.txtRaiseEyebrows.toPlainText() == "{RIGHTCLICK}":
+                                    self.mouse.click(Button.right, 1)
+                                else:
+                                    self.wsh.SendKeys(self.txtRaiseEyebrows.toPlainText())
+
                             for t in range(17, 27, 1):
                                 cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
 
                         elif gesture_output == 2:
                             print("Smile detected! - ", (mouth_width/self.base_line) - self.neutral_gesture_vars['2'])
                             if GetWindowText(GetForegroundWindow()) != self.window_name:
-                                self.wsh.SendKeys(self.txtSmile.toPlainText())
+                                if self.txtSmile.toPlainText()[:11] == "{LEFTCLICK}":
+                                    self.mouse.click(Button.left, 1)
+                                elif self.txtSmile.toPlainText() == "{RIGHTCLICK}":
+                                    self.mouse.click(Button.right, 1)
+                                else:
+                                    self.wsh.SendKeys(self.txtSmile.toPlainText())
+
                             for t in range(54, 60, 1):
                                 cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
                             cv2.circle(frame, (shape[48][0], shape[48][1]), 2, (255, 0, 0), -1)
@@ -173,21 +196,37 @@ class MainWindow(QDialog):
                         elif gesture_output == 3:
                             print("Anger detected! - ", self.neutral_gesture_vars['3'] - (nose_height/self.base_line))
                             if GetWindowText(GetForegroundWindow()) != self.window_name:
-                                self.wsh.SendKeys(self.txtSnarl.toPlainText())
+                                if self.txtSnarl.toPlainText()[:11] == "{LEFTCLICK}":
+                                    self.mouse.click(Button.left, 1)
+                                elif self.txtSnarl.toPlainText() == "{RIGHTCLICK}":
+                                    self.mouse.click(Button.right, 1)
+                                else:
+                                    self.wsh.SendKeys(self.txtSnarl.toPlainText())
+
                             for t in range(27, 36, 1):
                                 cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
 
                         elif gesture_output == 4:
                             print("Left wink detected! - ", self.neutral_gesture_vars['4'] - (left_eye_height/self.base_line))
                             if GetWindowText(GetForegroundWindow()) != self.window_name:
-                                self.wsh.SendKeys(self.txtLeftWink.toPlainText())
+                                if self.txtLeftWink.toPlainText()[:11] == "{LEFTCLICK}":
+                                    self.mouse.click(Button.left, 1)
+                                elif self.txtLeftWink.toPlainText() == "{RIGHTCLICK}":
+                                    self.mouse.click(Button.right, 1)
+                                else:
+                                    self.wsh.SendKeys(self.txtLeftWink.toPlainText())
                             for t in range(42, 48, 1):
                                 cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
 
                         elif gesture_output == 5:
                             print("Right wink detected! - ", self.neutral_gesture_vars['5'] - (right_eye_height/self.base_line))
                             if GetWindowText(GetForegroundWindow()) != self.window_name:
-                                self.wsh.SendKeys(self.txtRightWink.toPlainText())
+                                if self.txtRightWink.toPlainText()[:11] == "{LEFTCLICK}":
+                                    self.mouse.click(Button.left, 1)
+                                elif self.txtRightWink.toPlainText() == "{RIGHTCLICK}":
+                                    self.mouse.click(Button.right, 1)
+                                else:
+                                    self.wsh.SendKeys(self.txtRightWink.toPlainText())
                             for t in range(36, 42, 1):
                                 cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
                         if 0 <= gesture_output <= 5: # If a gesture was output, reset the gesture array to give a small pause
@@ -236,7 +275,7 @@ class MainWindow(QDialog):
 
         self.neutral_gesture_vars = {}
         self.base_line = 0
-        self.sparetxtvar = ""
+        self.spare_text_variable = ""
 		
 		# Set up closeEvent method.
         #self.closeEvent = self.closeEvent
@@ -363,45 +402,46 @@ class MainWindow(QDialog):
         self.show()
 
     def get_userinput1(self, state):
+        print(state)
         if self.openmouthtxt.name == "openmouth":
             self.openmouthtxt.getUserInput()
-            var = self.openmouthtxt.getSpareTxtVar()
+            var = self.openmouthtxt.getspare_text_variable()
             self.txtOpenMouth.setPlainText(var)
             self.txtOpenMouth.setToolTip(var)
 
     def get_userinput2(self, state):
         if self.raiseeyebrowstxt.name == "raiseeyebrows":
             self.raiseeyebrowstxt.getUserInput()
-            var = self.raiseeyebrowstxt.getSpareTxtVar()
+            var = self.raiseeyebrowstxt.getspare_text_variable()
             self.txtRaiseEyebrows.setPlainText(var)
             self.txtRaiseEyebrows.setToolTip(var)
 			
     def get_userinput3(self, state):
         if self.smiletxt.name == "smile":
             self.smiletxt.getUserInput()
-            var = self.smiletxt.getSpareTxtVar()			
+            var = self.smiletxt.getspare_text_variable()			
             self.txtSmile.setPlainText(var)
             self.txtSmile.setToolTip(var)
 			
     def get_userinput4(self, state):
         if self.snarltxt.name == "snarl":
             self.snarltxt.getUserInput()
-            var = self.snarltxt.getSpareTxtVar()			
+            var = self.snarltxt.getspare_text_variable()			
             self.txtSnarl.setPlainText(var)
             self.txtSnarl.setToolTip(var)
 			
     def get_userinput5(self, state):
         if self.leftwinktxt.name == "leftwink":
             self.leftwinktxt.getUserInput()
-            var = self.leftwinktxt.getSpareTxtVar()			
+            var = self.leftwinktxt.getspare_text_variable()			
             self.txtLeftWink.setPlainText(var)
             self.txtLeftWink.setToolTip(var)
 			
     def get_userinput6(self, state):
         if self.rightwinktxt.name == "rightwink":
             self.rightwinktxt.getUserInput()
-            var = self.rightwinktxt.getSpareTxtVar()
-            self.txtRightWink.setPlainText("")
+            var = self.rightwinktxt.getspare_text_variable()
+            self.txtRightWink.setPlainText(var)
             self.txtRightWink.setToolTip(var)
 
     # Used to position the program in the middle of the screen.

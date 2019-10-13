@@ -61,7 +61,7 @@ QPlainTextEdit:selected {
     <rect>
      <x>10</x>
      <y>90</y>
-     <width>71</width>
+     <width>81</width>
      <height>41</height>
     </rect>
    </property>
@@ -69,25 +69,12 @@ QPlainTextEdit:selected {
     <string>Delete Text</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="btnEnter">
-   <property name="geometry">
-    <rect>
-     <x>180</x>
-     <y>90</y>
-     <width>71</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Enter</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="btnLeftClick">
    <property name="geometry">
     <rect>
-     <x>80</x>
+     <x>90</x>
      <y>90</y>
-     <width>51</width>
+     <width>81</width>
      <height>41</height>
     </rect>
    </property>
@@ -98,9 +85,9 @@ QPlainTextEdit:selected {
   <widget class="QPushButton" name="btnRightClick">
    <property name="geometry">
     <rect>
-     <x>130</x>
+     <x>170</x>
      <y>90</y>
-     <width>51</width>
+     <width>81</width>
      <height>41</height>
     </rect>
    </property>
