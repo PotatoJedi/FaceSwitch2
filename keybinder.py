@@ -5,6 +5,7 @@ from PyQt5.uic import loadUi
 from PyQt5.QtCore import pyqtSlot, Qt
 from PyQt5.QtGui import QColor, QIcon
 
+
 class SecondWindow(QDialog):
     def __init__(self, sparetxtvar):
         super(SecondWindow, self).__init__()
@@ -39,9 +40,6 @@ class SecondWindow(QDialog):
         self.plainTextEdit.setLineWidth(0)
         self.plainTextEdit.setMidLineWidth(3)
         self.plainTextEdit.setContentsMargins(0, 0, 0, 0)
-		
-		#Turn blue edge
-        #self.setStyleSheet("#myObject { border: 1px solid rgb(42, 130, 218); }")
 
 
     def on_click_deleteText(self):

@@ -61,7 +61,7 @@ QPlainTextEdit:selected {
     <rect>
      <x>10</x>
      <y>90</y>
-     <width>116</width>
+     <width>71</width>
      <height>41</height>
     </rect>
    </property>
@@ -72,14 +72,40 @@ QPlainTextEdit:selected {
   <widget class="QPushButton" name="btnEnter">
    <property name="geometry">
     <rect>
-     <x>135</x>
+     <x>180</x>
      <y>90</y>
-     <width>116</width>
+     <width>71</width>
      <height>41</height>
     </rect>
    </property>
    <property name="text">
     <string>Enter</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnLeftClick">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>90</y>
+     <width>51</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Left</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnRightClick">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>90</y>
+     <width>51</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Right</string>
    </property>
   </widget>
  </widget>
