@@ -15,11 +15,14 @@ import win32com.client as comclt  # Used to insert keys
 import json  # for saving/loading settings
 import textboxHandler as tbh
 
+from win32gui import GetWindowText, GetForegroundWindow
+
 class MainWindow(QDialog):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__()
-        self.formWidth = 1162
-        self.formHeight = 569
+        self.window_name = "Face Switch 2.0.3"
+        self.form_width = 1162
+        self.form_height = 569
 
     def landmarks(self):
         p = "resources/shape_predictor_68_face_landmarks.dat"  # p = our pre-trained model
@@ -53,15 +56,9 @@ class MainWindow(QDialog):
 
                     detection = False # Boolean for determining if a gesture has been detected
 
-                    counttX = 0
-                    counttY = 0
                     for (x, y) in shape:
                         cv2.circle(frame, (x, y), 2, (0, 255, 0), -1)  # (0, 255, 0) = Green
-                        #if (counttX != 0):
-							# Left dormant until needed.
-                            #cv2.line(frame, (x, y), (counttX, counttY), (0, 255, 0), 1)
-                        counttX = x
-                        counttY = y
+
                     # Create a base line variable so that the gesture detection will still work when the user moves towards/away from the camera
                     self.base_line = ((shape[16][0]) - (shape[0][0]))
 
@@ -153,44 +150,44 @@ class MainWindow(QDialog):
                             gesture_output = max(set(gesture_arr), key=gesture_arr.count)
                         if gesture_output == 0:
                             print("Mouth opened! - ", self.neutral_gesture_vars['0'] + (mouth_height/self.base_line))
-                            self.btnCalibrate.setFocus()
-                            self.wsh.SendKeys(self.txtOpenMouth.toPlainText())
+                            if GetWindowText(GetForegroundWindow()) != self.window_name:
+                                self.wsh.SendKeys(self.txtOpenMouth.toPlainText())
                             for t in range(60, 68, 1):
                                 cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
 
                         elif gesture_output == 1:
                             print("Eyebrows raised! - ", (eye_height/self.base_line) - self.neutral_gesture_vars['1'])
-                            self.btnCalibrate.setFocus()
-                            self.wsh.SendKeys(self.txtRaiseEyebrows.toPlainText())
+                            if GetWindowText(GetForegroundWindow()) != self.window_name:
+                                self.wsh.SendKeys(self.txtRaiseEyebrows.toPlainText())
                             for t in range(17, 27, 1):
                                 cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
 
                         elif gesture_output == 2:
                             print("Smile detected! - ", (mouth_width/self.base_line) - self.neutral_gesture_vars['2'])
-                            self.btnCalibrate.setFocus()
-                            self.wsh.SendKeys(self.txtSmile.toPlainText())
+                            if GetWindowText(GetForegroundWindow()) != self.window_name:
+                                self.wsh.SendKeys(self.txtSmile.toPlainText())
                             for t in range(54, 60, 1):
                                 cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
                             cv2.circle(frame, (shape[48][0], shape[48][1]), 2, (255, 0, 0), -1)
 
                         elif gesture_output == 3:
                             print("Anger detected! - ", self.neutral_gesture_vars['3'] - (nose_height/self.base_line))
-                            self.btnCalibrate.setFocus()
-                            self.wsh.SendKeys(self.txtSnarl.toPlainText())
+                            if GetWindowText(GetForegroundWindow()) != self.window_name:
+                                self.wsh.SendKeys(self.txtSnarl.toPlainText())
                             for t in range(27, 36, 1):
                                 cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
 
                         elif gesture_output == 4:
                             print("Left wink detected! - ", self.neutral_gesture_vars['4'] - (left_eye_height/self.base_line))
-                            self.btnCalibrate.setFocus()
-                            self.wsh.SendKeys(self.txtLeftWink.toPlainText())
+                            if GetWindowText(GetForegroundWindow()) != self.window_name:
+                                self.wsh.SendKeys(self.txtLeftWink.toPlainText())
                             for t in range(42, 48, 1):
                                 cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
 
                         elif gesture_output == 5:
                             print("Right wink detected! - ", self.neutral_gesture_vars['5'] - (right_eye_height/self.base_line))
-                            self.btnCalibrate.setFocus()
-                            self.wsh.SendKeys(self.txtRightWink.toPlainText())
+                            if GetWindowText(GetForegroundWindow()) != self.window_name:
+                                self.wsh.SendKeys(self.txtRightWink.toPlainText())
                             for t in range(36, 42, 1):
                                 cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
                         if 0 <= gesture_output <= 5: # If a gesture was output, reset the gesture array to give a small pause
@@ -218,6 +215,7 @@ class MainWindow(QDialog):
                 
         cv2.destroyAllWindows()
         self.cap.release()
+
 
     def initUI(self):
         global app_dir  # Allow the variable to be used anywhere
@@ -252,7 +250,7 @@ class MainWindow(QDialog):
         #self.setWindowFlags(Qt.Window
         #                   | Qt.WindowMinimizeButtonHint
         #                        | Qt.WindowCloseButtonHint)
-        self.setFixedSize(self.formWidth, self.formHeight)
+        self.setFixedSize(self.form_width, self.form_height)
         self.center()
         self.oldPos = self.pos()
 		
