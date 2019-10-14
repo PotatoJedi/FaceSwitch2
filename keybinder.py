@@ -11,7 +11,7 @@ class SecondWindow(QDialog):
         super(SecondWindow, self).__init__()
         self.closeEvent = self.closeEvent
 
-        self.form_width = 269
+        self.form_width = 341
         self.form_height = 139
 
         if spare_text_variable != "":
@@ -30,7 +30,7 @@ class SecondWindow(QDialog):
         self.plainTextEdit.setReadOnly(True)
         self.setWindowTitle("Keybinder 2.0")
         # buttons
-        #self.btnEnter.clicked.connect(self.close)
+        self.btnConfirm.clicked.connect(self.close)
         self.btnDeleteText.clicked.connect(self.on_click_deleteText)
 
         #self.setWindowFlags(Qt.Window)
