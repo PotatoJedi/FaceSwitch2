@@ -272,6 +272,13 @@ class MainWindow(QDialog):
         self.captureFacePositions = True
         self.capturedPositions = False
         self.webcamActive = True
+        self.openMouthActivated = False
+        self.raiseEyebrowsActivated = False
+        self.smileActivated = False
+        self.snarlActivated = False
+        self.leftWinkActivated = False
+        self.rightWinkActivated = False
+
 
         self.neutral_gesture_vars = {}
         self.base_line = 0
