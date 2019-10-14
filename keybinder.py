@@ -54,9 +54,11 @@ class SecondWindow(QDialog):
 
         self.setFocus()
 
-        self.btnDeleteText.setEnabled(False)
-        self.btnRightClick.setEnabled(False)
-        self.btnLeftClick.setEnabled(False)
+        #self.setEnabled(False)
+
+        #self.btnDeleteText.setEnabled(False)
+        #self.btnRightClick.setEnabled(False)
+        #self.btnLeftClick.setEnabled(False)
 
     def right_click(self):
         print("Right click")
@@ -71,10 +73,9 @@ class SecondWindow(QDialog):
     def on_click_deleteText(self):
         self.spare_text_variable = ""
         self.plainTextEdit.setPlainText(self.spare_text_variable)
-
-        self.btnDeleteText.setEnabled(False)
-        self.btnRightClick.setEnabled(False)
-        self.btnLeftClick.setEnabled(False)
+        #self.btnDeleteText.setEnabled(False)
+        #self.btnRightClick.setEnabled(False)
+        #self.btnLeftClick.setEnabled(False)
 
 
     def keyPressEvent(self, e):
@@ -167,14 +168,13 @@ class SecondWindow(QDialog):
             self.plainTextEdit.setPlainText(self.spare_text_variable)
 
 
-            if len(self.spare_text_variable) > 0:
-                self.btnDeleteText.setEnabled(True)
-                self.btnRightClick.setEnabled(True)
-                self.btnLeftClick.setEnabled(True)
-            else:
-                self.btnDeleteText.setEnabled(False)
-                self.btnRightClick.setEnabled(False)
-                self.btnLeftClick.setEnabled(False)
+            #if len(self.spare_text_variable) > 0:
+                #self.btnDeleteText.setEnabled(True)
+                #self.btnRightClick.setEnabled(True)
+                #self.btnLeftClick.setEnabled(True)
+            #else:
+                #self.btnDeleteText.setEnabled(False)
+                ##self.btnLeftClick.setEnabled(False)
 
 
     def returnspare_text_variable(self):
