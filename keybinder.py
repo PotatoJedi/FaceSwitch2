@@ -11,14 +11,16 @@ class SecondWindow(QDialog):
         super(SecondWindow, self).__init__()
         self.closeEvent = self.closeEvent
 
-        self.form_width = 261
-        self.form_height = 138
+        self.form_width = 269
+        self.form_height = 139
 
         if spare_text_variable != "":
             self.spare_text_variable = spare_text_variable
         else:
             self.spare_text_variable = "type in to here"
         self.changedText = False
+
+        #self.plainTextEdit.setFocus()
 
     def basicWindow(self):
         loadUi('interfaces/fr2.ui', self)
@@ -44,29 +46,30 @@ class SecondWindow(QDialog):
         self.plainTextEdit.setLineWidth(0)
         self.plainTextEdit.setMidLineWidth(3)
         self.plainTextEdit.setContentsMargins(0, 0, 0, 0)
-		
-		
-		
+
+
+
         self.btnRightClick.clicked.connect(lambda: self.right_click())
         self.btnLeftClick.clicked.connect(lambda: self.left_click())
+
+        self.btnDeleteText.setFocus()
 
     def right_click(self):
         print("Right click")
         self.spare_text_variable += "{RIGHTCLICK}"
         self.plainTextEdit.setPlainText(self.spare_text_variable)
-		
+
     def left_click(self):
         print("Left click")
         self.spare_text_variable += "{LEFTCLICK}"
         self.plainTextEdit.setPlainText(self.spare_text_variable)
-		
+
     def on_click_deleteText(self):
         self.spare_text_variable = ""
         self.plainTextEdit.setPlainText(self.spare_text_variable)
 
     def keyPressEvent(self, e):
         if not self.changedText:
-            #self.plainTextEdit.setPlaceholderText('')
             self.changedText = True
 
         if self.changedText:
@@ -153,8 +156,7 @@ class SecondWindow(QDialog):
                 self.spare_text_variable += "{TAB}"
 
             self.plainTextEdit.setPlainText(self.spare_text_variable)
-                # {BREAK}
-                # {PRTSC} ## Print Screen
+
 
     def returnspare_text_variable(self):
         return self.spare_text_variable
