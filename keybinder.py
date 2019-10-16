@@ -17,14 +17,14 @@ class SecondWindow(QDialog):
         if spare_text_variable != "":
             self.spare_text_variable = spare_text_variable
         else:
-            self.spare_text_variable = "type in to here"
+            self.spare_text_variable = "start typing!"
         self.changedText = False
 
         #self.plainTextEdit.setFocus()
 
     def basicWindow(self):
         loadUi('interfaces/fr2.ui', self)
-		
+
         self.setWindowIcon(QIcon('resources/face_switch_2_icon_black.ico'))
 
         self.plainTextEdit.setReadOnly(True)
@@ -46,8 +46,8 @@ class SecondWindow(QDialog):
         self.plainTextEdit.setLineWidth(0)
         self.plainTextEdit.setMidLineWidth(3)
         self.plainTextEdit.setContentsMargins(0, 0, 0, 0)
-
-
+        self.plainTextEdit.setReadOnly(True)
+        self.plainTextEdit.mousePressEvent = self.refocusitself
 
         self.btnRightClick.clicked.connect(lambda: self.right_click())
         self.btnLeftClick.clicked.connect(lambda: self.left_click())
@@ -59,6 +59,8 @@ class SecondWindow(QDialog):
         #self.btnDeleteText.setEnabled(False)
         #self.btnRightClick.setEnabled(False)
         #self.btnLeftClick.setEnabled(False)
+    def refocusitself(self, state):
+        self.setFocus()
 
     def right_click(self):
         print("Right click")
