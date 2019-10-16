@@ -287,7 +287,6 @@ class MainWindow(QDialog):
 		# Set up closeEvent method.
         #self.closeEvent = self.closeEvent
 
-
 		### UI ####
 
         loadUi('interfaces/fr.ui', self)
@@ -341,12 +340,12 @@ class MainWindow(QDialog):
         self.cboxRightWink.stateChanged.connect(lambda: self.btn_state(self.cboxRightWink))
         # Buttons
         self.btnInitialize.setToolTip('Toggle Gesture Detection ON/OFF')
-        self.btnInitialize.clicked.connect(self.on_click_initialize)
         self.btnSave.setToolTip('Save Settings')
         self.btnSave.clicked.connect(lambda: self.btn_save_settings())
         self.btnLoad.setToolTip('Load Settings')
         self.btnLoad.clicked.connect(lambda: self.btn_load_settings())
         self.btnCalibrate.clicked.connect(lambda: self.btn_calibrate(self.facial_landmarks, self.base_line))
+        self.btnExit.clicked.connect(self.close)
         # sliders
         self.sliderOpenMouth.valueChanged.connect(lambda: self.value_changed())
         self.sliderRaiseEyebrows.valueChanged.connect(lambda: self.value_changed())
