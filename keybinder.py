@@ -17,7 +17,7 @@ class SecondWindow(QDialog):
         if spare_text_variable != "":
             self.spare_text_variable = spare_text_variable
         else:
-            self.spare_text_variable = "start typing!"
+            self.spare_text_variable = "press some keys"
         self.changedText = False
 
         #self.plainTextEdit.setFocus()
@@ -66,11 +66,13 @@ class SecondWindow(QDialog):
         print("Right click")
         self.spare_text_variable += "{RIGHTCLICK}"
         self.plainTextEdit.setPlainText(self.spare_text_variable)
+        self.setFocus()
 
     def left_click(self):
         print("Left click")
         self.spare_text_variable += "{LEFTCLICK}"
         self.plainTextEdit.setPlainText(self.spare_text_variable)
+        self.setFocus()
 
     def on_click_deleteText(self):
         self.spare_text_variable = ""
