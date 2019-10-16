@@ -77,10 +77,7 @@ class SecondWindow(QDialog):
     def on_click_deleteText(self):
         self.spare_text_variable = ""
         self.plainTextEdit.setPlainText(self.spare_text_variable)
-        #self.btnDeleteText.setEnabled(False)
-        #self.btnRightClick.setEnabled(False)
-        #self.btnLeftClick.setEnabled(False)
-
+        self.setFocus()
 
     def keyPressEvent(self, e):
         if not self.changedText:
