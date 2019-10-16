@@ -79,6 +79,7 @@ class SecondWindow(QDialog):
         self.plainTextEdit.setPlainText(self.spare_text_variable)
         self.setFocus()
 
+
     def keyPressEvent(self, e):
         if not self.changedText:
             self.changedText = True
@@ -91,6 +92,14 @@ class SecondWindow(QDialog):
                 self.spare_text_variable += chr(key)
             elif 48 <= key <= 90:
                 self.spare_text_variable += str(chr(key)).lower()
+
+            elif key == Qt.Key_Backslash:
+                self.spare_text_variable += "\\"
+            elif key == Qt.Key_Slash:
+                self.spare_text_variable += "/"
+            elif key == Qt.Key_Asterisk:
+                self.spare_text_variable += "*"
+
             elif key == Qt.Key_Space:
                 self.spare_text_variable += " "
             elif key == Qt.Key_Shift:

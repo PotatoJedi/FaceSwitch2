@@ -22,24 +22,24 @@ from pynput.mouse import Button, Controller
 class MainWindow(QDialog):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__()
-        self.window_name = "Face Switch 2.0.3"
+        self.window_name = "Face Switch v2.0.4-beta"
         self.form_width = 1162
         self.form_height = 569
-		
+
         self.mouse = Controller()
 
     def landmarks(self):
         p = "resources/shape_predictor_68_face_landmarks.dat"  # p = our pre-trained model
         detector = dlib.get_frontal_face_detector()
         predictor = dlib.shape_predictor(p)
-        
+
         gesture_arr = deque(maxlen=10)
         gesture_arr.extend([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
-        
+
         self.webcam.setFocus()
-		
+
         while self.webcamActive:
-            # Getting out image by webcam 
+            # Getting out image by webcam
             _, frame = self.cap.read()
             # Converting the image to gray scale
             if frame is not None:
@@ -49,7 +49,7 @@ class MainWindow(QDialog):
             else:
                 print("Error connecting to webcam! Exiting...")
                 sys.exit()
-            
+
             # Activated
             if self.faceShapePredictorActivated:
                 for (i, rect) in enumerate(rects):
@@ -154,7 +154,7 @@ class MainWindow(QDialog):
                             gesture_output = max(set(gesture_arr), key=gesture_arr.count)
                         if gesture_output == 0:
                             print("Mouth opened! - ", self.neutral_gesture_vars['0'] + (mouth_height/self.base_line))
-							
+
                             if GetWindowText(GetForegroundWindow()) != self.window_name:
                                 if self.txtOpenMouth.toPlainText()[:11] == "{LEFTCLICK}":
                                     self.mouse.click(Button.left, 1)
@@ -162,7 +162,7 @@ class MainWindow(QDialog):
                                     self.mouse.click(Button.right, 1)
                                 else:
                                     self.wsh.SendKeys(self.txtOpenMouth.toPlainText())
-								
+
                             for t in range(60, 68, 1):
                                 cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
 
@@ -238,20 +238,20 @@ class MainWindow(QDialog):
                             self.hascalibratedwarn = True
 
             rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            image = QImage(rgb_frame.tobytes(), 
+            image = QImage(rgb_frame.tobytes(),
                 rgb_frame.shape[1],
                 rgb_frame.shape[0],
                 QImage.Format_RGB888)
             self.webcam.setPixmap(QPixmap.fromImage(image))
             self.webcam.show()
-            
+
             k = cv2.waitKey(5) & 0xFF
             if k == 27:
                 self.exit()
             # Press 'q' to break out of loop
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 self.exit()
-                
+
         cv2.destroyAllWindows()
         self.cap.release()
 
@@ -267,7 +267,7 @@ class MainWindow(QDialog):
                 print("Creation of the directory %s failed" % app_dir)
             else:
                 print("Successfully created the directory %s " % app_dir)
-		
+
         self.faceShapePredictorActivated = False
         self.captureFacePositions = True
         self.capturedPositions = False
@@ -283,13 +283,13 @@ class MainWindow(QDialog):
         self.neutral_gesture_vars = {}
         self.base_line = 0
         self.spare_text_variable = ""
-		
+
 		# Set up closeEvent method.
         #self.closeEvent = self.closeEvent
-		
-		
+
+
 		### UI ####
-		
+
         loadUi('interfaces/fr.ui', self)
         self.setWindowIcon(QIcon('resources/face_switch_2_icon_black.ico'))
         #self.setWindowFlags(Qt.FramelessWindowHint)
@@ -299,7 +299,7 @@ class MainWindow(QDialog):
         self.setFixedSize(self.form_width, self.form_height)
         self.center()
         self.oldPos = self.pos()
-		
+
         QApplication.setStyle("Fusion")
         palette = QPalette()
         palette.setColor(QPalette.Window, QColor(53, 53, 53))
@@ -318,7 +318,7 @@ class MainWindow(QDialog):
         QApplication.setPalette(palette)
 
 		### END UI ###
-		
+
         # LOAD DEFAULT S
         self.value_changed()
         self.hascalibrated = False
@@ -330,7 +330,7 @@ class MainWindow(QDialog):
 		# END LOAD DEFAULT SETTINGS #
 
 		# WIDGETS #
-		
+
 		# Using stylesheet from (https://github.com/ColinDuquesnoy/QDarkStyleSheet/blob/master/qdarkstyle/style.qss)
         # Checkboxes
         self.cboxOpenMouth.stateChanged.connect(lambda: self.btn_state(self.cboxOpenMouth))
@@ -342,7 +342,7 @@ class MainWindow(QDialog):
         # Buttons
         self.btnInitialize.setToolTip('Toggle Gesture Detection ON/OFF')
         self.btnInitialize.clicked.connect(self.on_click_initialize)
-        self.btnSave.setToolTip('Save Settings')		
+        self.btnSave.setToolTip('Save Settings')
         self.btnSave.clicked.connect(lambda: self.btn_save_settings())
         self.btnLoad.setToolTip('Load Settings')
         self.btnLoad.clicked.connect(lambda: self.btn_load_settings())
@@ -354,7 +354,7 @@ class MainWindow(QDialog):
         self.sliderSnarl.valueChanged.connect(lambda: self.value_changed())
         self.sliderLeftWink.valueChanged.connect(lambda: self.value_changed())
         self.sliderRightWink.valueChanged.connect(lambda: self.value_changed())
-		# Textboxes 
+		# Textboxes
         self.openmouthtxt = tbh.textBox("openmouth")
         self.raiseeyebrowstxt = tbh.textBox("raiseeyebrows")
         self.smiletxt = tbh.textBox("smile")
@@ -369,7 +369,7 @@ class MainWindow(QDialog):
         self.txtSnarl.setReadOnly(True)
         self.txtLeftWink.setReadOnly(True)
         self.txtRightWink.setReadOnly(True)
-		
+
 		# Text box on click event
         self.txtOpenMouth.mousePressEvent = self.get_userinput1
         self.txtRaiseEyebrows.mousePressEvent = self.get_userinput2
@@ -377,17 +377,17 @@ class MainWindow(QDialog):
         self.txtSnarl.mousePressEvent = self.get_userinput4
         self.txtLeftWink.mousePressEvent = self.get_userinput5
         self.txtRightWink.mousePressEvent = self.get_userinput6
-		
+
 		# END OF WIDGETS #
-		
+
         # WEBCAM
         self.cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
         self.webcam.setText("Webcam")
-		
+
 		# KEY TYPER
         self.wsh = comclt.Dispatch("WScript.Shell")
 
-		# 
+		#
         self.facial_landmarks = 0
 
         self.neutral_open_mouth = 0
@@ -405,7 +405,7 @@ class MainWindow(QDialog):
         self.right_wink_var = 0
 
         self.count = 0
-		
+
         self.show()
 
     def get_userinput1(self, state):
@@ -422,28 +422,28 @@ class MainWindow(QDialog):
             var = self.raiseeyebrowstxt.getspare_text_variable()
             self.txtRaiseEyebrows.setPlainText(var)
             self.txtRaiseEyebrows.setToolTip(var)
-			
+
     def get_userinput3(self, state):
         if self.smiletxt.name == "smile":
             self.smiletxt.getUserInput()
-            var = self.smiletxt.getspare_text_variable()			
+            var = self.smiletxt.getspare_text_variable()
             self.txtSmile.setPlainText(var)
             self.txtSmile.setToolTip(var)
-			
+
     def get_userinput4(self, state):
         if self.snarltxt.name == "snarl":
             self.snarltxt.getUserInput()
-            var = self.snarltxt.getspare_text_variable()			
+            var = self.snarltxt.getspare_text_variable()
             self.txtSnarl.setPlainText(var)
             self.txtSnarl.setToolTip(var)
-			
+
     def get_userinput5(self, state):
         if self.leftwinktxt.name == "leftwink":
             self.leftwinktxt.getUserInput()
-            var = self.leftwinktxt.getspare_text_variable()			
+            var = self.leftwinktxt.getspare_text_variable()
             self.txtLeftWink.setPlainText(var)
             self.txtLeftWink.setToolTip(var)
-			
+
     def get_userinput6(self, state):
         if self.rightwinktxt.name == "rightwink":
             self.rightwinktxt.getUserInput()
@@ -526,7 +526,7 @@ class MainWindow(QDialog):
         self.snarl_var = round(float(self.sliderSnarl.value()) / 1000, 3)
         self.left_wink_var = round(float(self.sliderLeftWink.value()) / 1000, 3)
         self.right_wink_var = round(float(self.sliderRightWink.value()) / 1000, 3)
-    
+
         self.lblOpenMouthT.setText(str(self.open_mouth_var))
         self.lblRaiseEyebrowsT.setText(str(self.raise_eyebrows_var))
         self.lblSmileT.setText(str(self.smile_var))
@@ -568,12 +568,12 @@ class MainWindow(QDialog):
             print("Calibration activated")
         except:
             print("No calibration detected!")
-        
+
         return data
 
     def save_state(self):
         data = self.prep_data_to_save()
-        
+
         filepathwithextension = app_dir + '\state_settings.json'
         with open(filepathwithextension, 'w') as f:
             json.dump(data, f)
@@ -589,9 +589,9 @@ class MainWindow(QDialog):
 
     def btn_save_settings(self):
         data = self.prep_data_to_save()
-        
+
         name, ok = QInputDialog.getText(self, 'Save Settings', 'Enter your name:')
-        
+
         if ok and name != '':
             self.save_settings(app_dir, name, data)
 
@@ -635,7 +635,7 @@ class MainWindow(QDialog):
                 self.sliderSnarl.setValue(int(data['snarl_var']*1000))
                 self.sliderLeftWink.setValue(int(data['left_wink_var']*1000))
                 self.sliderRightWink.setValue(int(data['right_wink_var']*1000))
-                
+
                 print("Initial settings: '" + name + "' loaded successfully!")
         except FileNotFoundError:
             print("Settings file: '" + name + "' not found or corrupt!")
@@ -672,7 +672,7 @@ class MainWindow(QDialog):
 
         #if self.hascalibrated:
         #if self.faceShapePredictorActivated:
-        
+
         # open mouth checkbox
         if state.objectName() == "cboxOpenMouth":
             if state.isChecked():
@@ -747,7 +747,7 @@ class MainWindow(QDialog):
 
     def closeEvent(self, event):
         reply = QMessageBox.question(self, 'Message', "Are you sure you want to quit?", QMessageBox.Yes, QMessageBox.No)
-        
+
         if reply == QMessageBox.Yes:
             # Save the settings before exiting
             print("Saving state settings...")
