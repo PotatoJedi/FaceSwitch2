@@ -340,6 +340,7 @@ class MainWindow(QDialog):
         self.cboxRightWink.stateChanged.connect(lambda: self.btn_state(self.cboxRightWink))
         # Buttons
         self.btnInitialize.setToolTip('Toggle Gesture Detection ON/OFF')
+        self.btnInitialize.clicked.connect(lambda: self.on_click_initialize())
         self.btnSave.setToolTip('Save Settings')
         self.btnSave.clicked.connect(lambda: self.btn_save_settings())
         self.btnLoad.setToolTip('Load Settings')
