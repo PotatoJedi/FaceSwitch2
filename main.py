@@ -383,6 +383,8 @@ class MainWindow(QDialog):
 		# KEY TYPER
         self.wsh = comclt.Dispatch("WScript.Shell")
 
+        self.setWindowFlags(Qt.WindowStaysOnTopHint)
+
         self.show()
 
     def get_userinput1(self, state):

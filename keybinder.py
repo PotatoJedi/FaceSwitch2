@@ -27,7 +27,7 @@ class SecondWindow(QDialog):
 
         self.plainTextEdit.setReadOnly(True)
         self.setWindowTitle("Keybinder 2.0")
-        
+
         # Buttons
         self.btnConfirm.clicked.connect(self.close)
         self.btnDeleteText.clicked.connect(self.on_click_deleteText)
@@ -45,6 +45,8 @@ class SecondWindow(QDialog):
 
         self.btnRightClick.clicked.connect(lambda: self.right_click())
         self.btnLeftClick.clicked.connect(lambda: self.left_click())
+
+        self.setWindowFlags(Qt.WindowStaysOnTopHint)
 
         self.setFocus()
 
