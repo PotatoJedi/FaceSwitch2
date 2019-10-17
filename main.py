@@ -47,7 +47,8 @@ class MainWindow(QDialog):
                 # Get faces into webcam's image
                 rects = detector(gray, 0)
             else:
-                print("Error connecting to webcam! Exiting...")
+                print("Error connecting to webcam!")
+                QMessageBox.about(self, "Error", "Error connecting to webcam! Please connect a camera to your PC and restart the program.")
                 sys.exit()
 
             # Activated
@@ -630,7 +631,7 @@ class MainWindow(QDialog):
                                             '5': self.neutral_right_wink
                                             }
                 self.hascalibrated = True
-                print("User profile has had calibration activated!")
+                print("User calibration loaded!")
             except:
                 print("Error with calibration data!")
         self.hascalibrated = True
