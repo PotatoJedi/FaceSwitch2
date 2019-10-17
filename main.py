@@ -23,8 +23,8 @@ class MainWindow(QDialog):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__()
         self.window_name = "Face Switch v2.0.4-beta"
-        #self.form_width = 1162
-        #self.form_height = 569
+        self.form_width = 1151
+        self.form_height = 581
 
         self.mouse = Controller()
 
@@ -297,7 +297,7 @@ class MainWindow(QDialog):
 		### UI ####
         loadUi('interfaces/fr.ui', self)
         self.setWindowIcon(QIcon('resources/face_switch_2_icon_black.ico'))
-        #self.setFixedSize(self.form_width, self.form_height)
+        self.setFixedSize(self.form_width, self.form_height)
         self.center()
         #self.oldPos = self.pos()
 

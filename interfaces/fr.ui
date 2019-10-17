@@ -40,6 +40,9 @@
      <italic>false</italic>
     </font>
    </property>
+   <property name="toolTip">
+    <string>Toggle Gesture Detection ON/OFF</string>
+   </property>
    <property name="autoFillBackground">
     <bool>false</bool>
    </property>
@@ -723,6 +726,9 @@ QPlainTextEdit:selected {
      <pointsize>11</pointsize>
     </font>
    </property>
+   <property name="toolTip">
+    <string>Load Settings</string>
+   </property>
    <property name="styleSheet">
     <string notr="true"/>
    </property>
@@ -826,6 +832,9 @@ QPlainTextEdit:selected {
     <font>
      <pointsize>11</pointsize>
     </font>
+   </property>
+   <property name="toolTip">
+    <string>Calibrate</string>
    </property>
    <property name="styleSheet">
     <string notr="true"/>
@@ -973,6 +982,9 @@ QPlainTextEdit:selected {
      <pointsize>11</pointsize>
      <italic>false</italic>
     </font>
+   </property>
+   <property name="toolTip">
+    <string>Quit</string>
    </property>
    <property name="autoFillBackground">
     <bool>false</bool>
