@@ -23,7 +23,7 @@ class SecondWindow(QDialog):
         #self.plainTextEdit.setFocus()
 
     def basicWindow(self):
-        loadUi('interfaces/fr2.ui', self)
+        loadUi('interfaces/keybind_window.ui', self)
 
         self.setWindowIcon(QIcon('resources/face_switch_2_icon_black.ico'))
 
