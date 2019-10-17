@@ -295,7 +295,7 @@ class MainWindow(QDialog):
         self.spare_text_variable = ""
 
 		### UI ####
-        loadUi('interfaces/fr.ui', self)
+        loadUi('interfaces/face_switch_2.ui', self)
         self.setWindowIcon(QIcon('resources/face_switch_2_icon_black.ico'))
         self.setFixedSize(self.form_width, self.form_height)
         self.center()
