@@ -66,7 +66,7 @@ class MainWindow(QDialog):
 
                     # Create a base line variable so that the gesture detection will still work when the user moves towards/away from the camera
                     self.base_line = ((shape[16][0]) - (shape[0][0]))
-                    
+
                     if self.hascalibrated:
                         # Recognise gestures
                         # Open mouth
@@ -273,7 +273,7 @@ class MainWindow(QDialog):
         self.snarlActivated = False
         self.leftWinkActivated = False
         self.rightWinkActivated = False
-        
+
         self.facial_landmarks = 0
 
         self.neutral_open_mouth = 0
@@ -299,7 +299,7 @@ class MainWindow(QDialog):
         self.setWindowIcon(QIcon('resources/face_switch_2_icon_black.ico'))
         #self.setFixedSize(self.form_width, self.form_height)
         self.center()
-        self.oldPos = self.pos()
+        #self.oldPos = self.pos()
 
         QApplication.setStyle("Fusion")
         palette = QPalette()
@@ -382,7 +382,7 @@ class MainWindow(QDialog):
 
 		# KEY TYPER
         self.wsh = comclt.Dispatch("WScript.Shell")
-        
+
         self.show()
 
     def get_userinput1(self, state):
@@ -434,15 +434,6 @@ class MainWindow(QDialog):
         cp = QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)
         self.move(qr.topLeft())
-
-    def mousePressEvent(self, event):
-        self.oldPos = event.globalPos()
-
-    def mouseMoveEvent(self, event):
-        delta = QPoint (event.globalPos() - self.oldPos)
-        #print(delta)
-        self.move(self.x() + delta.x(), self.y() + delta.y())
-        self.oldPos = event.globalPos()
 
     def btn_calibrate(self, neutral_landmarks, base_line):
         self.neutral_landmarks = neutral_landmarks
