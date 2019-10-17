@@ -5,8 +5,7 @@ import main as main
 class textBox(QDialog):
     def __init__(self, name):
         super(textBox, self).__init__()
-
-
+        
         self.name = name
         self.spare_text_variable = ""
 

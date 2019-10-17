@@ -20,8 +20,6 @@ class SecondWindow(QDialog):
             self.spare_text_variable = "press some keys"
         self.changedText = False
 
-        #self.plainTextEdit.setFocus()
-
     def basicWindow(self):
         loadUi('interfaces/keybind_window.ui', self)
 
@@ -29,14 +27,10 @@ class SecondWindow(QDialog):
 
         self.plainTextEdit.setReadOnly(True)
         self.setWindowTitle("Keybinder 2.0")
-        # buttons
+        
+        # Buttons
         self.btnConfirm.clicked.connect(self.close)
         self.btnDeleteText.clicked.connect(self.on_click_deleteText)
-
-        #self.setWindowFlags(Qt.Window)
-       # self.setWindowFlags(Qt.FramelessWindowHint)
-        #self.setWindowFlags(self.windowFlags() | Qt.CustomizeWindowHint)
-        #self.setWindowFlags(self.windowFlags() & ~Qt.WindowMaximizeButtonHint)
 
         self.setFixedSize(self.form_width, self.form_height)
         self.setStyleSheet("background-color: rgb(48, 52, 52);")
@@ -54,11 +48,6 @@ class SecondWindow(QDialog):
 
         self.setFocus()
 
-        #self.setEnabled(False)
-
-        #self.btnDeleteText.setEnabled(False)
-        #self.btnRightClick.setEnabled(False)
-        #self.btnLeftClick.setEnabled(False)
     def refocusitself(self, state):
         self.setFocus()
 
@@ -142,7 +131,7 @@ class SecondWindow(QDialog):
                 self.spare_text_variable += "{F11}"
             elif key == Qt.Key_F12:
                 self.spare_text_variable += "{F12}"
-                # Goes all the way to F16 if required.
+            # Goes all the way to F16 if required.
 
             elif key == 16777219:
                 self.spare_text_variable += "{BACKSPACE}"
@@ -177,16 +166,6 @@ class SecondWindow(QDialog):
 
             self.plainTextEdit.setPlainText(self.spare_text_variable)
 
-
-            #if len(self.spare_text_variable) > 0:
-                #self.btnDeleteText.setEnabled(True)
-                #self.btnRightClick.setEnabled(True)
-                #self.btnLeftClick.setEnabled(True)
-            #else:
-                #self.btnDeleteText.setEnabled(False)
-                ##self.btnLeftClick.setEnabled(False)
-
-
     def returnspare_text_variable(self):
         return self.spare_text_variable
 
@@ -198,5 +177,4 @@ class SecondWindow(QDialog):
         if self.directlyClose:
             self.plainTextEdit.setPlainText("")
             self.plainTextEdit.setPlaceholderText('enter text here')
-            #self.btnEnter.setFocus()
             event.accept()

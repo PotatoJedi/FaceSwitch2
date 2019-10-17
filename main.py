@@ -65,13 +65,7 @@ class MainWindow(QDialog):
 
                     # Create a base line variable so that the gesture detection will still work when the user moves towards/away from the camera
                     self.base_line = ((shape[16][0]) - (shape[0][0]))
-
-                    self.count += 1
-
-                    #if self.count is 100:
-                    #    self.count = 0
-                    #    self.hascalibratedwarn = False
-
+                    
                     if self.hascalibrated:
                         # Recognise gestures
                         # Open mouth
@@ -148,9 +142,9 @@ class MainWindow(QDialog):
                             gesture_arr.append(-1)
 
                         gesture_output = -1  # Set the default value to -1 (no gesture)
-                        #  Get the most common number (gesture) from the array and set it to be the registered gesture
-                        #  (eliminates noise)
-                        if -1 not in gesture_arr:  #  Only if the array is full of gesture recognitions (i.e no default values)
+                        # Get the most common number (gesture) from the array and set it to be the registered gesture
+                        # (eliminates noise)
+                        if -1 not in gesture_arr:  # Only if the array is full of gesture recognitions (i.e no default values)
                             gesture_output = max(set(gesture_arr), key=gesture_arr.count)
                         if gesture_output == 0:
                             print("Mouth opened! - ", self.neutral_gesture_vars['0'] + (mouth_height/self.base_line))
@@ -299,17 +293,9 @@ class MainWindow(QDialog):
         self.base_line = 0
         self.spare_text_variable = ""
 
-		# Set up closeEvent method.
-        #self.closeEvent = self.closeEvent
-
 		### UI ####
-
         loadUi('interfaces/fr.ui', self)
         self.setWindowIcon(QIcon('resources/face_switch_2_icon_black.ico'))
-        #self.setWindowFlags(Qt.FramelessWindowHint)
-        #self.setWindowFlags(Qt.Window
-        #                   | Qt.WindowMinimizeButtonHint
-        #                        | Qt.WindowCloseButtonHint)
         self.setFixedSize(self.form_width, self.form_height)
         self.center()
         self.oldPos = self.pos()
@@ -331,20 +317,16 @@ class MainWindow(QDialog):
         palette.setColor(QPalette.HighlightedText, Qt.black)
         QApplication.setPalette(palette)
 
-		### END UI ###
-
-        # LOAD DEFAULT S
+        # LOAD DEFAULTS
         self.value_changed()
         self.hascalibrated = False
         self.hascalibratedwarn = False
         # Load previous state settings from file
         print("Checking for state settings...")
         state_settings_path = app_dir + '\state_settings.json'
-        self.load_settings(state_settings_path)  # Load the last settings that were last used
-		# END LOAD DEFAULT SETTINGS #
+        self.load_settings(state_settings_path)
 
 		# WIDGETS #
-
 		# Using stylesheet from (https://github.com/ColinDuquesnoy/QDarkStyleSheet/blob/master/qdarkstyle/style.qss)
         # Checkboxes
         self.cboxOpenMouth.stateChanged.connect(lambda: self.btn_state(self.cboxOpenMouth))
@@ -393,20 +375,13 @@ class MainWindow(QDialog):
         self.txtLeftWink.mousePressEvent = self.get_userinput5
         self.txtRightWink.mousePressEvent = self.get_userinput6
 
-		# END OF WIDGETS #
-
         # WEBCAM
         self.cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
         self.webcam.setText("Webcam")
 
 		# KEY TYPER
         self.wsh = comclt.Dispatch("WScript.Shell")
-
-		#
         
-
-        self.count = 0
-
         self.show()
 
     def get_userinput1(self, state):
@@ -473,9 +448,7 @@ class MainWindow(QDialog):
         self.base_line = base_line
 
         if self.faceShapePredictorActivated:
-            # print(self.neutral_landmarks.shape)
-
-            # Calculate facial feture distance ratios for the users neutral face
+            # Calculate facial feature distance ratios for the users neutral face
             # Closed mouth ratio
             self.neutral_open_mouth = self.neutral_landmarks[66][1] - self.neutral_landmarks[62][1]
             self.neutral_open_mouth /= base_line
@@ -664,17 +637,13 @@ class MainWindow(QDialog):
         self.value_changed()
 
     def btn_load_settings(self):
-        f, a = QFileDialog.getOpenFileName(self, "title", app_dir, "json files  (*.json)")  # returns two items
+        f, a = QFileDialog.getOpenFileName(self, "title", app_dir, "json files  (*.json)")  # Read the .json settings file
         if f != '':
-            self.load_settings(f)  # pass the first item
+            self.load_settings(f)  # Send the data to the load_settings method
 
     def btn_state(self, state):
-        # checkBox activations
-
-        #if self.hascalibrated:
-        #if self.faceShapePredictorActivated:
-
-        # open mouth checkbox
+        # CheckBox activations
+        # Open mouth checkbox
         if state.objectName() == "cboxOpenMouth":
             if state.isChecked():
                 if not self.openMouthActivated:
@@ -683,7 +652,7 @@ class MainWindow(QDialog):
             else:
                 self.openMouthActivated = False
                 print("Open Mouth detection deactivated")
-        # raise eyebrow checkbox
+        # Raise eyebrow checkbox
         if state.objectName() == "cboxRaiseEyebrows":
             if state.isChecked():
                 if not self.raiseEyebrowsActivated:
@@ -692,7 +661,7 @@ class MainWindow(QDialog):
             else:
                 self.raiseEyebrowsActivated = False
                 print("Raise Eyebrows detection deactivated")
-        # smile checkbox
+        # Smile checkbox
         if state.objectName() == "cboxSmile":
             if state.isChecked():
                 if not self.smileActivated:
@@ -702,7 +671,7 @@ class MainWindow(QDialog):
                 self.smileActivated = False
                 print("Smile detection deactivated")
 
-        # snarl checkbox
+        # Snarl checkbox
         if state.objectName() == "cboxSnarl":
             if state.isChecked():
                 if not self.snarlActivated:
@@ -711,7 +680,7 @@ class MainWindow(QDialog):
             else:
                 self.snarlActivated = False
                 print("Snarl detection deactivated")
-        # left wink checkbox
+        # Left wink checkbox
         if state.objectName() == "cboxLeftWink":
             if state.isChecked():
                 if not self.leftWinkActivated:
@@ -721,7 +690,7 @@ class MainWindow(QDialog):
                 self.leftWinkActivated = False
                 print("Left Wink detection deactivated")
 
-        # right wink checkbox
+        # Right wink checkbox
         if state.objectName() == "cboxRightWink":
             if state.isChecked():
                 if not self.rightWinkActivated:
@@ -730,8 +699,6 @@ class MainWindow(QDialog):
             else:
                 self.rightWinkActivated = False
                 print("Right Wink detection deactivated")
-        #else:
-            #QMessageBox.information(self, '', 'Activation required')
 
     @pyqtSlot()
     def on_click_initialize(self):  # Used to turn the gesture detection ON or OFF
