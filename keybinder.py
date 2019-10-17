@@ -46,6 +46,8 @@ class SecondWindow(QDialog):
         self.btnRightClick.clicked.connect(lambda: self.right_click())
         self.btnLeftClick.clicked.connect(lambda: self.left_click())
 
+        # on top
+
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
 
         self.setFocus()

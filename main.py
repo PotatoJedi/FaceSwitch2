@@ -383,6 +383,7 @@ class MainWindow(QDialog):
 		# KEY TYPER
         self.wsh = comclt.Dispatch("WScript.Shell")
 
+        # On Top
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
 
         self.show()
