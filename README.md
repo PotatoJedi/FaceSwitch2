@@ -1,4 +1,4 @@
-# fr
+# Face Switch 2
 Authors: Sione Manulea, Joshua Clarke
 - Python version: 3.6.7
 
