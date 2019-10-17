@@ -278,7 +278,22 @@ class MainWindow(QDialog):
         self.snarlActivated = False
         self.leftWinkActivated = False
         self.rightWinkActivated = False
+        
+        self.facial_landmarks = 0
 
+        self.neutral_open_mouth = 0
+        self.neutral_raise_eyebrows = 0
+        self.neutral_smile = 0
+        self.neutral_snarl = 0
+        self.neutral_left_wink = 0
+        self.neutral_right_wink = 0
+
+        self.open_mouth_var = 0
+        self.raise_eyebrows_var = 0
+        self.smile_var = 0
+        self.snarl_var = 0
+        self.left_wink_var = 0
+        self.right_wink_var = 0
 
         self.neutral_gesture_vars = {}
         self.base_line = 0
@@ -346,7 +361,7 @@ class MainWindow(QDialog):
         self.btnLoad.setToolTip('Load Settings')
         self.btnLoad.clicked.connect(lambda: self.btn_load_settings())
         self.btnCalibrate.clicked.connect(lambda: self.btn_calibrate(self.facial_landmarks, self.base_line))
-        self.btnExit.clicked.connect(self.close)
+        self.btnExit.clicked.connect(lambda: self.btn_exit())
         # sliders
         self.sliderOpenMouth.valueChanged.connect(lambda: self.value_changed())
         self.sliderRaiseEyebrows.valueChanged.connect(lambda: self.value_changed())
@@ -388,21 +403,7 @@ class MainWindow(QDialog):
         self.wsh = comclt.Dispatch("WScript.Shell")
 
 		#
-        self.facial_landmarks = 0
-
-        self.neutral_open_mouth = 0
-        self.neutral_raise_eyebrows = 0
-        self.neutral_smile = 0
-        self.neutral_snarl = 0
-        self.neutral_left_wink = 0
-        self.neutral_right_wink = 0
-
-        self.open_mouth_var = 0
-        self.raise_eyebrows_var = 0
-        self.smile_var = 0
-        self.snarl_var = 0
-        self.left_wink_var = 0
-        self.right_wink_var = 0
+        
 
         self.count = 0
 
@@ -744,6 +745,12 @@ class MainWindow(QDialog):
             print("Gesture detection Activated!")
             self.btnInitialize.setText("Deactivate")
 
+
+    def btn_exit(self):
+        print("Saving state settings...")
+        self.save_state()
+        print("State settings saved successfully!")
+        self.close()
 
     def closeEvent(self, event):
         reply = QMessageBox.question(self, 'Message', "Are you sure you want to quit?", QMessageBox.Yes, QMessageBox.No)
