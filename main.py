@@ -189,7 +189,7 @@ class MainWindow(QDialog):
                             cv2.circle(frame, (shape[48][0], shape[48][1]), 2, (255, 0, 0), -1)
 
                         elif gesture_output == 3:
-                            print("Anger detected! - ", self.neutral_gesture_vars['3'] - (nose_height/self.base_line))
+                            print("Snarl detected! - ", self.neutral_gesture_vars['3'] - (nose_height/self.base_line))
                             if GetWindowText(GetForegroundWindow()) != self.window_name:
                                 if self.txtSnarl.toPlainText()[:11] == "{LEFTCLICK}":
                                     self.mouse.click(Button.left, 1)
