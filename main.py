@@ -71,7 +71,7 @@ class MainWindow(QDialog):
                         # Recognise gestures
                         # Open mouth
                         if self.openMouthActivated:
-                            mouth_height = (shape[66][1]) - (shape[62][1])
+                            mouth_height = (((shape[65][1]) + (shape[66][1]) + (shape[67][1])) / 3) - ((shape[61][1] + (shape[62][1]) + (shape[63][1])) / 3)
                             try:
                                 if self.neutral_gesture_vars['0'] + (mouth_height/self.base_line) > float(self.open_mouth_var):
                                     gesture_arr.append(0)
@@ -344,7 +344,7 @@ class MainWindow(QDialog):
         self.btnLoad.setToolTip('Load Settings')
         self.btnLoad.clicked.connect(lambda: self.btn_load_settings())
         self.btnCalibrate.clicked.connect(lambda: self.btn_calibrate(self.facial_landmarks, self.base_line))
-        self.btnExit.clicked.connect(lambda: self.btn_exit())
+        self.btnExit.clicked.connect(lambda: self.close())
         # sliders
         self.sliderOpenMouth.valueChanged.connect(lambda: self.value_changed())
         self.sliderRaiseEyebrows.valueChanged.connect(lambda: self.value_changed())
@@ -450,23 +450,24 @@ class MainWindow(QDialog):
 
         if self.faceShapePredictorActivated:
             # Calculate facial feature distance ratios for the users neutral face
-            # Closed mouth ratio
-            self.neutral_open_mouth = self.neutral_landmarks[66][1] - self.neutral_landmarks[62][1]
+            # Normal mouth height ratio
+            self.neutral_open_mouth = (((self.neutral_landmarks[65][1]) + (self.neutral_landmarks[66][1]) + (self.neutral_landmarks[67][1])) / 3) - (
+                (self.neutral_landmarks[61][1] + (self.neutral_landmarks[62][1]) + (self.neutral_landmarks[63][1])) / 3)
             self.neutral_open_mouth /= base_line
             print("closed mouth:", self.neutral_open_mouth)
             # Normal eyebrow height ratio
             self.neutral_raise_eyebrows = (self.neutral_landmarks[27][1]) - (
-                        ((self.neutral_landmarks[19][1]) + (self.neutral_landmarks[24][1])) / 2)
+                ((self.neutral_landmarks[19][1]) + (self.neutral_landmarks[24][1])) / 2)
             self.neutral_raise_eyebrows /= base_line
             print("eyebrows:", self.neutral_raise_eyebrows)
             # Normal mouth width ratio
             self.neutral_smile = (((self.neutral_landmarks[54][0]) + (self.neutral_landmarks[64][0])) / 2) - (
-                        ((self.neutral_landmarks[48][0]) + (self.neutral_landmarks[60][0])) / 2)
+                ((self.neutral_landmarks[48][0]) + (self.neutral_landmarks[60][0])) / 2)
             self.neutral_smile /= base_line
             print("smile:", self.neutral_smile)
             # Normal non frown/snarl ratio
             self.neutral_snarl = (((self.neutral_landmarks[31][1]) + (self.neutral_landmarks[35][1])) / 2) - (
-                        ((self.neutral_landmarks[21][1]) + (self.neutral_landmarks[22][1])) / 2)
+                ((self.neutral_landmarks[21][1]) + (self.neutral_landmarks[22][1])) / 2)
             self.neutral_snarl /= base_line
             print("nose:", self.neutral_snarl)
             # Normal left eye height ratio
@@ -540,7 +541,7 @@ class MainWindow(QDialog):
                         }
             data.update(calibration)
             self.hascalibrated = True
-            print("Calibration activated")
+            print("Calibration saved!")
         except:
             print("No calibration detected!")
 
@@ -712,13 +713,6 @@ class MainWindow(QDialog):
             self.faceShapePredictorActivated = True
             print("Gesture detection Activated!")
             self.btnInitialize.setText("Deactivate")
-
-
-    def btn_exit(self):
-        print("Saving state settings...")
-        self.save_state()
-        print("State settings saved successfully!")
-        self.close()
 
     def closeEvent(self, event):
         reply = QMessageBox.question(self, 'Message', "Are you sure you want to quit?", QMessageBox.Yes, QMessageBox.No)
