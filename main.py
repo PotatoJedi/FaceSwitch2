@@ -22,7 +22,7 @@ from pynput.mouse import Button, Controller
 class MainWindow(QDialog):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__()
-        self.window_name = "Face Switch v2.0.4-beta"
+        self.window_name = "Face Switch v2.0.5-beta"
         self.form_width = 1151
         self.form_height = 581
 
@@ -385,7 +385,9 @@ class MainWindow(QDialog):
 
         # On Top
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
-
+		
+        self.setWindowTitle(self.window_name)
+		
         self.show()
 
     def get_userinput1(self, state):
