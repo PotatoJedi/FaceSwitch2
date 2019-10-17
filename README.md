@@ -42,4 +42,4 @@ For example they could map a keystroke to the "open mouth" gesture. This would m
 
 ## 8. Welcome
 
-![6](https://i.imgur.com/YZgwjjd.png)
+![6](https://i.imgur.com/a/JwzAlbE)
