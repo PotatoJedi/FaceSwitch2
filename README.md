@@ -21,7 +21,7 @@ For example they could map a keystroke to the "open mouth" gesture. This would m
 
 ## 3. Download complete - run installer
 
-![1](https://i.imgur.com/pAT2YPU.png)
+![1](https://i.imgur.com/ZNQtlEw.png)
 
 ## 4. Another security screen
 
