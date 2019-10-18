@@ -25,7 +25,7 @@ For example they could map a keystroke to the "open mouth" gesture. This would m
 
 ## 4. Another security screen
 
-![2](https://i.imgur.com/zc3eQ6I.png)
+![2](https://i.imgur.com/ZwaQuEB.png)
 
 ## 5. Click create a desktop shortcut, then click Next >
 
