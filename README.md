@@ -16,9 +16,8 @@ For example they could map a keystroke to the "open mouth" gesture. This would m
 ## 1. Download
 [Click here to download](https://github.com/accessibilitysoftwarehub/FaceSwitch2/releases/download/v2.0.5-beta/FaceSwitchSetup.exe)
 
-## 2. Chrome Users - Keep
-
-![01](https://i.imgur.com/bN4kZ1Y.png)
+## 2. Wait for download to complete.
+![0](https://i.imgur.com/oKoAYAb.png)
 
 ## 3. Download complete - run installer
 
