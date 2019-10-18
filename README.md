@@ -11,7 +11,7 @@ For example they could map a keystroke to the "open mouth" gesture. This would m
 ##### [Click here to learn more](https://github.com/accessibilitysoftwarehub/FaceSwitch2/wiki)
 
 
-# Installation Manual for Face Switch 2.0.3
+# Installation Manual for Face Switch 2.0.5
 
 ## 1. Download
 [Click here to download](https://github.com/accessibilitysoftwarehub/FaceSwitch2/releases/download/v2.0.5-beta/FaceSwitchSetup.exe)
