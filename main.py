@@ -26,6 +26,13 @@ class MainWindow(QDialog):
         self.form_width = 1151
         self.form_height = 581
 
+        self.openMouthVar = ""
+        self.raiseEyebrowsVar = ""
+        self.smileVar = ""
+        self.snarlVar = ""
+        self.leftWinkVar = ""
+        self.rightWinkVar = ""
+
         self.mouse = Controller()
 
     def landmarks(self):
@@ -385,9 +392,15 @@ class MainWindow(QDialog):
 
         # On Top
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
-		
+
         self.setWindowTitle(self.window_name)
-		
+
+        self.txtOpenMouth.setToolTip(self.openMouthVar)
+        self.txtRaiseEyebrows.setToolTip(self.raiseEyebrowsVar)
+        self.txtSmile.setToolTip(self.smileVar)
+        self.txtSnarl.setToolTip(self.snarlVar)
+        self.txtLeftWink.setToolTip(self.leftWinkVar)
+        self.txtRightWink.setToolTip(self.rightWinkVar)
         self.show()
 
     def get_userinput1(self, state):
@@ -595,11 +608,24 @@ class MainWindow(QDialog):
                 self.cboxRightWink.setChecked(self.rightWinkActivated)
                 #  Set keybind texts
                 self.txtOpenMouth.setPlainText(str(data['openMouthKey']))
+                self.openMouthVar = str(data['openMouthKey'])
+
                 self.txtRaiseEyebrows.setPlainText(str(data['raiseEyebrowsKey']))
+                self.raiseEyebrowsVar = str(data['raiseEyebrowsKey'])
+
                 self.txtSmile.setPlainText(str(data['smileKey']))
+                self.smileVar = str(data['smileKey'])
+
                 self.txtSnarl.setPlainText(str(data['snarlKey']))
+                self.snarlVar = str(data['snarlKey'])
+
                 self.txtLeftWink.setPlainText(str(data['leftWinkKey']))
+                self.leftWinkVar = str(data['leftWinkKey'])
+
                 self.txtRightWink.setPlainText(str(data['rightWinkKey']))
+                self.rightWinkVar = str(data['rightWinkKey'])
+
+
                 #  Set slider values
                 self.sliderOpenMouth.setValue(int(data['open_mouth_var']*400))
                 self.sliderRaiseEyebrows.setValue(int(data['raise_eyebrows_var']*1250))
