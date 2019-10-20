@@ -13,36 +13,36 @@ For example they could map a keystroke to the "open mouth" gesture. This would m
 
 # Installation Manual for Face Switch 2.0.5
 
-## 1. Download
+### 1. Download
 [Click here to download](https://github.com/accessibilitysoftwarehub/FaceSwitch2/releases/download/v2.0.5-beta/FaceSwitchSetup.exe)
 
-## 2. Wait for download to complete.
+### 2. Wait for download to complete.
 ![0](https://i.imgur.com/oKoAYAb.png)
 
-## 3. Download complete - run installer
+### 3. Download complete - run installer
 
 ![1](https://i.imgur.com/ZNQtlEw.png)
 
-## 4. Another security screen
+### 4. Another security screen
 
 ![2](https://i.imgur.com/ZwaQuEB.png)
 
-## 5. Click create a desktop shortcut, then click Next >
+### 5. Click create a desktop shortcut, then click Next >
 
 ![3](https://i.imgur.com/tUcEnap.png)
 
-## 6. Click Install
+### 6. Click Install
 
 ![3.1](https://i.imgur.com/j6NMiwy.png)
 
-## 7. Wait for installation
+### 7. Wait for installation
 
 ![4](https://i.imgur.com/yZKoHiw.png)
 
-## 8. Click Launch FaceSwitch then press Finish
+### 8. Click Launch FaceSwitch then press Finish
 
 ![5](https://i.imgur.com/EqQFhTf.png)
 
-## 9. Welcome
+### 9. Welcome
 
 ![6](https://i.imgur.com/JA1t8up.png)
