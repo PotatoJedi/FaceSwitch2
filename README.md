@@ -46,3 +46,7 @@ For example they could map a keystroke to the "open mouth" gesture. This would m
 # 9. Welcome
 
 ![6](https://i.imgur.com/JA1t8up.png)
+
+# 10. Using the software
+### a. Activate the facial recognition
+![7](https://media.giphy.com/media/f6UwgU1G0PgM9unpdH/giphy.gif)
