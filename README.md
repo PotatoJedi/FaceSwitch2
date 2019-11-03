@@ -48,7 +48,14 @@ For example they could map a keystroke to the "open mouth" gesture. This would m
 ![6](https://i.imgur.com/JA1t8up.png)
 
 # 10. Using the software
+
 ### a. Activate the facial recognition
 ![7](https://media.giphy.com/media/f6UwgU1G0PgM9unpdH/giphy.gif)
+
 ### b. Choose a gesture to use
 ![8](https://media.giphy.com/media/H1AlVTkeAzcgzOUzeY/giphy.gif)
+
+### c. Perform the gesture you chose and the key assigned will be sent to the PC
+You can tell a gesture was recognised by looking at the points that flash from green to blue.
+
+![8](https://media.giphy.com/media/RIwl1O0O1vmSJHgrpH/giphy.gif)
