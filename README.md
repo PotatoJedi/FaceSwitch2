@@ -49,7 +49,7 @@ For example they could map a keystroke to the "open mouth" gesture. This would m
 
 # 10. Using the software
 
-### a. Activate the facial recognition
+### a. Activate the facial landmarks recognition
 ![7](https://media.giphy.com/media/f6UwgU1G0PgM9unpdH/giphy.gif)
 
 ### b. Choose a gesture to use
