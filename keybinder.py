@@ -4,28 +4,35 @@ from PyQt5.QtWidgets import QDialog, QLabel, QMessageBox
 from PyQt5.uic import loadUi
 from PyQt5.QtCore import pyqtSlot, Qt
 from PyQt5.QtGui import QColor, QIcon
+from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QWidget
+
+
+from tkinter import *
 
 
 class SecondWindow(QDialog):
     def __init__(self, spare_text_variable):
         super(SecondWindow, self).__init__()
+
         self.closeEvent = self.closeEvent
 
-        self.form_width = 341
+        self.form_width = 201
         self.form_height = 139
 
         if spare_text_variable != "":
             self.spare_text_variable = spare_text_variable
         else:
-            self.spare_text_variable = "press some keys"
+            self.spare_text_variable = "press some keys / click the mouse!"
         self.changedText = False
+
 
     def basicWindow(self):
         loadUi('interfaces/keybind_window.ui', self)
 
         self.setWindowIcon(QIcon('resources/face_switch_2_icon_black.ico'))
 
-        self.plainTextEdit.setReadOnly(True)
+        #self.plainTextEdit.setReadOnly(True)
         self.setWindowTitle("Keybinder 2.0")
 
         # Buttons
@@ -36,35 +43,37 @@ class SecondWindow(QDialog):
         self.setStyleSheet("background-color: rgb(48, 52, 52);")
 
         self.plainTextEdit.setPlaceholderText(self.spare_text_variable)
+        self.plainTextEdit.setPlainText(self.spare_text_variable)
         self.plainTextEdit.setObjectName("myObject")
         self.plainTextEdit.setLineWidth(0)
         self.plainTextEdit.setMidLineWidth(3)
         self.plainTextEdit.setContentsMargins(0, 0, 0, 0)
-        self.plainTextEdit.setReadOnly(True)
+        #self.plainTextEdit.setReadOnly(True)
         self.plainTextEdit.mousePressEvent = self.refocusitself
 
-        self.btnRightClick.clicked.connect(lambda: self.right_click())
-        self.btnLeftClick.clicked.connect(lambda: self.left_click())
+        #self.btnRightClick.clicked.connect(lambda: self.right_click())
+        #self.btnLeftClick.clicked.connect(lambda: self.left_click())
+        self.plainTextEdit.setTextInteractionFlags(Qt.NoTextInteraction)
 
         # on top
-
+        self.plainTextEdit.setEnabled(False)
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
 
         self.setFocus()
 
+    def mousePressEvent(self, QMouseEvent):
+        if QMouseEvent.button() == Qt.LeftButton:
+            print("Left click")
+            self.spare_text_variable += "{LEFTCLICK}"
+            self.plainTextEdit.setPlainText(self.spare_text_variable)
+            self.setFocus()
+        elif QMouseEvent.button() == Qt.RightButton:
+            print("Right click")
+            self.spare_text_variable += "{RIGHTCLICK}"
+            self.plainTextEdit.setPlainText(self.spare_text_variable)
+            self.setFocus()
+
     def refocusitself(self, state):
-        self.setFocus()
-
-    def right_click(self):
-        print("Right click")
-        self.spare_text_variable += "{RIGHTCLICK}"
-        self.plainTextEdit.setPlainText(self.spare_text_variable)
-        self.setFocus()
-
-    def left_click(self):
-        print("Left click")
-        self.spare_text_variable += "{LEFTCLICK}"
-        self.plainTextEdit.setPlainText(self.spare_text_variable)
         self.setFocus()
 
     def on_click_deleteText(self):
@@ -179,6 +188,5 @@ class SecondWindow(QDialog):
     def closeEvent(self, event):
         self.directlyClose = True
         if self.directlyClose:
-            self.plainTextEdit.setPlainText("")
-            self.plainTextEdit.setPlaceholderText('enter text here')
+            self.plainTextEdit.setPlainText('enter text here')
             event.accept()

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>341</width>
+    <width>201</width>
     <height>139</height>
    </rect>
   </property>
@@ -16,46 +16,6 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QPlainTextEdit" name="plainTextEdit">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>321</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>15</pointsize>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QPlainTextEdit {
-  background-color: #353535;
-  color: #F0F0F0;
-  border-radius: 4px;
-  border: 1px solid #32414B;
-  text-align: center;
-}
-
-QPlainTextEdit:hover {
-  border: 1px solid #148CD2;
-  color: #F0F0F0;
-}
-
-QPlainTextEdit:selected {
-  background: #1464A0;
-  color: #32414B;
-}</string>
-   </property>
-   <property name="frameShape">
-    <enum>QFrame::Panel</enum>
-   </property>
-   <property name="frameShadow">
-    <enum>QFrame::Plain</enum>
-   </property>
-  </widget>
   <widget class="QPushButton" name="btnDeleteText">
    <property name="geometry">
     <rect>
@@ -69,36 +29,10 @@ QPlainTextEdit:selected {
     <string>Delete Text</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="btnLeftClick">
-   <property name="geometry">
-    <rect>
-     <x>90</x>
-     <y>90</y>
-     <width>81</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Left</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="btnRightClick">
-   <property name="geometry">
-    <rect>
-     <x>170</x>
-     <y>90</y>
-     <width>81</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Right</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="btnConfirm">
    <property name="geometry">
     <rect>
-     <x>250</x>
+     <x>110</x>
      <y>90</y>
      <width>81</width>
      <height>41</height>
@@ -106,6 +40,31 @@ QPlainTextEdit:selected {
    </property>
    <property name="text">
     <string>Confirm</string>
+   </property>
+  </widget>
+  <widget class="QPlainTextEdit" name="plainTextEdit">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>181</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Plain</enum>
+   </property>
+   <property name="readOnly">
+    <bool>true</bool>
+   </property>
+   <property name="textInteractionFlags">
+    <set>Qt::NoTextInteraction</set>
+   </property>
+   <property name="backgroundVisible">
+    <bool>false</bool>
    </property>
   </widget>
  </widget>
