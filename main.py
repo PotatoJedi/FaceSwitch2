@@ -391,7 +391,7 @@ class MainWindow(QDialog):
         self.wsh = comclt.Dispatch("WScript.Shell")
 
         # On Top
-        self.setWindowFlags(Qt.WindowStaysOnTopHint)
+        #self.setWindowFlags(Qt.WindowStaysOnTopHint)
 
         self.setWindowTitle(self.window_name)
 
