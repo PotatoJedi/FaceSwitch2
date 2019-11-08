@@ -51,6 +51,24 @@
      <height>71</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QPlainTextEdit {
+  background-color: #353535;
+  color: #F0F0F0;
+  border-radius: 4px;
+  border: 1px solid #32414B;
+}
+
+QPlainTextEdit:hover {
+  border: 1px solid #148CD2;
+  color: #F0F0F0;
+}
+
+QPlainTextEdit:selected {
+  background: #1464A0;
+  color: #32414B;
+}</string>
+   </property>
    <property name="frameShape">
     <enum>QFrame::StyledPanel</enum>
    </property>
@@ -59,6 +77,9 @@
    </property>
    <property name="readOnly">
     <bool>true</bool>
+   </property>
+   <property name="plainText">
+    <string/>
    </property>
    <property name="textInteractionFlags">
     <set>Qt::NoTextInteraction</set>

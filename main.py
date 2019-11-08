@@ -3,7 +3,7 @@ import sys
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtWidgets import QApplication, QDialog, QInputDialog, QMainWindow, QCheckBox, QWidget, QPushButton, QLabel, \
-    QMessageBox, QDesktopWidget, QFileDialog
+    QMessageBox, QDesktopWidget, QFileDialog, QComboBox
 from PyQt5.QtGui import QIcon, QPalette, QColor, QPixmap, QImage
 from PyQt5.QtCore import pyqtSlot, Qt, QPoint
 from imutils import face_utils
@@ -18,6 +18,7 @@ import textboxHandler as tbh
 from win32gui import GetWindowText, GetForegroundWindow
 
 from pynput.mouse import Button, Controller
+#from pynput.keyboard import Key, Controller
 
 class MainWindow(QDialog):
     def __init__(self, parent=None):
@@ -34,6 +35,8 @@ class MainWindow(QDialog):
         self.rightWinkVar = ""
 
         self.mouse = Controller()
+        #self.keyboard = Controller()
+		
 
     def landmarks(self):
         p = "resources/shape_predictor_68_face_landmarks.dat"  # p = our pre-trained model
@@ -158,12 +161,7 @@ class MainWindow(QDialog):
                             print("Mouth opened! - ", self.neutral_gesture_vars['0'] + (mouth_height/self.base_line))
 
                             if GetWindowText(GetForegroundWindow()) != self.window_name:
-                                if self.txtOpenMouth.toPlainText()[:11] == "{LEFTCLICK}":
-                                    self.mouse.click(Button.left, 1)
-                                elif self.txtOpenMouth.toPlainText() == "{RIGHTCLICK}":
-                                    self.mouse.click(Button.right, 1)
-                                else:
-                                    self.wsh.SendKeys(self.txtOpenMouth.toPlainText())
+                                self.check_text(self.txtOpenMouth.toPlainText())
 
                             for t in range(60, 68, 1):
                                 cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
@@ -171,25 +169,15 @@ class MainWindow(QDialog):
                         elif gesture_output == 1:
                             print("Eyebrows raised! - ", (eye_height/self.base_line) - self.neutral_gesture_vars['1'])
                             if GetWindowText(GetForegroundWindow()) != self.window_name:
-                                if self.txtRaiseEyebrows.toPlainText()[:11] == "{LEFTCLICK}":
-                                    self.mouse.click(Button.left, 1)
-                                elif self.txtRaiseEyebrows.toPlainText() == "{RIGHTCLICK}":
-                                    self.mouse.click(Button.right, 1)
-                                else:
-                                    self.wsh.SendKeys(self.txtRaiseEyebrows.toPlainText())
-
+                                self.check_text(self.txtRaiseEyebrows.toPlainText())
+                            
                             for t in range(17, 27, 1):
                                 cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
 
                         elif gesture_output == 2:
                             print("Smile detected! - ", (mouth_width/self.base_line) - self.neutral_gesture_vars['2'])
                             if GetWindowText(GetForegroundWindow()) != self.window_name:
-                                if self.txtSmile.toPlainText()[:11] == "{LEFTCLICK}":
-                                    self.mouse.click(Button.left, 1)
-                                elif self.txtSmile.toPlainText() == "{RIGHTCLICK}":
-                                    self.mouse.click(Button.right, 1)
-                                else:
-                                    self.wsh.SendKeys(self.txtSmile.toPlainText())
+                                self.check_text(self.txtSmile.toPlainText())
 
                             for t in range(54, 60, 1):
                                 cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
@@ -198,12 +186,7 @@ class MainWindow(QDialog):
                         elif gesture_output == 3:
                             print("Snarl detected! - ", self.neutral_gesture_vars['3'] - (nose_height/self.base_line))
                             if GetWindowText(GetForegroundWindow()) != self.window_name:
-                                if self.txtSnarl.toPlainText()[:11] == "{LEFTCLICK}":
-                                    self.mouse.click(Button.left, 1)
-                                elif self.txtSnarl.toPlainText() == "{RIGHTCLICK}":
-                                    self.mouse.click(Button.right, 1)
-                                else:
-                                    self.wsh.SendKeys(self.txtSnarl.toPlainText())
+                                self.check_text(self.txtSnarl.toPlainText())
 
                             for t in range(27, 36, 1):
                                 cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
@@ -211,29 +194,23 @@ class MainWindow(QDialog):
                         elif gesture_output == 4:
                             print("Left wink detected! - ", self.neutral_gesture_vars['4'] - (left_eye_height/self.base_line))
                             if GetWindowText(GetForegroundWindow()) != self.window_name:
-                                if self.txtLeftWink.toPlainText()[:11] == "{LEFTCLICK}":
-                                    self.mouse.click(Button.left, 1)
-                                elif self.txtLeftWink.toPlainText() == "{RIGHTCLICK}":
-                                    self.mouse.click(Button.right, 1)
-                                else:
-                                    self.wsh.SendKeys(self.txtLeftWink.toPlainText())
+                                self.check_text(self.txtLeftWink.toPlainText())
+									
                             for t in range(42, 48, 1):
                                 cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
 
                         elif gesture_output == 5:
                             print("Right wink detected! - ", self.neutral_gesture_vars['5'] - (right_eye_height/self.base_line))
                             if GetWindowText(GetForegroundWindow()) != self.window_name:
-                                if self.txtRightWink.toPlainText()[:11] == "{LEFTCLICK}":
-                                    self.mouse.click(Button.left, 1)
-                                elif self.txtRightWink.toPlainText() == "{RIGHTCLICK}":
-                                    self.mouse.click(Button.right, 1)
-                                else:
-                                    self.wsh.SendKeys(self.txtRightWink.toPlainText())
+                                self.check_text(self.txtRightWink.toPlainText())
+									
                             for t in range(36, 42, 1):
                                 cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
+								
                         if 0 <= gesture_output <= 5: # If a gesture was output, reset the gesture array to give a small pause
                             gesture_arr = deque(maxlen=10)
                             gesture_arr.extend([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
+							
                     else:
                         if self.hascalibratedwarn is False:
                             print("> Calibration is required ")
@@ -256,9 +233,36 @@ class MainWindow(QDialog):
 
         cv2.destroyAllWindows()
         self.cap.release()
-
+	
+    def check_text(self, text):
+        if text[:11] == "{LEFTCLICK}":
+            self.mouse.click(Button.left, 1)
+            print("Left Click Pressed")
+        elif text[:12] == "{RIGHTCLICK}":
+            self.mouse.click(Button.right, 1)
+            print("Right Click Pressed")
+        elif text[:10] == "{MIDCLICK}":
+            self.mouse.click(Button.middle, 1)
+            print("Middle Click Pressed")
+        else:
+            self.wsh.SendKeys(text)
+            print("'", text, "' typed")
 
     def initUI(self):
+        cv2.destroyAllWindows()
+        try:
+            self.cap.release()
+        except:
+            pass
+
+        try:
+            self.webcam.hide()
+        except:
+            pass
+
+        self.form_width = 1151
+        self.form_height = 581
+	
         global app_dir  # Allow the variable to be used anywhere
         app_dir = os.environ['USERPROFILE'] + '\.FaceSwitch2'  # Path to application settings
 
@@ -401,6 +405,59 @@ class MainWindow(QDialog):
         self.txtSnarl.setToolTip(self.snarlVar)
         self.txtLeftWink.setToolTip(self.leftWinkVar)
         self.txtRightWink.setToolTip(self.rightWinkVar)
+		
+        #combo = QComboBox(self)
+        #combo.addItem("Default")
+        #combo.addItem("Webcam Only")
+        #combo.move(3, 3)
+        #combo.activated[str].connect(self.onChanged)  
+		
+        self.lblTitle.show()
+
+        self.show()
+		
+        self.landmarks()
+		
+    def onChanged(self, text):
+        if text == "Default":
+            self.initUI()
+		# Experimentation branch
+        elif text == "Webcam Only":
+            self.initUI_2()
+		
+    def initUI_2(self):
+        cv2.destroyAllWindows()
+        self.cap.release()
+		
+        try: 
+            self.webcam.hide()
+        except:
+            pass
+
+        self.lblTitle.hide()
+		
+        self.openMouthVar = ""
+        self.raiseEyebrowsVar = ""
+        self.smileVar = ""
+        self.snarlVar = ""
+        self.leftWinkVar = ""
+        self.rightWinkVar = ""
+		
+        self.form_width = 652
+        self.form_height = 507
+		
+        self.window_name = "Face Switch v2.0.5-beta"
+        self.setWindowTitle(self.window_name)
+
+        loadUi('interfaces/face_switch_2_2.ui', self)
+        self.setWindowIcon(QIcon('resources/face_switch_2_icon_black.ico'))
+        self.setFixedSize(self.form_width, self.form_height)
+        self.center()
+		
+		# WEBCAM
+        self.cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+        self.webcam.setText("Webcam")
+		
         self.show()
 
     def get_userinput1(self, state):
@@ -625,7 +682,6 @@ class MainWindow(QDialog):
                 self.txtRightWink.setPlainText(str(data['rightWinkKey']))
                 self.rightWinkVar = str(data['rightWinkKey'])
 
-
                 #  Set slider values
                 self.sliderOpenMouth.setValue(int(data['open_mouth_var']*400))
                 self.sliderRaiseEyebrows.setValue(int(data['raise_eyebrows_var']*1250))
@@ -755,7 +811,5 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     mainWindow = MainWindow()
     mainWindow.initUI()
-    mainWindow.landmarks()
-    mainWindow.show()
     print("Now exiting")
     sys.exit()

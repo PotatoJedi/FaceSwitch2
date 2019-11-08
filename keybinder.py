@@ -72,6 +72,11 @@ class SecondWindow(QDialog):
             self.spare_text_variable += "{RIGHTCLICK}"
             self.plainTextEdit.setPlainText(self.spare_text_variable)
             self.setFocus()
+        elif QMouseEvent.button() == Qt.MidButton:
+            print("Right click")
+            self.spare_text_variable += "{MIDCLICK}"
+            self.plainTextEdit.setPlainText(self.spare_text_variable)
+            self.setFocus()
 
     def refocusitself(self, state):
         self.setFocus()
@@ -89,7 +94,7 @@ class SecondWindow(QDialog):
         if self.changedText:
             self.setFocus()
             key = e.key()
-            print(key)
+			
             if 49 <= key <= 57:
                 self.spare_text_variable += chr(key)
             elif 48 <= key <= 90:
