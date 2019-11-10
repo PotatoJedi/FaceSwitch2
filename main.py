@@ -18,7 +18,7 @@ import textboxHandler as tbh
 from win32gui import GetWindowText, GetForegroundWindow
 
 from pynput.mouse import Button, Controller
-#from pynput.keyboard import Key, Controller
+from pynput.keyboard import Key, Controller
 
 class MainWindow(QDialog):
     def __init__(self, parent=None):
@@ -35,7 +35,7 @@ class MainWindow(QDialog):
         self.rightWinkVar = ""
 
         self.mouse = Controller()
-        #self.keyboard = Controller()
+        self.keyboard = Controller()
 		
 
     def landmarks(self):
@@ -245,7 +245,10 @@ class MainWindow(QDialog):
             self.mouse.click(Button.middle, 1)
             print("Middle Click Pressed")
         else:
-            self.wsh.SendKeys(text)
+            #self.wsh.SendKeys(text)
+            self.keyboard.press(Key.f12)
+            self.keyboard.release(Key.f12)
+			
             print("'", text, "' typed")
 
     def initUI(self):
