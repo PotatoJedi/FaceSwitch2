@@ -245,9 +245,9 @@ class MainWindow(QDialog):
             self.mouse.click(Button.middle, 1)
             print("Middle Click Pressed")
         else:
-            #self.wsh.SendKeys(text)
-            self.keyboard.press(Key.f12)
-            self.keyboard.release(Key.f12)
+            self.wsh.SendKeys(text)
+            #self.keyboard.press(Key.f12)
+            #self.keyboard.release(Key.f12)
 			
             print("'", text, "' typed")
 
