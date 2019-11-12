@@ -17,8 +17,11 @@ import textboxHandler as tbh
 
 from win32gui import GetWindowText, GetForegroundWindow
 
-from pynput.mouse import Button, Controller
-from pynput.keyboard import Key, Controller
+import pynput.mouse as ms
+import pynput.keyboard as kb
+
+from pynput.mouse import Button
+from pynput.keyboard import Key
 
 class MainWindow(QDialog):
     def __init__(self, parent=None):
@@ -33,10 +36,8 @@ class MainWindow(QDialog):
         self.snarlVar = ""
         self.leftWinkVar = ""
         self.rightWinkVar = ""
-
-        self.mouse = Controller()
-        self.keyboard = Controller()
-		
+        self.mouse = ms.Controller()
+        self.keyboard = kb.Controller()
 
     def landmarks(self):
         p = "resources/shape_predictor_68_face_landmarks.dat"  # p = our pre-trained model
@@ -244,12 +245,114 @@ class MainWindow(QDialog):
         elif text[:10] == "{MIDCLICK}":
             self.mouse.click(Button.middle, 1)
             print("Middle Click Pressed")
+        elif text[:4] == "{F1}":
+            self.keyboard.press(Key.f1)
+            self.keyboard.release(Key.f1)
+        elif text[:4] == "{F2}":
+            self.keyboard.press(Key.f2)
+            self.keyboard.release(Key.f2)
+        elif text[:4] == "{F3}":
+            self.keyboard.press(Key.f3)
+            self.keyboard.release(Key.f3)
+        elif text[:4] == "{F4}":
+            self.keyboard.press(Key.f4)
+            self.keyboard.release(Key.f4)
+        elif text[:4] == "{F5}":
+            self.keyboard.press(Key.f5)
+            self.keyboard.release(Key.f5)
+        elif text[:4] == "{F6}":
+            self.keyboard.press(Key.f6)
+            self.keyboard.release(Key.f6)
+        elif text[:4] == "{F7}":
+            self.keyboard.press(Key.f7)
+            self.keyboard.release(Key.f7)
+        elif text[:4] == "{F8}":
+            self.keyboard.press(Key.f8)
+            self.keyboard.release(Key.f8)
+        elif text[:4] == "{F9}":
+            self.keyboard.press(Key.f9)
+            self.keyboard.release(Key.f9)
+        elif text[:4] == "{F10}":
+            self.keyboard.press(Key.f10)
+            self.keyboard.release(Key.f10)
+        elif text[:4] == "{F11}":
+            self.keyboard.press(Key.f11)
+            self.keyboard.release(Key.f11)
+        elif text[:5] == "{F12}":
+            self.keyboard.press(Key.f12)
+            self.keyboard.release(Key.f12)
+        elif text[:5] == "{F13}":
+            self.keyboard.press(Key.f1)
+            self.keyboard.release(Key.f1)
+        elif text[:7] == "{ENTER}":
+            self.keyboard.press(Key.enter)
+            self.keyboard.release(Key.enter)
+        elif text[:11] == "{BACKSPACE}":
+            self.keyboard.press(Key.backspace)
+            self.keyboard.release(Key.backspace)
+        elif text[:10] == "{CAPSLOCK}":
+            self.keyboard.press(Key.caps_lock)
+            self.keyboard.release(Key.caps_lock)
+        elif text[:8] == "{ESCAPE}":
+            self.keyboard.press(Key.esc)
+            self.keyboard.release(Key.esc)
+        elif text[:6] == "{HOME}":
+            self.keyboard.press(Key.home)
+            self.keyboard.release(Key.home)
+        elif text[:8] == "{DELETE}":
+            self.keyboard.press(Key.delete)
+            self.keyboard.release(Key.delete)
+        elif text[:8] == "{INSERT}":
+            self.keyboard.press(Key.insert)
+            self.keyboard.release(Key.insert)
+        elif text[:4] == "{UP}":
+            self.keyboard.press(Key.up)
+            self.keyboard.release(Key.up)
+        elif text[:4] == "{DOWN}":
+            self.keyboard.press(Key.down)
+            self.keyboard.release(Key.down)
+        elif text[:6] == "{LEFT}":
+            self.keyboard.press(Key.left)
+            self.keyboard.release(Key.left)
+        elif text[:7] == "{RIGHT}":
+            self.keyboard.press(Key.right)
+            self.keyboard.release(Key.right)
+        elif text[:9] == "{NUMLOCK}":
+            self.keyboard.press(Key.num_lock)
+            self.keyboard.release(Key.num_lock)
+        elif text[:6] == "{PGUP}":
+            self.keyboard.press(Key.page_up)
+            self.keyboard.release(Key.page_up)
+        elif text[:6] == "{PGDN}":
+            self.keyboard.press(Key.page_down)
+            self.keyboard.release(Key.page_down)
+
         else:
-            self.wsh.SendKeys(text)
-            #self.keyboard.press(Key.f12)
-            #self.keyboard.release(Key.f12)
-			
-            print("'", text, "' typed")
+            modifierenabled = False
+            count = 0
+            for i in text:
+                # Shift
+                if i is '+':
+                    if modifierenabled == False:
+                        self.keyboard.press(Key.shift)
+                        modifierenabled = True
+                    elif modifierenabled == True:
+                        self.keyboard.release(Key.shift)
+                        modifierenabled = False
+                # alt
+                if i is '%':
+                    if modifierenabled == False:
+                        self.keyboard.press(Key.alt)
+                        modifierenabled = True
+                    elif modifierenabled == True:
+                        self.keyboard.release(Key.alt)
+                        modifierenabled = False
+
+                else:
+                    self.keyboard.press(i)
+                    self.keyboard.release(i)
+
+        print("Pressed", text)
 
     def initUI(self):
         cv2.destroyAllWindows()
@@ -307,6 +410,8 @@ class MainWindow(QDialog):
         self.neutral_gesture_vars = {}
         self.base_line = 0
         self.spare_text_variable = ""
+
+        #        self.mouse = Controller()
 
 		### UI ####
         loadUi('interfaces/face_switch_2.ui', self)
@@ -414,12 +519,13 @@ class MainWindow(QDialog):
         #combo.addItem("Webcam Only")
         #combo.move(3, 3)
         #combo.activated[str].connect(self.onChanged)  
-		
+
         self.lblTitle.show()
 
         self.show()
 		
         self.landmarks()
+
 		
     def onChanged(self, text):
         if text == "Default":
