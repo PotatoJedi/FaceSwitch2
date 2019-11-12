@@ -15,6 +15,7 @@ pywin32 = "==224"
 PyQt5 = "==5.13.1"
 cmake = "==3.14.4"
 pynput = "*"
+pyinstaller = "*"
 
 [requires]
 python_version = "3.6.7"
