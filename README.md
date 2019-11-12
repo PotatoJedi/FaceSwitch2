@@ -29,19 +29,19 @@ For example they could map a keystroke to the "open mouth" gesture. This would m
 
 # 5. Click create a desktop shortcut. Click Next >
 
-![3](https://i.imgur.com/tUcEnap.png)
+![3](https://i.imgur.com/Ka5PJzT.png)
 
 # 6. Click Install
 
-![3.1](https://i.imgur.com/j6NMiwy.png)
+![3.1](https://i.imgur.com/jdvmbOP.png)
 
 # 7. Install
 
-![4](https://i.imgur.com/yZKoHiw.png)
+![4](https://i.imgur.com/5tM9Fqc.png)
 
 # 8. Click Launch FaceSwitch. Click Finish
 
-![5](https://i.imgur.com/EqQFhTf.png)
+![5](https://i.imgur.com/Yv8uA6f.png)
 
 # 9. Welcome
 
