@@ -45,7 +45,7 @@ For example they could map a keystroke to the "open mouth" gesture. This would m
 
 # 9. Welcome
 
-![6](https://i.imgur.com/JA1t8up.png)
+![6](https://i.imgur.com/K8rDPzv.png)
 
 # 10. Using the software
 
