@@ -9,7 +9,7 @@ For example they could map a keystroke to the "open mouth" gesture. This would m
 #### Latest release v2.0.6-beta
 ##### [Click here to download the latest release](https://github.com/accessibilitysoftwarehub/FaceSwitch2/releases/tag/v2.0.6-beta)
 ##### [Click here to learn more](https://github.com/accessibilitysoftwarehub/FaceSwitch2/wiki)
-##### [Click here to view virus scan](https://www.virustotal.com/gui/file/66ad9d0843de187895da1387aca56ec201a0e9dc0226ffb5bfb4041a434666de/detection)
+##### [Click here to view virus scan results](https://www.virustotal.com/gui/file/66ad9d0843de187895da1387aca56ec201a0e9dc0226ffb5bfb4041a434666de/detection)
 
 # Installation Manual for Face Switch 2.0.6
 
