@@ -44,8 +44,8 @@ class MainWindow(QDialog):
         detector = dlib.get_frontal_face_detector()
         predictor = dlib.shape_predictor(p)
 
-        gesture_arr = deque(maxlen=10)
-        gesture_arr.extend([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
+        gesture_arr = deque(maxlen=15)
+        gesture_arr.extend([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
 
         self.webcam.setFocus()
 
@@ -209,8 +209,8 @@ class MainWindow(QDialog):
                                 cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
 								
                         if 0 <= gesture_output <= 5: # If a gesture was output, reset the gesture array to give a small pause
-                            gesture_arr = deque(maxlen=10)
-                            gesture_arr.extend([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
+                            gesture_arr = deque(maxlen=15)
+                            gesture_arr.extend([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
 							
                     else:
                         if self.hascalibratedwarn is False:
