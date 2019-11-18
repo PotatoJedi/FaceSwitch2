@@ -2,7 +2,7 @@ import sys
 
 from PyQt5.QtWidgets import QDialog, QLabel, QMessageBox
 from PyQt5.uic import loadUi
-from PyQt5.QtCore import pyqtSlot, Qt
+from PyQt5.QtCore import pyqtSlot, Qt, QPoint
 from PyQt5.QtGui import QColor, QIcon
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWidgets import QWidget
@@ -60,7 +60,22 @@ class SecondWindow(QDialog):
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
 
         self.setFocus()
+		
 
+    def wheelEvent(self,event):
+	
+	
+        numDegrees = event.angleDelta() / 8
+        if numDegrees.y() > 0:
+            self.spare_text_variable += "{SCROLLUP}"
+            self.plainTextEdit.setPlainText(self.spare_text_variable)
+            print("Scroll up Detected")
+        if numDegrees.y() < 0:
+            self.spare_text_variable += "{SCROLLDOWN}"
+            self.plainTextEdit.setPlainText(self.spare_text_variable)
+            print("Scroll Down Detected")
+		
+		
     def mousePressEvent(self, QMouseEvent):
         if QMouseEvent.button() == Qt.LeftButton:
             print("Left click")

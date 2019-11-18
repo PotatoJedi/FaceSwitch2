@@ -26,7 +26,7 @@ from pynput.keyboard import Key
 class MainWindow(QDialog):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__()
-        self.window_name = "Face Switch v2.0.6-beta"
+        self.window_name = "Face Switch v2.0.7-beta"
         self.form_width = 1151
         self.form_height = 581
 
@@ -326,6 +326,11 @@ class MainWindow(QDialog):
         elif text[:6] == "{PGDN}":
             self.keyboard.press(Key.page_down)
             self.keyboard.release(Key.page_down)
+        elif text[:10] == "{SCROLLUP}":
+            self.mouse.scroll(0, 52)
+        elif text[:12] == "{SCROLLDOWN}":
+            self.mouse.scroll(0, -52)
+
 
         else:
             modifierenabled = False
