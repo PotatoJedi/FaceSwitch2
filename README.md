@@ -57,5 +57,8 @@ For example they could map a keystroke to the "open mouth" gesture. This would m
 
 ### c. Perform the gesture you chose and the key assigned will be sent to the PC
 You can tell a gesture was recognised by looking at the points that flash from green to blue.
+![9](https://media.giphy.com/media/RIwl1O0O1vmSJHgrpH/giphy.gif)
 
-![8](https://media.giphy.com/media/RIwl1O0O1vmSJHgrpH/giphy.gif)
+### d. DEMO:
+Here I am using gestures to scroll up and down on a webpage.
+![10](https://media.giphy.com/media/THsSFKKINGfjk0reoh/giphy.gif)
