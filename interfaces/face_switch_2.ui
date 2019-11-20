@@ -782,7 +782,7 @@ QPlainTextEdit:selected {
    <property name="geometry">
     <rect>
      <x>290</x>
-     <y>100</y>
+     <y>80</y>
      <width>181</width>
      <height>31</height>
     </rect>
@@ -994,6 +994,88 @@ QPlainTextEdit:selected {
    </property>
    <property name="text">
     <string>Quit</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblTiming">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>120</y>
+     <width>41</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Timing</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+   </property>
+  </widget>
+  <widget class="QSlider" name="sliderTiming">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>120</y>
+     <width>101</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="cursor">
+    <cursorShape>CrossCursor</cursorShape>
+   </property>
+   <property name="minimum">
+    <number>5</number>
+   </property>
+   <property name="maximum">
+    <number>30</number>
+   </property>
+   <property name="singleStep">
+    <number>20</number>
+   </property>
+   <property name="pageStep">
+    <number>5</number>
+   </property>
+   <property name="value">
+    <number>15</number>
+   </property>
+   <property name="sliderPosition">
+    <number>15</number>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="invertedAppearance">
+    <bool>false</bool>
+   </property>
+   <property name="tickPosition">
+    <enum>QSlider::TicksAbove</enum>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblTimingNum">
+   <property name="geometry">
+    <rect>
+     <x>440</x>
+     <y>120</y>
+     <width>31</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>15</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
    </property>
   </widget>
  </widget>

@@ -29,7 +29,7 @@ class MainWindow(QDialog):
         self.window_name = "Face Switch v2.0.7-beta"
         self.form_width = 1151
         self.form_height = 581
-
+        
         self.openMouthVar = ""
         self.raiseEyebrowsVar = ""
         self.smileVar = ""
@@ -44,8 +44,9 @@ class MainWindow(QDialog):
         detector = dlib.get_frontal_face_detector()
         predictor = dlib.shape_predictor(p)
 
-        gesture_arr = deque(maxlen=15)
-        gesture_arr.extend([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
+        gesture_arr = deque(maxlen=self.gesture_length)
+        for i in range(self.gesture_length):
+            gesture_arr.extend([-1])
 
         self.webcam.setFocus()
 
@@ -129,7 +130,6 @@ class MainWindow(QDialog):
                                 if self.neutral_gesture_vars['4'] - (left_eye_height/self.base_line) > float(self.left_wink_var):
                                     gesture_arr.append(4)
                                     gesture_arr.append(4)
-                                    gesture_arr.append(4)
                                     detection = True
                             except:
                                 pass
@@ -141,7 +141,6 @@ class MainWindow(QDialog):
                             right_eye_height = right_eye_bottom - right_eye_top
                             try:
                                 if self.neutral_gesture_vars['5'] - (right_eye_height/self.base_line) > float(self.right_wink_var):
-                                    gesture_arr.append(5)
                                     gesture_arr.append(5)
                                     gesture_arr.append(5)
                                     detection = True
@@ -209,8 +208,9 @@ class MainWindow(QDialog):
                                 cv2.circle(frame, (shape[t][0], shape[t][1]), 2, (255, 0, 0), -1)
 								
                         if 0 <= gesture_output <= 5: # If a gesture was output, reset the gesture array to give a small pause
-                            gesture_arr = deque(maxlen=15)
-                            gesture_arr.extend([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
+                            gesture_arr = deque(maxlen=self.gesture_length)
+                            for i in range(self.gesture_length):
+                                gesture_arr.extend([-1])
 							
                     else:
                         if self.hascalibratedwarn is False:
@@ -405,6 +405,7 @@ class MainWindow(QDialog):
         self.neutral_left_wink = 0
         self.neutral_right_wink = 0
 
+        self.gesture_length = 15
         self.open_mouth_var = 0
         self.raise_eyebrows_var = 0
         self.smile_var = 0
@@ -470,6 +471,7 @@ class MainWindow(QDialog):
         self.btnCalibrate.clicked.connect(lambda: self.btn_calibrate(self.facial_landmarks, self.base_line))
         self.btnExit.clicked.connect(lambda: self.close())
         # sliders
+        self.sliderTiming.valueChanged.connect(lambda: self.value_changed())
         self.sliderOpenMouth.valueChanged.connect(lambda: self.value_changed())
         self.sliderRaiseEyebrows.valueChanged.connect(lambda: self.value_changed())
         self.sliderSmile.valueChanged.connect(lambda: self.value_changed())
@@ -530,49 +532,6 @@ class MainWindow(QDialog):
         self.show()
 		
         self.landmarks()
-
-		
-    def onChanged(self, text):
-        if text == "Default":
-            self.initUI()
-		# Experimentation branch
-        elif text == "Webcam Only":
-            self.initUI_2()
-		
-    def initUI_2(self):
-        cv2.destroyAllWindows()
-        self.cap.release()
-		
-        try: 
-            self.webcam.hide()
-        except:
-            pass
-
-        self.lblTitle.hide()
-		
-        self.openMouthVar = ""
-        self.raiseEyebrowsVar = ""
-        self.smileVar = ""
-        self.snarlVar = ""
-        self.leftWinkVar = ""
-        self.rightWinkVar = ""
-		
-        self.form_width = 652
-        self.form_height = 507
-		
-        self.window_name = "Face Switch v2.0.5-beta"
-        self.setWindowTitle(self.window_name)
-
-        loadUi('interfaces/face_switch_2_2.ui', self)
-        self.setWindowIcon(QIcon('resources/face_switch_2_icon_black.ico'))
-        self.setFixedSize(self.form_width, self.form_height)
-        self.center()
-		
-		# WEBCAM
-        self.cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-        self.webcam.setText("Webcam")
-		
-        self.show()
 
     def get_userinput1(self, state):
         print(state)
@@ -676,6 +635,7 @@ class MainWindow(QDialog):
             print("Must be activated")
 
     def value_changed(self):
+        self.gesture_length = self.sliderTiming.value()
         self.open_mouth_var = round(float(self.sliderOpenMouth.value()) / 400, 2)
         self.raise_eyebrows_var = round(float(self.sliderRaiseEyebrows.value()) / 1250, 2)
         self.smile_var = round(float(self.sliderSmile.value()) / 500, 2)
@@ -683,6 +643,7 @@ class MainWindow(QDialog):
         self.left_wink_var = round(float(self.sliderLeftWink.value()) / 1000, 3)
         self.right_wink_var = round(float(self.sliderRightWink.value()) / 1000, 3)
 
+        self.lblTimingNum.setText(str(self.gesture_length))
         self.lblOpenMouthT.setText(str(self.open_mouth_var))
         self.lblRaiseEyebrowsT.setText(str(self.raise_eyebrows_var))
         self.lblSmileT.setText(str(self.smile_var))
@@ -704,6 +665,7 @@ class MainWindow(QDialog):
                 'snarlKey': self.txtSnarl.toPlainText(),
                 'leftWinkKey': self.txtLeftWink.toPlainText(),
                 'rightWinkKey': self.txtRightWink.toPlainText(),
+                'timing_var': self.gesture_length,
                 'open_mouth_var': self.open_mouth_var,
                 'raise_eyebrows_var': self.raise_eyebrows_var,
                 'smile_var': self.smile_var,
@@ -795,8 +757,11 @@ class MainWindow(QDialog):
 
                 self.txtRightWink.setPlainText(str(data['rightWinkKey']))
                 self.rightWinkVar = str(data['rightWinkKey'])
+                
+                self.lblTimingNum.setText(str(data['timing_var']))
 
                 #  Set slider values
+                self.sliderTiming.setValue(int(data['timing_var']))
                 self.sliderOpenMouth.setValue(int(data['open_mouth_var']*400))
                 self.sliderRaiseEyebrows.setValue(int(data['raise_eyebrows_var']*1250))
                 self.sliderSmile.setValue(int(data['smile_var']*500))
