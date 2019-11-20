@@ -81,7 +81,7 @@ class MainWindow(QDialog):
                     if self.hascalibrated:
                         # Recognise gestures
                         # Open mouth
-                        if self.openMouthActivated:
+                        if self.openMouthActivated and not detection:
                             mouth_height = (((shape[65][1]) + (shape[66][1]) + (shape[67][1])) / 3) - ((shape[61][1] + (shape[62][1]) + (shape[63][1])) / 3)
                             try:
                                 if self.neutral_gesture_vars['0'] + (mouth_height/self.base_line) > float(self.open_mouth_var):
@@ -91,7 +91,7 @@ class MainWindow(QDialog):
                                 pass
 
                         # Raise Eyebrow
-                        if self.raiseEyebrowsActivated:
+                        if self.raiseEyebrowsActivated and not detection:
                             eye_height = (shape[27][1]) - (((shape[19][1]) + (shape[24][1]))/2)
                             try:
                                 if (eye_height/self.base_line) - self.neutral_gesture_vars['1'] > float(self.raise_eyebrows_var):
@@ -101,7 +101,7 @@ class MainWindow(QDialog):
                                 pass
 
                         # Smile
-                        if self.smileActivated:
+                        if self.smileActivated and not detection:
                             mouth_width = (((shape[54][0]) + (shape[64][0]))/2) - (((shape[48][0]) + (shape[60][0]))/2)
                             try:
                                 if (mouth_width/self.base_line) - self.neutral_gesture_vars['2'] > float(self.smile_var):
@@ -111,7 +111,7 @@ class MainWindow(QDialog):
                                 pass
 
                         # Scrunch nose / Snarl
-                        if self.snarlActivated:
+                        if self.snarlActivated and not detection:
                             nose_height = (((shape[31][1]) + (shape[35][1]))/2) - (((shape[21][1]) + (shape[22][1]))/2)
                             try:
                                 if self.neutral_gesture_vars['3'] - (nose_height/self.base_line) > float(self.snarl_var):
@@ -121,7 +121,7 @@ class MainWindow(QDialog):
                                 pass
 
                         # Left Wink
-                        if self.leftWinkActivated:
+                        if self.leftWinkActivated and not detection:
                             left_eye_top = ((shape[43][1]) + (shape[44][1]))/2
                             left_eye_bottom = ((shape[46][1]) + (shape[47][1]))/2
                             left_eye_height = left_eye_bottom - left_eye_top
