@@ -11,7 +11,7 @@ For example they could map a keystroke to the "open mouth" gesture. This would m
 ##### [Click here to learn more](https://github.com/accessibilitysoftwarehub/FaceSwitch2/wiki)
 ##### [Click here to view virus scan results](https://www.virustotal.com/gui/file/66ad9d0843de187895da1387aca56ec201a0e9dc0226ffb5bfb4041a434666de/detection)
 ##### [Google Search Results for AdWare.MSIL.licu](https://www.google.com/search?rlz=1C1AWFC_enNZ867NZ867&sxsrf=ACYBGNQHWKShg13R33T1JiEHlAUUBmIobw%3A1573801601293&ei=gU7OXa3CEYHWz7sPw_WO6A8&q=%22AdWare.MSIL.licu%22&oq=%22AdWare.MSIL.licu%22&gs_l=psy-ab.3...16237.17020..17260...0.0..0.409.592.0j1j4-1......0....1..gws-wiz.cfL2TofeRig&ved=0ahUKEwjthpHr0-vlAhUB63MBHcO6A_0Q4dUDCAs&uact=5)
-# Installation Manual for Face Switch 2.0.6
+# Installation Manual for Face Switch 2.0.8
 
 # 1. Download
 [Click to download](https://github.com/accessibilitysoftwarehub/FaceSwitch2/releases/download/v2.0.8-beta/FaceSwitchSetup.exe)
