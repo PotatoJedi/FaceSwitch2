@@ -26,7 +26,7 @@ from pynput.keyboard import Key
 class MainWindow(QDialog):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__()
-        self.window_name = "Face Switch v2.0.7-beta"
+        self.window_name = "Face Switch v2.0.9-beta"
         self.form_width = 1151
         self.form_height = 581
         
