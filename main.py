@@ -299,6 +299,9 @@ class MainWindow(QDialog):
         elif text[:6] == "{HOME}":
             self.keyboard.press(Key.home)
             self.keyboard.release(Key.home)
+        elif text[:5] == "{END}":
+            self.keyboard.press(Key.end)
+            self.keyboard.release(Key.end)
         elif text[:8] == "{DELETE}":
             self.keyboard.press(Key.delete)
             self.keyboard.release(Key.delete)
